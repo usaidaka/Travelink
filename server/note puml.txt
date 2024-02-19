@@ -1,0 +1,33 @@
+@startuml database
+entity "Customer" as customer {
+  + ID [PK]
+  --
+  Name
+  Email
+  Phone
+}
+entity "Order" as order {
+  + ID [PK]
+  --
+  Date
+  Total
+}
+customer -- order
+
+entity "Entity1" as entity1 {
+  + ID [PK]
+  --
+  Name
+}
+
+entity "Entity2" as entity2 {
+  + ID [PK]
+  --
+  Details
+}
+@enduml
+
+entity1 -- entity2 : one-to-many
+entity1 ..> entity2 : many-to-one
+entity1 -- entity2 : one-to-one
+entity1 o-- entity2 : many-to-many
