@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Carts", {
+    await queryInterface.createTable("Groups", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -15,19 +15,16 @@ module.exports = {
           model: "Users",
           key: "id",
         },
-        allowNull: false,
       },
-      product_id: {
+      route_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: "Products",
+          model: "Routes",
           key: "id",
         },
-        allowNull: false,
       },
-      quantity: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
+      group_name: {
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,
@@ -44,6 +41,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Carts");
+    await queryInterface.dropTable("Groups");
   },
 };

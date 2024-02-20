@@ -5,44 +5,13 @@ const Validation = require("../helpers/validationHelper");
 const AuthHelper = require("../helpers/authHelper");
 const GeneralHelper = require("../helpers/generalHelper");
 const handleUploadImage = require("../middlewares/multerMiddleware");
-const { decryptData } = require("../service/encrypt");
+const { decryptPayload } = require("../service/decryptionHelper");
 
 const fileName = "server/api/auth.js";
 
 const register = async (request, reply) => {
   try {
-    const formData = request.body;
-
-    const decryptedData = {
-      ...(formData?.username && { username: decryptData(formData?.username) }),
-      ...(formData?.email && { email: decryptData(formData?.email) }),
-      ...(formData?.password && { password: decryptData(formData?.password) }),
-      ...(formData?.confirmPassword && {
-        confirmPassword: decryptData(formData?.confirmPassword),
-      }),
-      ...(formData?.role && { role: decryptData(formData?.role) }),
-      ...(formData?.first_name && {
-        first_name: decryptData(formData?.first_name),
-      }),
-      ...(formData?.last_name && {
-        last_name: decryptData(formData?.last_name),
-      }),
-      ...(formData?.gender && {
-        gender: decryptData(formData?.gender),
-      }),
-      ...(formData?.email_contact && {
-        email_contact: decryptData(formData?.email_contact),
-      }),
-      ...(formData?.phone && {
-        phone: decryptData(formData?.phone),
-      }),
-      ...(formData?.phone_contact && {
-        phone_contact: decryptData(formData?.phone_contact),
-      }),
-      ...(formData?.mbti && {
-        mbti: decryptData(formData?.mbti),
-      }),
-    };
+    const decryptedData = decryptPayload(request.body);
 
     Validation.registerValidation(decryptedData);
 
@@ -57,13 +26,8 @@ const register = async (request, reply) => {
 
 const login = async (request, reply) => {
   try {
-    const formData = request.body;
-    const decryptedData = {
-      ...(formData?.email && { email: decryptData(formData?.email) }),
-      ...(formData?.password && { password: decryptData(formData?.password) }),
-    };
-
-    console.log(decryptedData);
+    console.log(request.body);
+    const decryptedData = decryptPayload(request.body);
 
     Validation.loginValidation(decryptedData);
 
@@ -79,10 +43,8 @@ const login = async (request, reply) => {
 
 const forgotPassword = async (request, reply) => {
   try {
-    const formData = request.body;
-    const decryptedData = {
-      ...(formData?.email && { email: decryptData(formData?.email) }),
-    };
+    const decryptedData = decryptPayload(request.body);
+    console.log(decryptedData);
 
     Validation.forgotPasswordValidation(decryptedData);
 
@@ -97,19 +59,8 @@ const forgotPassword = async (request, reply) => {
 
 const resetPassword = async (request, reply) => {
   try {
-    const formData = request.body;
-    console.log(formData, "<<<<<");
-    const decryptedData = {
-      ...(formData?.otp && { otp: decryptData(formData?.otp) }),
-      ...(formData?.newPassword && {
-        newPassword: decryptData(formData?.newPassword),
-      }),
-      ...(formData?.confirmNewPassword && {
-        confirmNewPassword: decryptData(formData?.confirmNewPassword),
-      }),
-    };
-
-    console.log(decryptedData, "<<<<< test");
+    const decryptedData = decryptPayload(request.body);
+    console.log(decryptedData, "<<<<<");
 
     Validation.resetPasswordValidation(decryptedData);
 

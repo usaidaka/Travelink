@@ -19,6 +19,9 @@ module.exports = {
       otp: {
         type: Sequelize.STRING,
       },
+      token: {
+        type: Sequelize.TEXT,
+      },
       expiredAt: {
         type: Sequelize.DATE,
       },

@@ -12,16 +12,14 @@ module.exports = (sequelize, DataTypes) => {
       User.hasOne(models.UserDetail, { foreignKey: "user_id" });
       User.hasMany(models.Address, { foreignKey: "user_id" });
       User.hasOne(models.Credential, { foreignKey: "user_id" });
-      User.hasMany(models.Order, { foreignKey: "user_id" });
-      User.hasMany(models.Cart, { foreignKey: "user_id" });
       User.hasMany(models.Post, { foreignKey: "user_id" });
       User.hasOne(models.Route, { foreignKey: "user_id" });
-      User.belongsToMany(models.Product, {
-        through: "ProductPivot",
-        foreignKey: "user_id",
-        as: "User",
-      });
       User.hasMany(models.Comment, { foreignKey: "user_id" });
+      User.belongsToMany(models.Group, {
+        through: "GroupPivot",
+        foreignKey: "user_id",
+        as: "user",
+      });
     }
   }
   User.init(

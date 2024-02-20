@@ -1,7 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class ImageProduct extends Model {
+  class Group extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -9,20 +9,25 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      ImageProduct.belongsTo(models.Product, { foreignKey: "product_id" });
+      Group.belongsToMany(models.User, {
+        through: "GroupPivot",
+        foreignKey: "group_id",
+        as: "Group",
+      });
     }
   }
-  ImageProduct.init(
+  Group.init(
     {
-      product_id: DataTypes.INTEGER,
-      image: DataTypes.TEXT,
+      user_id: DataTypes.INTEGER,
+      route_id: DataTypes.INTEGER,
+      group_name: DataTypes.STRING,
       deletedAt: DataTypes.DATE,
     },
     {
       sequelize,
-      modelName: "ImageProduct",
+      modelName: "Group",
       paranoid: true,
     }
   );
-  return ImageProduct;
+  return Group;
 };

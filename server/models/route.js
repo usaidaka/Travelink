@@ -9,7 +9,6 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Route.belongsTo(models.Product, { foreignKey: "route_id" });
       Route.hasMany(models.City, { foreignKey: "current_city_id" });
       Route.hasMany(models.City, { foreignKey: "direction_city_id" });
       Route.hasMany(models.Province, { foreignKey: "current_province_id" });

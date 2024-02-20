@@ -2,23 +2,21 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("ImageProducts", {
+    await queryInterface.createTable("GroupPivots", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      product_id: {
+      user_id: {
         type: Sequelize.INTEGER,
-        references: {
-          model: "Products",
-          key: "id",
-        },
-        allowNull: false,
       },
-      image: {
-        type: Sequelize.TEXT,
+      group_id: {
+        type: Sequelize.INTEGER,
+      },
+      is_leader: {
+        type: Sequelize.BOOLEAN,
       },
       createdAt: {
         allowNull: false,
@@ -35,6 +33,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("ImageProducts");
+    await queryInterface.dropTable("GroupPivots");
   },
 };

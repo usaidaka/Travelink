@@ -12,7 +12,6 @@ module.exports = (sequelize, DataTypes) => {
       Address.belongsTo(models.User, { foreignKey: "user_id" });
       Address.belongsTo(models.Province, { foreignKey: "province_id" });
       Address.belongsTo(models.City, { foreignKey: "city_id" });
-      Address.hasMany(models.Order, { foreignKey: "address_id" });
     }
   }
   Address.init(

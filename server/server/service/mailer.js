@@ -41,7 +41,7 @@ module.exports = {
       <p>${message}</p>
       ${
         redirect
-          ? `<a href=${link} style="background: #187BCD; margin: 0 auto; width: max-content; padding: 5px 10px; color: #fff; border-radius: 4px; text-decoration: none;">${buttonText}</a>`
+          ? `<a href=${link} target="_blank" style="background: #187BCD; margin: 0 auto; width: max-content; padding: 5px 10px; color: #fff; border-radius: 4px; text-decoration: none;">${buttonText}</a>`
           : ``
       }
     </div>

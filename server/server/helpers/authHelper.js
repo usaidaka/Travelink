@@ -17,7 +17,7 @@ const jwtExpiresCredentialIn = process.env.JWT_EXPIRES_CREDENTIAL_IN || "24h";
 const fileName = "server/helpers/authHelper.js";
 const salt = bcrypt.genSaltSync(10);
 const cloudinary = require("../service/cloudinary");
-const { encryptData } = require("../service/encrypt");
+const { encryptPayload } = require("../service/encryptionHelper");
 
 // eslint-disable-next-line arrow-body-style
 const __hashPassword = (password) => {
@@ -136,12 +136,12 @@ const login = async (dataObject) => {
       ],
     });
     if (_.isEmpty(user)) {
-      return Promise.reject(Boom.notFound("USER_NOT_FOUND"));
+      return Promise.reject(Boom.notFound("User not found"));
     }
 
     const isPassMatched = __comparePassword(password, user.password);
     if (!isPassMatched) {
-      return Promise.reject(Boom.badRequest("WRONG_CREDENTIALS"));
+      return Promise.reject(Boom.badRequest("Wrong Password"));
     }
 
     const token = __generateToken({
@@ -151,7 +151,7 @@ const login = async (dataObject) => {
     });
 
     const result = {
-      username: user.name,
+      username: user.username,
       email: user.email,
       role: user.role,
       image: user.image,
@@ -162,11 +162,11 @@ const login = async (dataObject) => {
       is_verify: user.UserDetail?.is_verify,
     };
 
-    const resultEncrypted = encryptData(JSON.stringify(result));
+    const resultEncrypted = encryptPayload({ decryptedData: result });
 
     return Promise.resolve({
       ok: true,
-      message: "log in successful",
+      message: "Log in successful",
       token,
       result: resultEncrypted,
     });
@@ -184,7 +184,7 @@ const forgotPassword = async (dataObject) => {
     const user = await db.User.findOne({
       where: { email },
     });
-    console.log(user.id, "<<<<");
+
     if (_.isEmpty(user)) {
       await transaction.rollback();
       return Promise.reject(Boom.notFound("User not found"));
@@ -197,7 +197,7 @@ const forgotPassword = async (dataObject) => {
     const resetPasswordToken = __generateTokenCredential({
       username: user.username,
       email: user.email,
-      role: user.role,
+      type: "reset-password",
     });
 
     const expDate = new Date(moment().add(10, "minutes").format());
@@ -210,6 +210,7 @@ const forgotPassword = async (dataObject) => {
       await db.Credential.update(
         {
           otp: __generateCredential,
+          token: resetPasswordToken,
           expiredAt: expDate,
         },
         { where: { user_id: user.id }, transaction }
@@ -219,6 +220,7 @@ const forgotPassword = async (dataObject) => {
         {
           user_id: user.id,
           otp: __generateCredential,
+          token: resetPasswordToken,
           expiredAt: expDate,
         },
         { transaction }

@@ -1,0 +1,211 @@
+@startuml database
+
+' STYLE
+skinparam class {
+    BackgroundColor LightBlue
+    BorderColor Black
+}
+
+skinparam arrow {
+    Color Black
+    FontSize 12
+    FontStyle italic
+}
+skinparam linetype ortho
+
+/' USER '/
+
+entity "User_Detail" { 
+/' V '/
+  + id [PK]
+  --
+  + user_id [FK]
+  --
+  -first_name (string)
+  -last_name (string)
+  -phone (string, UQ)
+  -email_contact (string)
+  -phone_contact (string)
+  -password (string, UQ)
+  -mbti (ENUM)
+  -is_verify (bool)
+}
+
+entity "User" {
+/' V '/    
+  + id [PK]
+  --
+  -username (string, UQ)
+  -email (string, UQ)
+  -image (string)
+  -role (ENUM, [User, Admin, Super])
+}
+
+entity "Address" {
+    /' V '/    
+  + id [PK]
+  --
+  + province_id [FK]
+  + city_id [FK]
+  + user_id [FK]
+  --
+  -detail (string)
+  -longitude (string)
+  -latitude (string)
+  -postal_conde (string)
+  -title (string)
+}
+
+entity "Route"{
+    /' V '/    
+  + id [PK]
+  --
+  + user_id [FK]
+  + current_province_id [FK]
+  + current_city_id [FK]
+  + direction_province_id [FK]
+  + direction_city_id [FK]
+  --
+  -current_detail (string) 
+  -current_longitute (string)
+  -current_latitude (string)
+  -direction_detail (string) 
+  -direction_longitute (string)
+  -direction_latitude (string)
+   
+}
+
+
+entity "Credential" {
+/' V '/    
+  + id [PK]
+  --
+  + user_id [FK]
+  --
+  -otp (string)
+  -expiredAt (date)
+}
+
+entity "Post" {
+/' V '/    
+  + id [PK]
+  --
+  + user_id [FK]
+  + province_id [FK]
+  + city_id [FK]
+  --
+  -caption (string)
+  -location_name (string)
+}
+
+entity "Image_Post" {
+/' V '/    
+  + id [PK]
+  --
+  + post_id [FK] 
+  --
+  -image
+}
+
+entity "Comment" {
+/' V '/    
+  + id [PK]
+  --
+  + post_id [FK]
+  + user_id [FK]
+  --
+  -comment (string)
+}
+
+
+/' LOCATION '/
+entity "Province" {
+/' V '/    
+  + id [PK]
+  --
+  -name
+}
+
+entity "City" {
+/' V '/    
+  + id [PK]
+  --
+  + province_id [FK]
+  --
+  -name
+}
+
+
+/' ADMIN '/
+
+entity "Destination" {
+  + id [PK]
+  --
+  + province_id [FK]
+  + city_id [FK]
+  --
+  -description (string) 
+  -image (string)
+  -phone (string)
+  -longitute (string)
+  -latitude (string)
+}
+
+entity "Image_Destination" {
+  + id [PK]
+  --
+  + destinantion_id [FK]
+  --
+  -image
+}
+
+/' GROUP '/
+entity "Group" {
+  + id [PK]
+  --
+  + user_id [FK]
+  + route_id [FK]
+  --
+  + group_name (string)
+}
+
+entity "Group_Pivot" {
+  + id [PK]
+  --
+  + user_id [FK]
+  + group_id [FK]
+  --
+  + is_leader (boolean)
+}
+
+
+
+
+
+/' RELATIONAL '/
+
+' user
+User ||--|{ Group_Pivot
+Group ||--|{ Group_Pivot
+User ||--|| User_Detail
+User ||--|| Credential
+User }|--|| Address
+User ||--|| Route
+Province }|--|| City
+Route }|--|| City
+Route }|--|| Province
+Address }|--|| City
+Post ||--|| Province
+Post ||--|| City
+User }|--||Post
+Post }|--||Image_Post
+Post }|--||Comment
+User }|--|| Comment
+Destination }|--||Image_Destination
+
+
+
+
+
+
+@enduml
