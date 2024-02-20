@@ -1,0 +1,63 @@
+@import '@styles/base';
+
+.error-validation {
+  color: red;
+  font-size: 12px;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  transform: translateY(100%);
+}
+
+.container {
+  @include container-auth;
+
+  .form {
+    font-size: 12px;
+    .wrapper {
+      @include directionY;
+      position: relative;
+      justify-content: center;
+      margin: 20px 0px;
+
+      .input {
+        @include inputTag;
+      }
+
+      .password {
+        width: 100%;
+        position: relative;
+
+        .input {
+          @include inputTag;
+        }
+        .visible {
+          position: absolute;
+          top: 0;
+          right: 0;
+          margin: 4px 6px;
+          cursor: pointer;
+
+          .icon {
+            width: 26px;
+          }
+        }
+      }
+    }
+
+    .submit {
+      width: 100%;
+      margin-top: 10px;
+      @include apply-at-xl-size {
+        margin-top: 20px;
+      }
+    }
+  }
+  .register {
+    @include redirectAuth;
+    span {
+      color: $color-blue-logo;
+      text-decoration: underline;
+    }
+  }
+}

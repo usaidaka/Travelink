@@ -1,18 +1,30 @@
 import PropTypes from 'prop-types';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
-import { selectLogin } from '@containers/Client/selectors';
+import { selectLogin, selectUser } from '@containers/Client/selectors';
+import decryptPayload from '@utils/decryptionHelper';
 
-const Client = ({ login, children }) => {
+const Client = ({ login, children, user }) => {
+  const [decryptedUser, setDecryptedUser] = useState('');
+  console.log(user);
+
+  useEffect(() => {
+    if (user) {
+      setDecryptedUser(decryptPayload(user));
+    }
+  }, [user]);
+
+  const isUser = !login || decryptedUser.role !== 'User';
+
   const navigate = useNavigate();
   useEffect(() => {
-    if (!login) {
-      navigate('/login');
+    if (isUser) {
+      navigate(-1);
     }
-  }, [login, navigate]);
+  }, [decryptedUser.role, isUser, login, navigate]);
 
   return children;
 };
@@ -20,10 +32,12 @@ const Client = ({ login, children }) => {
 Client.propTypes = {
   login: PropTypes.bool,
   children: PropTypes.element,
+  user: PropTypes.string,
 };
 
 const mapStateToProps = createStructuredSelector({
   login: selectLogin,
+  user: selectUser,
 });
 
 export default connect(mapStateToProps)(Client);

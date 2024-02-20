@@ -1,0 +1,53 @@
+@import '@styles/base';
+
+.container {
+  @include container-auth;
+
+  .form {
+    font-size: 12px;
+    .wrapper {
+      @include directionY;
+      justify-content: center;
+      margin: 10px 0px;
+
+      .input {
+        @include inputTag;
+      }
+
+      .password {
+        width: 100%;
+        position: relative;
+
+        .input {
+          @include inputTag;
+        }
+        .visible {
+          position: absolute;
+          top: 0;
+          right: 0;
+          margin: 4px 6px;
+
+          .icon {
+            width: 26px;
+          }
+        }
+      }
+    }
+
+    .submit {
+      width: 100%;
+      margin-top: 10px;
+      @include apply-at-xl-size {
+        margin-top: 20px;
+      }
+    }
+  }
+
+  .remember {
+    @include redirectAuth;
+    span {
+      color: $color-blue-logo;
+      text-decoration: underline;
+    }
+  }
+}

@@ -1,0 +1,74 @@
+@import '@styles/base';
+
+.error-validation {
+  color: red;
+  font-size: 12px;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  transform: translateY(100%);
+}
+
+.container {
+  @include container-register;
+
+  .form {
+    font-size: 12px;
+    .wrapper {
+      @include directionY;
+      justify-content: center;
+      margin: 20px 0px;
+      position: relative;
+
+      .input {
+        @include inputTag;
+      }
+
+      .password {
+        width: 100%;
+        position: relative;
+
+        .input {
+          @include inputTag;
+        }
+        .visible {
+          position: absolute;
+          top: 0;
+          right: 0;
+          margin: 4px 6px;
+
+          .icon {
+            width: 26px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.wrapper {
+  position: relative;
+  width: 100%;
+  margin-top: 20px;
+
+  @include apply-at-xl-size {
+    margin-top: 40px;
+  }
+
+  .button-render {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+
+    .login {
+      @include redirectAuth;
+      span {
+        color: $color-blue-logo;
+        text-decoration: underline;
+      }
+    }
+  }
+}

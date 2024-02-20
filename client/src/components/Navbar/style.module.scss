@@ -4,8 +4,23 @@
   background-color: var(--color-bg) !important;
   box-shadow: 0 0.25rem 0.75rem rgba(25, 49, 83, 0.2) !important;
   position: sticky;
+  z-index: 10;
+  width: 100%;
   top: 0;
   .contentWrapper {
+    .menu {
+      display: flex;
+      gap: 20px;
+    }
+
+    .dropDown {
+      @include directionX;
+    }
+
+    .dropdown-wrapper {
+      @include directionX;
+    }
+
     @include directionX;
 
     color: var(--color-text);
@@ -20,9 +35,13 @@
       align-items: center;
 
       .logo {
-        width: 1.5rem;
-        height: 1.5rem;
+        width: 15%;
+        height: 100%;
         margin-right: 0.5rem;
+        @include apply-at-xl-size {
+          width: 15%;
+          padding-left: 20px;
+        }
       }
       .title {
         font-weight: 700;
@@ -37,6 +56,20 @@
         margin-right: 0.5rem;
         cursor: pointer;
       }
+
+      .toggleImage {
+        width: 1.5rem;
+        height: 1.5rem;
+        border-radius: 100%;
+        cursor: pointer;
+        .photo-profile {
+          width: 100%;
+          height: 100%;
+          border-radius: 100%;
+          object-fit: cover;
+        }
+      }
+
       .toggle {
         @include directionX;
         align-items: center;
@@ -75,6 +108,10 @@
     margin-right: 0.5rem;
   }
 
+  .icon {
+    width: 30px;
+    height: 30px;
+  }
   .menuLang {
     font-family: Poppins, Arial, Helvetica, sans-serif;
     font-size: 0.8rem;

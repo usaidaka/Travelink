@@ -5,7 +5,9 @@ import request from '@utils/request';
 
 const urls = {
   // ping: 'ping.json',
-  register: 'user/register'
+  login: 'auth/login',
+  register: 'auth/register',
+  forgotPassword: 'auth/forgot-password',
 };
 
 export const callAPI = async (endpoint, method, header = {}, params = {}, data = {}) => {
@@ -33,12 +35,22 @@ export const callAPI = async (endpoint, method, header = {}, params = {}, data =
 export const fetchPokemon = () => callAPI(urls.ditto, 'GET');
 export const example = (data) => {
   const header = {
-    'Content-Type': 'multipart/form-data'
-  }
+    'Content-Type': 'multipart/form-data',
+  };
   return callAPI(urls.ditto, 'GET', header, {}, data);
 };
 
-export const register = (dataUser) => {
-  console.log(dataUser, '<<< DATA USER API')
-  return callAPI(urls.register, 'POST', {}, {}, dataUser);
-}
+export const register = (data) => {
+  console.log(data, '<<< DATA USER API');
+  return callAPI(urls.register, 'POST', {}, {}, data);
+};
+
+export const login = (data) => {
+  console.log(data, '<<< DATA USER');
+  return callAPI(urls.login, 'POST', {}, {}, data);
+};
+
+export const forgotPassword = (data) => {
+  console.log(data, '<<< DATA FORGOT');
+  return callAPI(urls.forgotPassword, 'POST', {}, {}, data);
+};

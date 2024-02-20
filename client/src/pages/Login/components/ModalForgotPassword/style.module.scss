@@ -1,0 +1,38 @@
+@import '@styles/base';
+
+.error-validation {
+  color: red;
+  font-size: 12px;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  transform: translateY(100%);
+}
+
+.open {
+  font-size: 12px;
+  margin-top: 20px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.form {
+  @include directionY;
+  font-size: 12px;
+  gap: 20px;
+
+  .wrapper {
+    @include directionY;
+    width: 100%;
+    position: relative;
+
+    .input {
+      @include inputTag;
+    }
+  }
+  .button {
+    @include directionX;
+    justify-content: end;
+    margin-top: 5px;
+  }
+}

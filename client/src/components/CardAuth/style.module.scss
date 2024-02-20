@@ -1,0 +1,54 @@
+@import '@styles/base';
+
+.container {
+  height: 100%;
+  display: flex;
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: $box-shadow-card;
+
+  @include apply-at-xl-size {
+    width: 70%;
+    height: 80%;
+  }
+
+  .decoration {
+    width: 60%;
+    display: none;
+    @include apply-at-xl-size {
+      display: block;
+    }
+    @include apply-at-xl-size {
+      .image {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+  .main {
+    background-color: $color-white;
+    @include directionY;
+    padding: 20px;
+    align-items: center;
+    width: 100%;
+    @include apply-at-xl-size {
+      width: 40%;
+    }
+
+    .image {
+      width: 200px;
+      height: 100%;
+      margin: auto;
+    }
+
+    .form {
+      width: 100%;
+      height: 100%;
+      @include apply-at-xl-size {
+        // height: 65%;
+      }
+    }
+  }
+}
