@@ -10,30 +10,33 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import encryptPayload from '@utils/encryptionHelper';
-import { getUserDataInput, setUserDataInput } from '@pages/Register/actions';
+import { setUserDataInput } from '@pages/Register/actions';
+import decryptPayload from '@utils/decryptionHelper';
 
 import classes from './style.module.scss';
 
 const StepOne = ({ step, onNextStep, dataUser }) => {
+  const [decryptedData, setDecryptedData] = useState(decryptPayload(dataUser.encryptedData));
   const [visible, setVisible] = useState(false);
   const dispatch = useDispatch();
-  console.log(step);
-  console.log(dataUser);
 
   useEffect(() => {
-    dispatch(getUserDataInput());
-  }, [dispatch]);
+    if (dataUser) {
+      setDecryptedData(decryptPayload(dataUser.encryptedData));
+    }
+  }, [dataUser]);
 
   const {
     register,
+    watch,
     formState: { errors },
     handleSubmit,
   } = useForm();
 
   const onSubmit = (data) => {
-    const encryptedData = encryptPayload(data);
-    console.log(encryptedData);
-    console.log(data);
+    const mergedData = { ...decryptedData, ...data };
+    const encryptedData = encryptPayload(mergedData);
+
     dispatch(setUserDataInput({ encryptedData }));
     onNextStep(step);
   };
@@ -59,6 +62,8 @@ const StepOne = ({ step, onNextStep, dataUser }) => {
                 required: 'username is required',
               })}
               aria-invalid={errors.username ? 'true' : 'false'}
+              value={decryptedData?.username}
+              onChange={(e) => setDecryptedData((prev) => ({ ...prev, username: e.target.value }))}
             />
             {errors.username && (
               <span role="alert" className={classes['error-validation']}>
@@ -81,6 +86,8 @@ const StepOne = ({ step, onNextStep, dataUser }) => {
                 required: 'email is required',
               })}
               aria-invalid={errors.email ? 'true' : 'false'}
+              value={decryptedData?.email}
+              onChange={(e) => setDecryptedData((prev) => ({ ...prev, email: e.target.value }))}
             />
             {errors.email && (
               <span role="alert" className={classes['error-validation']}>
@@ -105,6 +112,8 @@ const StepOne = ({ step, onNextStep, dataUser }) => {
                   required: 'password is required',
                 })}
                 aria-invalid={errors.password ? 'true' : 'false'}
+                value={decryptedData?.password}
+                onChange={(e) => setDecryptedData((prev) => ({ ...prev, password: e.target.value }))}
               />
               <div className={classes.visible} onClick={() => setVisible(!visible)}>
                 {visible ? <VisibilityOffIcon className={classes.icon} /> : <VisibilityIcon className={classes.icon} />}
@@ -131,8 +140,11 @@ const StepOne = ({ step, onNextStep, dataUser }) => {
                 placeholder="••••••••••"
                 {...register('confirmPassword', {
                   required: 'confirm password is required',
+                  validate: (value) => value === watch('password') || 'Passwords do not match',
                 })}
                 aria-invalid={errors.confirmPassword ? 'true' : 'false'}
+                value={decryptedData?.confirmPassword}
+                onChange={(e) => setDecryptedData((prev) => ({ ...prev, confirmPassword: e.target.value }))}
               />
               {errors.confirmPassword && (
                 <span role="alert" className={classes['error-validation']}>

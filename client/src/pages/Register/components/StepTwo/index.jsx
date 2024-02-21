@@ -13,7 +13,7 @@ import { setUserDataInput } from '@pages/Register/actions';
 import classes from './style.module.scss';
 
 const StepTwo = ({ step, onBackStep, onNextStep, dataUser }) => {
-  const [decryptedData, setDecryptedData] = useState({});
+  const [decryptedData, setDecryptedData] = useState(decryptPayload(dataUser.encryptedData));
 
   const dispatch = useDispatch();
 
@@ -22,6 +22,7 @@ const StepTwo = ({ step, onBackStep, onNextStep, dataUser }) => {
       setDecryptedData(decryptPayload(dataUser.encryptedData));
     }
   }, [dataUser]);
+  console.log(decryptedData);
 
   const {
     register,
@@ -47,17 +48,19 @@ const StepTwo = ({ step, onBackStep, onNextStep, dataUser }) => {
             <input
               type="text"
               className={classes.input}
-              id="firstName"
-              name="firstName"
+              id="first_name"
+              name="first_name"
               placeholder="John"
-              {...register('firstName', {
+              {...register('first_name', {
                 required: 'first name is required',
               })}
-              aria-invalid={errors.firstName ? 'true' : 'false'}
+              aria-invalid={errors.first_name ? 'true' : 'false'}
+              value={decryptedData?.first_name}
+              onChange={(e) => setDecryptedData((prev) => ({ ...prev, first_name: e.target.value }))}
             />
-            {errors.firstName && (
+            {errors.first_name && (
               <span role="alert" className={classes['error-validation']}>
-                {errors.firstName.message}
+                {errors.first_name.message}
               </span>
             )}
           </div>
@@ -69,17 +72,19 @@ const StepTwo = ({ step, onBackStep, onNextStep, dataUser }) => {
             <input
               type="text"
               className={classes.input}
-              id="lastName"
-              name="lastName"
+              id="last_name"
+              name="last_name"
               placeholder="Doe"
-              {...register('lastName', {
+              {...register('last_name', {
                 required: 'last name is required',
               })}
-              aria-invalid={errors.lastName ? 'true' : 'false'}
+              aria-invalid={errors.last_name ? 'true' : 'false'}
+              value={decryptedData?.last_name}
+              onChange={(e) => setDecryptedData((prev) => ({ ...prev, last_name: e.target.value }))}
             />
-            {errors.lastName && (
+            {errors.last_name && (
               <span role="alert" className={classes['error-validation']}>
-                {errors.lastName.message}
+                {errors.last_name.message}
               </span>
             )}
           </div>
@@ -96,6 +101,8 @@ const StepTwo = ({ step, onBackStep, onNextStep, dataUser }) => {
                 required: 'Gender is required',
               })}
               aria-invalid={errors.gender ? 'true' : 'false'}
+              value={decryptedData?.gender}
+              onChange={(e) => setDecryptedData((prev) => ({ ...prev, gender: e.target.value }))}
             >
               <option value="" disabled>
                 <FormattedMessage id="choose" />
@@ -104,7 +111,7 @@ const StepTwo = ({ step, onBackStep, onNextStep, dataUser }) => {
                 <FormattedMessage id="male" />
               </option>
               <option value="Female">
-                <FormattedMessage id="Female" />
+                <FormattedMessage id="female" />
               </option>
             </select>
             {errors.gender && (
@@ -129,6 +136,8 @@ const StepTwo = ({ step, onBackStep, onNextStep, dataUser }) => {
                   required: 'phone is required',
                 })}
                 aria-invalid={errors.phone ? 'true' : 'false'}
+                value={decryptedData?.phone}
+                onChange={(e) => setDecryptedData((prev) => ({ ...prev, phone: e.target.value }))}
               />
               {errors.phone && (
                 <span role="alert" className={classes['error-validation']}>
@@ -144,17 +153,19 @@ const StepTwo = ({ step, onBackStep, onNextStep, dataUser }) => {
               <input
                 type="text"
                 className={classes.input}
-                id="phoneContact"
-                name="phoneContact"
+                id="phone_contact"
+                name="phone_contact"
                 placeholder="08912341xxx"
-                {...register('phoneContact', {
+                {...register('phone_contact', {
                   required: 'phone contact is required',
                 })}
-                aria-invalid={errors.phoneContact ? 'true' : 'false'}
+                aria-invalid={errors.phone_contact ? 'true' : 'false'}
+                value={decryptedData?.phone_contact}
+                onChange={(e) => setDecryptedData((prev) => ({ ...prev, phone_contact: e.target.value }))}
               />
-              {errors.phoneContact && (
+              {errors.phone_contact && (
                 <span role="alert" className={classes['error-validation']}>
-                  {errors.phoneContact.message}
+                  {errors.phone_contact.message}
                 </span>
               )}
             </div>
@@ -167,17 +178,19 @@ const StepTwo = ({ step, onBackStep, onNextStep, dataUser }) => {
             <input
               type="email"
               className={classes.input}
-              id="emailContact"
-              name="emailContact"
+              id="email_contact"
+              name="email_contact"
               placeholder="email@gmail.com"
-              {...register('emailContact', {
+              {...register('email_contact', {
                 required: 'phone contact is required',
               })}
-              aria-invalid={errors.emailContact ? 'true' : 'false'}
+              aria-invalid={errors.email_contact ? 'true' : 'false'}
+              value={decryptedData?.email_contact}
+              onChange={(e) => setDecryptedData((prev) => ({ ...prev, email_contact: e.target.value }))}
             />
-            {errors.emailContact && (
+            {errors.email_contact && (
               <span role="alert" className={classes['error-validation']}>
-                {errors.emailContact.message}
+                {errors.email_contact.message}
               </span>
             )}
           </div>

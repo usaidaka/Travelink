@@ -8,6 +8,7 @@ const urls = {
   login: 'auth/login',
   register: 'auth/register',
   forgotPassword: 'auth/forgot-password',
+  resetPassword: 'auth/reset-password',
 };
 
 export const callAPI = async (endpoint, method, header = {}, params = {}, data = {}) => {
@@ -54,3 +55,5 @@ export const forgotPassword = (data) => {
   console.log(data, '<<< DATA FORGOT');
   return callAPI(urls.forgotPassword, 'POST', {}, {}, data);
 };
+
+export const resetPassword = (data) => callAPI(urls.resetPassword, 'POST', {}, {}, data);

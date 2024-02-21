@@ -10,7 +10,6 @@ export const storedKey = ['data', 'step'];
 
 const registerReducer = (state = initialState, action) =>
   produce(state, (draft) => {
-    console.log(action);
     switch (action.type) {
       case SET_USER_DATA_INPUT:
         draft.data = action.data;

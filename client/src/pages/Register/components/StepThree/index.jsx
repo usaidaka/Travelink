@@ -9,7 +9,9 @@ import mbti from '@assets/mbti.png';
 import decryptPayload from '@utils/decryptionHelper';
 import { useForm } from 'react-hook-form';
 import encryptPayload from '@utils/encryptionHelper';
-import { setUserDataInput } from '@pages/Register/actions';
+import { doRegister, setStepPage, setUserDataInput } from '@pages/Register/actions';
+import toast, { Toaster } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 import classes from './style.module.scss';
 
@@ -33,17 +35,15 @@ const mbtiPersonality = [
 ];
 
 const StepThree = ({ step, onBackStep, dataUser }) => {
-  const [decryptedData, setDecryptedData] = useState({});
+  const [decryptedData, setDecryptedData] = useState(decryptPayload(dataUser.encryptedData));
   const [isFinish, setIsFinish] = useState(true);
   const [loading, setLoading] = useState(false);
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
     setDecryptedData(decryptPayload(dataUser.encryptedData));
   }, [dataUser.encryptedData]);
-
-  console.log(decryptedData);
 
   const {
     register,
@@ -54,9 +54,19 @@ const StepThree = ({ step, onBackStep, dataUser }) => {
   const onSubmit = (data) => {
     const mergedData = { ...decryptedData, ...data };
     const encryptedData = encryptPayload(mergedData);
-    console.log(encryptedData);
-    console.log(decryptPayload(encryptedData));
+
     dispatch(setUserDataInput({ encryptedData }));
+    dispatch(
+      doRegister({ encryptedData }, (message) => {
+        toast.success(message, { duration: 2000 });
+        setLoading(true);
+        setTimeout(() => {
+          navigate('/login');
+          dispatch(setStepPage(1));
+          dispatch(setUserDataInput({}));
+        }, 4000);
+      })
+    );
   };
 
   return (
@@ -93,6 +103,8 @@ const StepThree = ({ step, onBackStep, dataUser }) => {
                   required: 'mbti is required',
                 })}
                 aria-invalid={errors.mbti ? 'true' : 'false'}
+                value={decryptedData?.mbti}
+                onChange={(e) => setDecryptedData((prev) => ({ ...prev, mbti: e.target.value }))}
               >
                 <option value="" disabled>
                   <FormattedMessage id="choose" />
@@ -128,6 +140,7 @@ const StepThree = ({ step, onBackStep, dataUser }) => {
           </Button>
         </div>
       </div>
+      <Toaster position="top-center" reverseOrder={false} />
     </form>
   );
 };

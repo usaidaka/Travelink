@@ -10,7 +10,7 @@ import StepIndicator from './components/StepIndication';
 import StepOne from './components/StepOne';
 import StepTwo from './components/StepTwo';
 import StepThree from './components/StepThree';
-import { selectStepPage, selectUserDataInput } from './selectors';
+import { selectStepPage } from './selectors';
 
 const Register = ({ step }) => {
   const dispatch = useDispatch();
@@ -60,12 +60,10 @@ const Register = ({ step }) => {
 };
 
 Register.propTypes = {
-  data: PropTypes.object,
   step: PropTypes.number,
 };
 
 const mapStateToProps = createStructuredSelector({
-  data: selectUserDataInput,
   step: selectStepPage,
 });
 

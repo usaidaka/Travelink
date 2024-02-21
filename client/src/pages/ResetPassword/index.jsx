@@ -1,6 +1,6 @@
 import CardAuth from '@components/CardAuth';
 import { FormattedMessage } from 'react-intl';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import resetDecoration from '@assets/resetDecoration.jpg';
 import { useState } from 'react';
 import { Button } from '@mui/material';
@@ -8,25 +8,35 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { useForm } from 'react-hook-form';
 import encryptPayload from '@utils/encryptionHelper';
+import { useDispatch } from 'react-redux';
 
 import classes from './style.module.scss';
+import { doResetPassword } from './actions';
 
 const ResetPassword = () => {
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const { resetToken } = useParams();
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const {
     register,
+    watch,
     formState: { errors },
     handleSubmit,
   } = useForm();
 
   const onSubmit = (data) => {
     const encryptedData = encryptPayload(data);
-    console.log(encryptedData);
-    console.log(data);
-    // dispatch(setUserDataInput({ encryptedData }));
+
+    dispatch(
+      doResetPassword({ encryptedData }, resetToken, () => {
+        setLoading(true);
+        setTimeout(() => navigate('/login'), 3000);
+      })
+    );
   };
 
   return (
@@ -97,6 +107,7 @@ const ResetPassword = () => {
                 placeholder="••••••••••"
                 {...register('confirmNewPassword', {
                   required: 'confirmNewPassword is required',
+                  validate: (value) => value === watch('newPassword') || 'Passwords do not match',
                 })}
                 aria-invalid={errors.confirmNewPassword ? 'true' : 'false'}
               />

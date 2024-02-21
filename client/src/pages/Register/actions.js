@@ -1,4 +1,4 @@
-import { SET_USER_DATA_INPUT, SET_STEP_PAGE, GET_STEP_PAGE, GET_USER_DATA_INPUT } from './constants';
+import { SET_USER_DATA_INPUT, SET_STEP_PAGE, GET_STEP_PAGE, GET_USER_DATA_INPUT, DO_REGISTER } from './constants';
 
 export const getUserDataInput = (data) => ({
   type: GET_USER_DATA_INPUT,
@@ -21,4 +21,10 @@ export const getStepPage = (step) => ({
 export const setStepPage = (step) => ({
   type: SET_STEP_PAGE,
   step,
+});
+
+export const doRegister = (data, cbSuccess) => ({
+  type: DO_REGISTER,
+  data,
+  cbSuccess,
 });

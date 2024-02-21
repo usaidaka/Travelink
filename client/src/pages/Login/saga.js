@@ -13,7 +13,7 @@ function* doLogin({ data, cbSuccess }) {
     yield put(setToken(response.token));
     yield put(setUser(response.result));
     const decryptedUser = decryptPayload(response.result);
-    console.log(decryptedUser);
+
     cbSuccess && cbSuccess(decryptedUser.role, response.message);
   } catch (error) {
     yield put(showPopup('Error', error.response?.data?.message));
@@ -25,7 +25,7 @@ function* doForgotPassword({ data, cbSuccess, cbFailed }) {
   setLoading(true);
   try {
     const response = yield call(forgotPassword, data);
-    console.log(response);
+
     cbSuccess && cbSuccess(response.message);
   } catch (error) {
     cbFailed && cbFailed();
