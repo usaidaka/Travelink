@@ -20,8 +20,6 @@ const MainLayout = ({ children, locale, theme, intl: { formatMessage }, user }) 
     }
   }, [user]);
 
-  console.log(decryptedUser);
-
   let renderNav;
 
   switch (decryptedUser.role) {

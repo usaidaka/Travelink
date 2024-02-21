@@ -23,6 +23,7 @@ export default {
   logout: 'Keluar',
   dashboard: 'Dasbor',
   admin: 'Admin',
+  profile: 'Profil',
 
   email: 'Surel',
   username: 'Nama Pengguna',

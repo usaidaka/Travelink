@@ -22,6 +22,7 @@ export default {
   logout: 'Log out',
   dashboard: 'Dashboard',
   admin: 'Admin',
+  profile: 'Profile',
 
   email: 'Email',
   username: 'Username',
