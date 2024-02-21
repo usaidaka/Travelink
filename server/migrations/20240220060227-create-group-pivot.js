@@ -18,6 +18,10 @@ module.exports = {
       is_leader: {
         type: Sequelize.BOOLEAN,
       },
+      is_allow: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

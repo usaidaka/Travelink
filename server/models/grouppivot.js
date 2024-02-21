@@ -26,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       user_id: DataTypes.INTEGER,
       group_id: DataTypes.INTEGER,
       is_leader: DataTypes.BOOLEAN,
+      is_allow: DataTypes.BOOLEAN,
       deletedAt: DataTypes.DATE,
     },
     {

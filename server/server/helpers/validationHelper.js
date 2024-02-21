@@ -140,6 +140,26 @@ const addRouteValidation = (data) => {
   }
 };
 
+const addGroup = (data) => {
+  const schema = Joi.object({
+    group_name: Joi.string().required().description("MTMA"),
+  });
+
+  if (schema.validate(data).error) {
+    throw Boom.badRequest(schema.validate(data).error);
+  }
+};
+
+const deleteGroup = (data) => {
+  const schema = Joi.object({
+    groupId: Joi.string().required().description("1"),
+  });
+
+  if (schema.validate(data).error) {
+    throw Boom.badRequest(schema.validate(data).error);
+  }
+};
+
 module.exports = {
   registerValidation,
   loginValidation,
@@ -147,4 +167,6 @@ module.exports = {
   resetPasswordValidation,
   addAddressValidation,
   addRouteValidation,
+  addGroup,
+  deleteGroup,
 };

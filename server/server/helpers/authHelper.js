@@ -200,7 +200,7 @@ const forgotPassword = async (dataObject) => {
       username: user.username,
       email: user.email,
       type: "reset-password",
-    });
+    }).replace(/\./g, "_");
 
     const expDate = new Date(moment().add(10, "minutes").format());
 
