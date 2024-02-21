@@ -77,9 +77,74 @@ const resetPasswordValidation = (data) => {
   }
 };
 
+const addAddressValidation = (data) => {
+  const schema = Joi.object({
+    province_id: Joi.number()
+      .required()
+      .description("Should be between 8-20 characters"),
+    city_id: Joi.number()
+      .required()
+      .description("Should be between 8-20 characters"),
+    detail: Joi.string()
+      .required()
+      .description("Should be at least 8 characters"),
+    longitude: Joi.number()
+      .required()
+      .description("Should be between 8-20 characters"),
+    latitude: Joi.number()
+      .required()
+      .description("Should be between 8-20 characters"),
+    postal_code: Joi.string()
+      .required()
+      .description("Should be between 8-20 characters"),
+    title: Joi.string()
+      .required()
+      .description("Should be between 8-20 characters"),
+  });
+
+  if (schema.validate(data).error) {
+    throw Boom.badRequest(schema.validate(data).error);
+  }
+};
+
+const addRouteValidation = (data) => {
+  const schema = Joi.object({
+    // current
+    current_province_id: Joi.number().required().description("1"),
+    current_city_id: Joi.number().required().description("1"),
+    current_detail: Joi.string()
+      .required()
+      .description("Should be at least 8 characters"),
+    current_longitude: Joi.number()
+      .required()
+      .description("Should be between 8-20 characters"),
+    current_latitude: Joi.number()
+      .required()
+      .description("Should be between 8-20 characters"),
+    // direction
+    direction_detail: Joi.string()
+      .required()
+      .description("Should be at least 8 characters"),
+    direction_province_id: Joi.number().required().description("1"),
+    direction_city_id: Joi.number().required().description("1"),
+    direction_longitude: Joi.number()
+      .required()
+      .description("Should be between 8-20 characters"),
+    direction_latitude: Joi.number()
+      .required()
+      .description("Should be between 8-20 characters"),
+  });
+
+  if (schema.validate(data).error) {
+    throw Boom.badRequest(schema.validate(data).error);
+  }
+};
+
 module.exports = {
   registerValidation,
   loginValidation,
   forgotPasswordValidation,
   resetPasswordValidation,
+  addAddressValidation,
+  addRouteValidation,
 };

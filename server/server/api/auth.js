@@ -26,7 +26,6 @@ const register = async (request, reply) => {
 
 const login = async (request, reply) => {
   try {
-    console.log(request.body);
     const decryptedData = decryptPayload(request.body);
 
     Validation.loginValidation(decryptedData);

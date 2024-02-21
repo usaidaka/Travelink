@@ -22,7 +22,7 @@ const validateToken = (request, reply, next) => {
     const token = authorization.split(" ")[1];
 
     const verifiedUser = jwt.verify(token, jwtSecretToken);
-    console.log(verifiedUser);
+
     if (_.isEmpty(verifiedUser) || !_.has(verifiedUser, "exp")) {
       throw Boom.unauthorized();
     }

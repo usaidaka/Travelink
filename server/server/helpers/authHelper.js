@@ -8,16 +8,17 @@ const jwt = require("jsonwebtoken");
 const db = require("../../models");
 const GeneralHelper = require("./generalHelper");
 const Mailer = require("../service/mailer");
-
-const jwtSecretToken = process.env.JWT_SECRET_TOKEN || "super_strong_key";
-const jwtSecretTokenCredential =
-  process.env.JWT_SECRET_TOKEN_CREDENTIAL || "super_strong_key";
-const jwtExpiresIn = process.env.JWT_EXPIRES_IN || "24h";
-const jwtExpiresCredentialIn = process.env.JWT_EXPIRES_CREDENTIAL_IN || "24h";
-const fileName = "server/helpers/authHelper.js";
-const salt = bcrypt.genSaltSync(10);
 const cloudinary = require("../service/cloudinary");
 const { encryptPayload } = require("../service/encryptionHelper");
+
+const jwtSecretTokenCredential =
+  process.env.JWT_SECRET_TOKEN_CREDENTIAL || "super_strong_key";
+const jwtSecretToken = process.env.JWT_SECRET_TOKEN || "super_strong_key";
+const jwtExpiresIn = process.env.JWT_EXPIRES_IN || "24h";
+const jwtExpiresCredentialIn = process.env.JWT_EXPIRES_CREDENTIAL_IN || "24h";
+const salt = bcrypt.genSaltSync(10);
+
+const fileName = "server/helpers/authHelper.js";
 
 // eslint-disable-next-line arrow-body-style
 const __hashPassword = (password) => {
@@ -125,7 +126,7 @@ const login = async (dataObject) => {
   try {
     const user = await db.User.findOne({
       where: { email },
-      attributes: { exclude: ["id", "deletedAt", "createdAt", "updatedAt"] },
+      attributes: { exclude: ["deletedAt", "createdAt", "updatedAt"] },
       include: [
         {
           model: db.UserDetail,
@@ -145,6 +146,7 @@ const login = async (dataObject) => {
     }
 
     const token = __generateToken({
+      id: user.id,
       username: user.username,
       email: user.email,
       role: user.role,

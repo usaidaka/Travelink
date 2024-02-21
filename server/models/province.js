@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       Province.hasMany(models.Route, { foreignKey: "current_province_id" });
       Province.hasMany(models.Route, { foreignKey: "direction_province_id" });
       Province.hasMany(models.Destination, { foreignKey: "province_id" });
+      Province.hasMany(models.City, { foreignKey: "province_id" });
     }
   }
   Province.init(
