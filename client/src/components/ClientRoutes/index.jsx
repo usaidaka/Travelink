@@ -10,8 +10,6 @@ const ClientRoutes = () => {
 
     const renderElement = (route) => {
       const { layout: Layout, component: Component, protected: Protected, role: Role } = route;
-      console.log(Role);
-      console.log(Protected);
 
       let element = <Component />;
 

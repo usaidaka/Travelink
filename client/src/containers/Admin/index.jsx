@@ -9,18 +9,19 @@ import decryptPayload from '@utils/decryptionHelper';
 
 const Admin = ({ login, children, user }) => {
   const [decryptedUser, setDecryptedUser] = useState({});
+  const [isAdmin, setIsAdmin] = useState(false);
+
   useEffect(() => {
     if (user) {
       setDecryptedUser(decryptPayload(user));
+      setIsAdmin(!login && (decryptedUser?.role !== 'Admin' || decryptedUser?.role !== 'Super'));
     }
-  }, [user]);
+  }, [decryptedUser?.role, login, user]);
 
   const navigate = useNavigate();
 
-  const isAdmin = !login && (decryptedUser.role !== 'Admin' || decryptedUser.role !== 'Super');
-
   useEffect(() => {
-    if (!isAdmin) {
+    if (isAdmin) {
       navigate(-1);
     }
   }, [isAdmin, navigate, decryptedUser.role]);

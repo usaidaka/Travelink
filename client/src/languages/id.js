@@ -46,4 +46,10 @@ export default {
   finishConfirmation:
     'Apakah Anda sudah memeriksa dan yakin bahwa semua data yang Anda isi sudah benar dan lengkap? Jangan lupa untuk memeriksa kembali sebelum melanjutkan.',
   otp: 'Kode Verifikasi',
+
+  home: 'Beranda',
+  explore: 'Jelajah',
+  people: 'Pengguna Lain',
+  setting: 'Pengaturan',
+  trip: 'Perjalanan',
 };

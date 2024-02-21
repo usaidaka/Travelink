@@ -45,4 +45,10 @@ export default {
   finishConfirmation:
     "Have you checked and are sure that all the data you have filled in is correct and complete? Don't forget to check again before continuing.",
   otp: 'One Time Password',
+
+  home: 'Home',
+  explore: 'Explore',
+  people: 'People',
+  setting: 'Setting',
+  trip: 'Trip',
 };

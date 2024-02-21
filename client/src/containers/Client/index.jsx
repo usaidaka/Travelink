@@ -8,23 +8,23 @@ import { selectLogin, selectUser } from '@containers/Client/selectors';
 import decryptPayload from '@utils/decryptionHelper';
 
 const Client = ({ login, children, user }) => {
-  const [decryptedUser, setDecryptedUser] = useState('');
+  const [decryptedUser, setDecryptedUser] = useState({});
+  const [isUser, setIsUser] = useState(false);
   console.log(user);
 
   useEffect(() => {
     if (user) {
       setDecryptedUser(decryptPayload(user));
+      setIsUser(!login && decryptedUser?.role !== 'User');
     }
-  }, [user]);
-
-  const isUser = !login || decryptedUser.role !== 'User';
+  }, [decryptedUser?.role, login, user]);
 
   const navigate = useNavigate();
   useEffect(() => {
     if (isUser) {
       navigate(-1);
     }
-  }, [decryptedUser.role, isUser, login, navigate]);
+  }, [isUser, login, navigate]);
 
   return children;
 };

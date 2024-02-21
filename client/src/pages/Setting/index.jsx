@@ -2,12 +2,12 @@ import { useState } from 'react';
 import Maps from '@components/Maps';
 import classes from './style.module.scss';
 
-const Home = () => {
+const Setting = () => {
   return (
     <div className={classes.container}>
-      <h1>home</h1>
+      <h1>Setting</h1>
     </div>
   );
 };
 
-export default Home;
+export default Setting;

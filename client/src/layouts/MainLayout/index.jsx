@@ -12,7 +12,7 @@ import decryptPayload from '@utils/decryptionHelper';
 import { useEffect, useState } from 'react';
 
 const MainLayout = ({ children, locale, theme, intl: { formatMessage }, user }) => {
-  const [decryptedUser, setDecryptedUser] = useState({});
+  const [decryptedUser, setDecryptedUser] = useState(decryptPayload(user));
 
   useEffect(() => {
     if (user) {
@@ -33,18 +33,16 @@ const MainLayout = ({ children, locale, theme, intl: { formatMessage }, user }) 
       break;
     case 'User':
       renderNav = (
-        <>
-          <Navbar title={formatMessage({ id: 'app_title_header' })} locale={locale} theme={theme} />
+        <Navbar title={formatMessage({ id: 'app_title_header' })} locale={locale} theme={theme}>
           {children}
-        </>
+        </Navbar>
       );
       break;
     default:
       renderNav = (
-        <>
-          <Navbar title={formatMessage({ id: 'app_title_header' })} locale={locale} theme={theme} />
+        <Navbar title={formatMessage({ id: 'app_title_header' })} locale={locale} theme={theme}>
           {children}
-        </>
+        </Navbar>
       );
       break;
   }

@@ -37,7 +37,7 @@ const Login = () => {
         if (role === 'Super' || role === 'Admin') {
           setTimeout(() => navigate('/admin/dashboard'), 2000);
         } else {
-          setTimeout(() => navigate('/'), 2000);
+          setTimeout(() => navigate('/home'), 2000);
         }
       })
     );
