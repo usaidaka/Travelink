@@ -5,13 +5,10 @@ export const getUserDataInput = (data) => ({
   data,
 });
 
-export const setUserDataInput = (data) => {
-  console.log(data);
-  return {
-    type: SET_USER_DATA_INPUT,
-    data,
-  };
-};
+export const setUserDataInput = (data) => ({
+  type: SET_USER_DATA_INPUT,
+  data,
+});
 
 export const getStepPage = (step) => ({
   type: GET_STEP_PAGE,

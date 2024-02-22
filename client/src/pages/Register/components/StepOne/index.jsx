@@ -168,7 +168,7 @@ const StepOne = ({ step, onNextStep, dataUser }) => {
             </span>
           </div>
           <Button type="submit" variant="contained" size="small">
-            Next
+            <FormattedMessage id="next" />
           </Button>
         </div>
       </div>

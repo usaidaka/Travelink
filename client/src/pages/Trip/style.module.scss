@@ -1,6 +1,146 @@
 @import '@styles/base';
 
-.maps {
-  height: 600px;
-  width: 400px;
+.error-validation {
+  color: red;
+  font-size: 12px;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  transform: translateY(100%);
+}
+
+.container {
+  padding: 20px;
+  width: 100%;
+  height: 100%;
+
+  .maps {
+    height: 260px;
+    width: 100%;
+    z-index: 9;
+    @include apply-at-xl-size {
+      height: 360px;
+    }
+  }
+
+  .form {
+    margin-top: 20px;
+    label {
+      font-size: 12px;
+    }
+
+    .wrapper {
+      @include directionY;
+      position: relative;
+      justify-content: center;
+      margin: 10px 0px;
+    }
+
+    .input {
+      @include inputTag;
+    }
+
+    .textarea {
+      @include inputTag;
+      resize: none;
+      padding: 4px 6px;
+      font-family: inherit;
+      height: 100px;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .my-location {
+        width: 36px;
+        cursor: pointer;
+        border-radius: 4px;
+        height: 36px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: $color-blue-logo;
+        color: $color-yellow-logo;
+      }
+    }
+
+    @include apply-at-xl-size {
+      display: flex;
+      gap: 10px;
+
+      .current {
+        width: 50%;
+        box-shadow:
+          rgba(17, 17, 26, 0.05) 0px 1px 0px,
+          rgba(17, 17, 26, 0.1) 0px 0px 8px;
+        padding: 10px;
+        border-radius: 6px;
+
+        .header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          .my-location {
+            width: 36px;
+            cursor: pointer;
+            border-radius: 4px;
+            height: 36px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: $color-blue-logo;
+            color: $color-yellow-logo;
+          }
+        }
+
+        .main-wrapper {
+          .region {
+            display: flex;
+            gap: 10px;
+
+            .wrapper {
+              width: 100%;
+            }
+          }
+        }
+      }
+      .direction {
+        width: 50%;
+        box-shadow:
+          rgba(17, 17, 26, 0.05) 0px 1px 0px,
+          rgba(17, 17, 26, 0.1) 0px 0px 8px;
+        padding: 10px;
+        border-radius: 6px;
+
+        .main-wrapper {
+          .region {
+            display: flex;
+            gap: 10px;
+
+            .wrapper {
+              width: 100%;
+            }
+          }
+        }
+      }
+    }
+  }
+  .button {
+    @include apply-at-xl-size {
+      display: flex;
+      flex-direction: column;
+      align-items: end;
+    }
+    .submit {
+      width: 100%;
+      margin-top: 10px;
+      @include apply-at-xl-size {
+        margin-top: 20px;
+        width: fit-content;
+      }
+    }
+  }
 }

@@ -26,7 +26,7 @@ const MenuLanguage = ({ open, anchorEl, onClose, onSelectLang, locale }) => (
 );
 
 MenuLanguage.propTypes = {
-  open: PropTypes.func,
+  open: PropTypes.bool,
   anchorEl: PropTypes.func,
   onClose: PropTypes.func,
   onSelectLang: PropTypes.func,

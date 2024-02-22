@@ -10,7 +10,6 @@ import decryptPayload from '@utils/decryptionHelper';
 const Client = ({ login, children, user }) => {
   const [decryptedUser, setDecryptedUser] = useState({});
   const [isUser, setIsUser] = useState(false);
-  console.log(user);
 
   useEffect(() => {
     if (user) {

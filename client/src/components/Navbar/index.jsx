@@ -82,8 +82,6 @@ const Navbar = ({ locale, theme, isLogin, user, children }) => {
     logout(dispatch, navigate);
   };
 
-  console.log(decryptedUser);
-
   return (
     <>
       <div className={classes.headerWrapper} data-testid="navbar">
@@ -215,7 +213,7 @@ const Navbar = ({ locale, theme, isLogin, user, children }) => {
         <div className={classes.children}>{children}</div>
         <div className={classes['sidebar-right']}>
           <div className={classes.maps}>
-            <Maps />
+            <Maps zoom={11} />
           </div>
         </div>
       </div>

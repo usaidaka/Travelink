@@ -133,10 +133,10 @@ const StepThree = ({ step, onBackStep, dataUser }) => {
       <div className={classes.wrapper}>
         <div className={classes['button-render']}>
           <Button variant="outlined" size="small" onClick={() => onBackStep(step)}>
-            Back
+            <FormattedMessage id="back" />
           </Button>
           <Button disabled={isFinish || loading} type="submit" variant="contained" color="success" size="small">
-            Submit
+            <FormattedMessage id="submit" />
           </Button>
         </div>
       </div>

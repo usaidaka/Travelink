@@ -46,10 +46,24 @@ export default {
   finishConfirmation:
     'Apakah Anda sudah memeriksa dan yakin bahwa semua data yang Anda isi sudah benar dan lengkap? Jangan lupa untuk memeriksa kembali sebelum melanjutkan.',
   otp: 'Kode Verifikasi',
+  submit: 'Kirim',
+  back: 'Kembali',
+  next: 'Lanjut',
 
   home: 'Beranda',
   explore: 'Jelajah',
   people: 'Pengguna Lain',
   setting: 'Pengaturan',
   trip: 'Perjalanan',
+
+  current_province: 'Provinsi Saat Ini',
+  current_city: 'Kota Saat Ini',
+  current_detail: 'Alamat Saat Ini',
+
+  direction_province: 'Provinsi Tujuan',
+  direction_city: 'Kota Tujuan',
+  direction_detail: 'Alamat Tujuan',
+
+  current_location: 'Lokasi Saat ini',
+  direction_location: 'Lokasi Tujuan',
 };

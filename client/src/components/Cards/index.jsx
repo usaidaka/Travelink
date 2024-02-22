@@ -8,7 +8,10 @@ const Cards = ({ course, id, onClick }) => {
   const navigate = useNavigate();
 
   return (
-    <div data-testid="cards-container" className={!course.is_close ? classes.card : `${classes.card} ${classes.disabled}`}>
+    <div
+      data-testid="cards-container"
+      className={!course.is_close ? classes.card : `${classes.card} ${classes.disabled}`}
+    >
       <img src={course.image} alt={course?.title} />
       <div data-testid="card-description" className={classes.cardDesc}>
         <div className={classes.desc}>
@@ -23,8 +26,13 @@ const Cards = ({ course, id, onClick }) => {
             Detail Course
           </div>
         )}
-        <button data-testid="button-submit" onClick={onClick}>Submit</button>
-        <Button data-testid="button-mui" onClick={onClick}>BUTTON</Button>
+
+        <button data-testid="button-submit" onClick={onClick}>
+          Submit
+        </button>
+        <Button data-testid="button-mui" onClick={onClick}>
+          BUTTON
+        </Button>
       </div>
     </div>
   );
@@ -33,7 +41,7 @@ const Cards = ({ course, id, onClick }) => {
 Cards.propTypes = {
   course: PropTypes.object,
   id: PropTypes.number,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
 };
 
 export default Cards;

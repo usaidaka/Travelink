@@ -11,7 +11,6 @@ const decryptPayload = (data) => {
       return JSON.parse(decrypted);
     }
     if (typeof data === 'string') {
-      console.log('str');
       const decrypted = AES.decrypt(data, config.encryption.cryptoSecret).toString(CryptoJS.enc.Utf8);
       return JSON.parse(decrypted);
     }

@@ -199,10 +199,10 @@ const StepTwo = ({ step, onBackStep, onNextStep, dataUser }) => {
       <div className={classes.wrapper}>
         <div className={classes['button-render']}>
           <Button variant="outlined" size="small" onClick={() => onBackStep(step)}>
-            Back
+            <FormattedMessage id="back" />
           </Button>
           <Button type="submit" variant="contained" size="small">
-            Next
+            <FormattedMessage id="next" />
           </Button>
         </div>
       </div>

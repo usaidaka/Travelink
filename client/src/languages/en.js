@@ -45,10 +45,24 @@ export default {
   finishConfirmation:
     "Have you checked and are sure that all the data you have filled in is correct and complete? Don't forget to check again before continuing.",
   otp: 'One Time Password',
+  submit: 'Submit',
+  back: 'Back',
+  next: 'Next',
 
   home: 'Home',
   explore: 'Explore',
   people: 'People',
   setting: 'Setting',
   trip: 'Trip',
+
+  current_province: 'Current Province',
+  current_city: 'Current City',
+  current_detail: 'Current Address',
+
+  direction_province: 'Province Direction',
+  direction_city: 'City Direction',
+  direction_detail: 'Address Direction',
+
+  current_location: 'Current Location',
+  direction_location: 'Direction Location',
 };

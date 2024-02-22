@@ -9,6 +9,10 @@ const urls = {
   register: 'auth/register',
   forgotPassword: 'auth/forgot-password',
   resetPassword: 'auth/reset-password',
+
+  myRoute: 'user/my-route',
+  addRoute: 'user/route',
+  region: 'user/region',
 };
 
 export const callAPI = async (endpoint, method, header = {}, params = {}, data = {}) => {
@@ -46,14 +50,14 @@ export const register = (data) => {
   return callAPI(urls.register, 'POST', {}, {}, data);
 };
 
-export const login = (data) => {
-  console.log(data, '<<< DATA USER');
-  return callAPI(urls.login, 'POST', {}, {}, data);
-};
+export const login = (data) => callAPI(urls.login, 'POST', {}, {}, data);
 
-export const forgotPassword = (data) => {
-  console.log(data, '<<< DATA FORGOT');
-  return callAPI(urls.forgotPassword, 'POST', {}, {}, data);
-};
+export const forgotPassword = (data) => callAPI(urls.forgotPassword, 'POST', {}, {}, data);
+
+export const myRoute = () => callAPI(urls.myRoute, 'GET', {}, {}, {});
 
 export const resetPassword = (data) => callAPI(urls.resetPassword, 'POST', {}, {}, data);
+
+export const region = (provinceId) => callAPI(`${urls.region}/${provinceId}`, 'GET', {}, {}, {});
+
+export const addRoute = (data) => callAPI(urls.addRoute, 'POST', {}, {}, data);
