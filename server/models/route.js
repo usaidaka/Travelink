@@ -9,10 +9,22 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Route.hasMany(models.City, { foreignKey: "current_city_id" });
-      Route.hasMany(models.City, { foreignKey: "direction_city_id" });
-      Route.hasMany(models.Province, { foreignKey: "current_province_id" });
-      Route.hasMany(models.Province, { foreignKey: "direction_province_id" });
+      Route.belongsTo(models.City, {
+        foreignKey: "current_city_id",
+        as: "current_city",
+      });
+      Route.belongsTo(models.Province, {
+        foreignKey: "current_province_id",
+        as: "current_province",
+      });
+      Route.belongsTo(models.City, {
+        foreignKey: "direction_city_id",
+        as: "direction_city",
+      });
+      Route.belongsTo(models.Province, {
+        foreignKey: "direction_province_id",
+        as: "direction_province",
+      });
       Route.belongsTo(models.User, { foreignKey: "user_id" });
     }
   }

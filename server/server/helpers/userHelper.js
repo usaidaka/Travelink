@@ -2,6 +2,7 @@ const Boom = require("boom");
 const _ = require("lodash");
 
 const db = require("../../models");
+const { Op } = require("sequelize");
 const GeneralHelper = require("./generalHelper");
 const { encryptPayload } = require("../service/encryptionHelper");
 const fileName = "server/helpers/userHelper.js";
@@ -172,22 +173,31 @@ const createRoute = async (id, dataObject) => {
 
 const getMyRoute = async (id) => {
   try {
-    const result = await db.Route.findAll({
+    const result = await db.Route.findOne({
       where: { user_id: id },
+      include: [
+        { model: db.Province, as: "current_province", attributes: ["name"] },
+        { model: db.City, as: "current_city", attributes: ["name"] },
+        { model: db.Province, as: "direction_province", attributes: ["name"] },
+        { model: db.City, as: "direction_city", attributes: ["name"] },
+      ],
       attributes: { exclude: ["updatedAt"] },
       paranoid: false,
     });
 
+    const resultEncrypted = encryptPayload({ decryptedData: result });
+
     if (_.isEmpty(result)) {
-      return Promise.reject(
-        Boom.badRequest("You have not trip yet. Go outside!")
-      );
+      return Promise.resolve({
+        ok: false,
+        message: "You don't have any trip. Make some plan!",
+      });
     }
 
     return Promise.resolve({
       ok: true,
       message: "Get my route successfully",
-      result: encryptPayload({ decryptedData: result }),
+      result: resultEncrypted,
     });
   } catch (err) {
     console.log([fileName, "get My Route", "ERROR"], {
@@ -324,6 +334,118 @@ const deleteGroup = async (id, groupId) => {
   }
 };
 
+const getRegion = async (provinceId) => {
+  try {
+    const provinceList = await db.Province.findAll({
+      attributes: ["id", "name"],
+    });
+
+    const cityList = await db.City.findAll({
+      where: { province_id: provinceId },
+      attributes: ["id", "name", "province_id"],
+    });
+
+    return Promise.resolve({
+      ok: true,
+      message: "Get region successfully",
+      result: {
+        province: provinceList,
+        city: cityList,
+      },
+    });
+  } catch (err) {
+    console.log([fileName, "get Region", "ERROR"], {
+      info: `${err}`,
+    });
+    return Promise.reject(GeneralHelper.errorResponse(err));
+  }
+};
+
+const getNearBy = async (id, radius = 50) => {
+  try {
+    const myCurrentLocation = await db.Route.findOne({
+      where: { user_id: id },
+      include: [
+        { model: db.Province, as: "current_province", attributes: ["name"] },
+        { model: db.City, as: "current_city", attributes: ["name"] },
+        { model: db.Province, as: "direction_province", attributes: ["name"] },
+        { model: db.City, as: "direction_city", attributes: ["name"] },
+      ],
+      attributes: [
+        "id",
+        "current_latitude",
+        "current_longitude",
+        "direction_latitude",
+        "direction_longitude",
+      ],
+    });
+
+    const allUserLocation = await db.Route.findAll({
+      where: {
+        user_id: {
+          [Op.not]: id,
+        },
+      },
+      include: [
+        { model: db.Province, as: "current_province", attributes: ["name"] },
+        { model: db.City, as: "current_city", attributes: ["name"] },
+        { model: db.Province, as: "direction_province", attributes: ["name"] },
+        { model: db.City, as: "direction_city", attributes: ["name"] },
+      ],
+      attributes: [
+        "id",
+        "user_id",
+        "current_latitude",
+        "current_longitude",
+        "direction_latitude",
+        "direction_longitude",
+      ],
+    });
+
+    const distanceKm = (lat1, lon1, lat2, lon2) => {
+      const r = 6371; // km
+      const p = Math.PI / 180;
+
+      const a =
+        0.5 -
+        Math.cos((lat2 - lat1) * p) / 2 +
+        (Math.cos(lat1 * p) *
+          Math.cos(lat2 * p) *
+          (1 - Math.cos((lon2 - lon1) * p))) /
+          2;
+
+      return 2 * r * Math.asin(Math.sqrt(a));
+    };
+
+    const nearbyUsers = [];
+
+    for (let i = 0; i < allUserLocation.length; i++) {
+      const distance = distanceKm(
+        allUserLocation[i].current_latitude,
+        allUserLocation[i].current_longitude,
+        myCurrentLocation.current_latitude,
+        myCurrentLocation.current_longitude
+      );
+
+      if (distance <= radius) {
+        nearbyUsers.push({
+          user: allUserLocation[i],
+          distance,
+        });
+      }
+    }
+
+    return Promise.resolve({
+      ok: true,
+      message: "get users near by",
+      result: nearbyUsers,
+    });
+  } catch (err) {
+    console.error("Error:", err);
+    return Promise.reject(err);
+  }
+};
+
 module.exports = {
   getMyAddress,
   createAddress,
@@ -331,4 +453,6 @@ module.exports = {
   getMyRoute,
   createGroup,
   deleteGroup,
+  getRegion,
+  getNearBy,
 };

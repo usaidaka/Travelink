@@ -98,6 +98,30 @@ const removeTeam = async (request, reply) => {
   }
 };
 
+const region = async (request, reply) => {
+  try {
+    const { provinceId } = request.params;
+
+    const response = await UserHelper.getRegion(provinceId);
+    return reply.send(response);
+  } catch (err) {
+    console.log([fileName, "Region", "ERROR"], { info: `${err}` });
+    return reply.send(GeneralHelper.errorResponse(err));
+  }
+};
+
+const nearBy = async (request, reply) => {
+  try {
+    const { id } = request.user;
+    const response = await UserHelper.getNearBy(id);
+    return reply.send(response);
+  } catch (err) {
+    console.log([fileName, "nearBy", "ERROR"], { info: `${err}` });
+    return reply.send(GeneralHelper.errorResponse(err));
+  }
+};
+
+// GET
 Router.get(
   "/my-address",
   Middleware.validateToken,
@@ -107,6 +131,11 @@ Router.get(
 
 Router.get("/my-route", Middleware.validateToken, Middleware.isUser, myRoute);
 
+Router.get("/nearby", Middleware.validateToken, Middleware.isUser, nearBy);
+
+Router.get("/region/:provinceId", region);
+
+// POST
 Router.post(
   "/address",
   Middleware.validateToken,
@@ -118,6 +147,7 @@ Router.post("/route", Middleware.validateToken, Middleware.isUser, addRoute);
 
 Router.post("/group", Middleware.validateToken, Middleware.isUser, addTeam);
 
+// DELETE
 Router.delete(
   "/group/:groupId",
   Middleware.validateToken,
