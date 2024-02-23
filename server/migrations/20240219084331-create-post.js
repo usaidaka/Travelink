@@ -23,6 +23,7 @@ module.exports = {
           model: "Provinces",
           key: "id",
         },
+        allowNull: true,
       },
       city_id: {
         type: Sequelize.INTEGER,
@@ -30,12 +31,15 @@ module.exports = {
           model: "Cities",
           key: "id",
         },
+        allowNull: true,
       },
       caption: {
         type: Sequelize.TEXT,
+        allowNull: true,
       },
       location_name: {
         type: Sequelize.STRING,
+        allowNull: true,
       },
       createdAt: {
         allowNull: false,

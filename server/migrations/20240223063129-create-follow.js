@@ -2,24 +2,26 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("ImagePosts", {
+    await queryInterface.createTable("Follows", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      post_id: {
+      follow_by: {
         type: Sequelize.INTEGER,
         references: {
-          model: "Posts",
+          model: "Users",
           key: "id",
         },
-        allowNull: false,
       },
-      image: {
-        type: Sequelize.TEXT,
-        allowNull: false,
+      follow_to: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: "Users",
+          key: "id",
+        },
       },
       createdAt: {
         allowNull: false,
@@ -36,6 +38,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("ImagePosts");
+    await queryInterface.dropTable("Follows");
   },
 };

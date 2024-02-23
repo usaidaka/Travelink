@@ -7,7 +7,20 @@ const GeneralHelper = require("../helpers/generalHelper");
 const handleUploadImage = require("../middlewares/multerMiddleware");
 const { decryptPayload } = require("../service/decryptionHelper");
 
-const fileName = "server/api/auth.js";
+const fileName = "server/api/user.js";
+
+const myProfile = async (request, reply) => {
+  try {
+    const { id } = request.user;
+    console.log(id);
+
+    const response = await UserHelper.getMyProfile(id);
+    return reply.send(response);
+  } catch (err) {
+    console.log([fileName, "my Profile", "ERROR"], { info: `${err}` });
+    return reply.send(GeneralHelper.errorResponse(err));
+  }
+};
 
 const myAddress = async (request, reply) => {
   try {
@@ -121,13 +134,78 @@ const nearBy = async (request, reply) => {
   }
 };
 
+const post = async (request, reply) => {
+  try {
+    Validation.getPost(request.query);
+
+    const { id } = request.user;
+    const { userId } = request.params;
+    const query = request.query;
+
+    const response = await UserHelper.getPost(id, userId, query);
+    return reply.send(response);
+  } catch (err) {
+    console.log([fileName, "following Post", "ERROR"], { info: `${err}` });
+    return reply.send(GeneralHelper.errorResponse(err));
+  }
+};
+
+const addPost = async (request, reply) => {
+  try {
+    const { id } = request.user;
+    const image = request.file;
+
+    let data = request.body;
+
+    console.log(data, "<<<DATA");
+
+    Validation.createPost(data);
+
+    const response = await UserHelper.createPost(id, data, image);
+    return reply.send(response);
+  } catch (err) {
+    console.log([fileName, "add Post", "ERROR"], { info: `${err}` });
+    return reply.send(GeneralHelper.errorResponse(err));
+  }
+};
+
+const editPost = async (request, reply) => {
+  try {
+    const { id } = request.user;
+    const { postId } = request.params;
+    const data = request.body;
+    Validation.createPost(data);
+    const response = await UserHelper.updatePost(id, postId, data);
+    return reply.send(response);
+  } catch (err) {
+    console.log([fileName, "add Post", "ERROR"], { info: `${err}` });
+    return reply.send(GeneralHelper.errorResponse(err));
+  }
+};
+
+const deletePost = async (request, reply) => {
+  try {
+    const { id } = request.user;
+    const { postId } = request.params;
+    const response = await UserHelper.deletePost(id, postId);
+    return reply.send(response);
+  } catch (err) {
+    console.log([fileName, "add Post", "ERROR"], { info: `${err}` });
+    return reply.send(GeneralHelper.errorResponse(err));
+  }
+};
+
 // GET
+Router.get("/profile", Middleware.validateToken, Middleware.isUser, myProfile);
+
 Router.get(
   "/my-address",
   Middleware.validateToken,
   Middleware.isUser,
   myAddress
 );
+
+Router.get("/post", Middleware.validateToken, Middleware.isUser, post);
 
 Router.get("/my-route", Middleware.validateToken, Middleware.isUser, myRoute);
 
@@ -143,6 +221,14 @@ Router.post(
   addAddress
 );
 
+Router.post(
+  "/post",
+  Middleware.validateToken,
+  Middleware.isUser,
+  handleUploadImage,
+  addPost
+);
+
 Router.post("/route", Middleware.validateToken, Middleware.isUser, addRoute);
 
 Router.post("/group", Middleware.validateToken, Middleware.isUser, addTeam);
@@ -153,6 +239,21 @@ Router.delete(
   Middleware.validateToken,
   Middleware.isUser,
   removeTeam
+);
+
+Router.delete(
+  "/post/:postId",
+  Middleware.validateToken,
+  Middleware.isUser,
+  deletePost
+);
+
+/* UPDATE */
+Router.patch(
+  "/post/:postId",
+  Middleware.validateToken,
+  Middleware.isUser,
+  editPost
 );
 
 module.exports = Router;

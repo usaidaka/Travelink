@@ -6,6 +6,35 @@ const { Op } = require("sequelize");
 const GeneralHelper = require("./generalHelper");
 const { encryptPayload } = require("../service/encryptionHelper");
 const fileName = "server/helpers/userHelper.js";
+const cloudinary = require("../service/cloudinary");
+
+const getMyProfile = async (id) => {
+  try {
+    const profile = await db.User.findByPk(id, {
+      attributes: {
+        exclude: ["createdAt", "updatedAt", "deletedAt", "password"],
+      },
+      include: [
+        {
+          model: db.UserDetail,
+          attributes: {
+            exclude: ["createdAt", "updatedAt", "deletedAt", "id"],
+          },
+        },
+      ],
+    });
+
+    const resultEncrypted = encryptPayload({ decryptedData: profile });
+    return Promise.resolve({
+      ok: true,
+      message: "Get my profile successfully",
+      result: resultEncrypted,
+    });
+  } catch (err) {
+    console.log([fileName, "get My Profile", "ERROR"], { info: `${err}` });
+    return Promise.reject(GeneralHelper.errorResponse(err));
+  }
+};
 
 const getMyAddress = async (id) => {
   try {
@@ -189,7 +218,7 @@ const getMyRoute = async (id) => {
 
     if (_.isEmpty(result)) {
       return Promise.resolve({
-        ok: false,
+        ok: true,
         message: "You don't have any trip. Make some plan!",
       });
     }
@@ -362,6 +391,7 @@ const getRegion = async (provinceId) => {
 };
 
 const getNearBy = async (id, radius = 50) => {
+  let resultEncrypted = "";
   try {
     const myCurrentLocation = await db.Route.findOne({
       where: { user_id: id },
@@ -380,13 +410,24 @@ const getNearBy = async (id, radius = 50) => {
       ],
     });
 
+    if (_.isEmpty(myCurrentLocation)) {
+      resultEncrypted = encryptPayload({ decryptedData: [] });
+      return Promise.resolve({
+        ok: false,
+        message: "You don't any trip. Make some plan",
+        result: [],
+      });
+    }
+
     const allUserLocation = await db.Route.findAll({
-      where: {
-        user_id: {
-          [Op.not]: id,
-        },
-      },
       include: [
+        {
+          model: db.User,
+          include: [
+            { model: db.UserDetail, attributes: ["phone", "first_name"] },
+          ],
+          attributes: ["id", "username", "email", "image"],
+        },
         { model: db.Province, as: "current_province", attributes: ["name"] },
         { model: db.City, as: "current_city", attributes: ["name"] },
         { model: db.Province, as: "direction_province", attributes: ["name"] },
@@ -401,6 +442,15 @@ const getNearBy = async (id, radius = 50) => {
         "direction_longitude",
       ],
     });
+
+    if (_.isEmpty(allUserLocation)) {
+      resultEncrypted = encryptPayload({ decryptedData: [] });
+      return Promise.resolve({
+        ok: false,
+        message: "Another user don't have any trip yet",
+        result: resultEncrypted,
+      });
+    }
 
     const distanceKm = (lat1, lon1, lat2, lon2) => {
       const r = 6371; // km
@@ -434,19 +484,255 @@ const getNearBy = async (id, radius = 50) => {
         });
       }
     }
+    let remapData = [];
+    nearbyUsers.map(
+      (near) =>
+        (remapData = [
+          {
+            id: near?.user?.id,
+            profile: {
+              username: near?.user?.User?.username,
+              firstName: near?.user?.User?.UserDetail?.first_name,
+              email: near?.user?.User?.email,
+              phone: near?.user?.User?.UserDetail?.phone,
+              image: near?.user?.User?.image,
+            },
+            current_position: [
+              near?.user?.current_latitude,
+              near?.user?.current_longitude,
+            ],
+            direction_position: [
+              near?.user?.direction_latitude,
+              near?.user?.direction_longitude,
+            ],
+            current_region: {
+              province: near?.user?.current_province?.name,
+              city: near?.user?.current_city?.name,
+            },
+            direction_region: {
+              province: near?.user?.direction_province?.name,
+              city: near?.user?.direction_city?.name,
+            },
+            distance: near.distance,
+          },
+        ])
+    );
+
+    resultEncrypted = encryptPayload({ decryptedData: remapData });
 
     return Promise.resolve({
       ok: true,
-      message: "get users near by",
-      result: nearbyUsers,
+      message: "get users nearby successful",
+      result: resultEncrypted,
     });
   } catch (err) {
-    console.error("Error:", err);
-    return Promise.reject(err);
+    console.log([fileName, "get nearby", "ERROR"], {
+      info: `${err}`,
+    });
+    return Promise.reject(GeneralHelper.errorResponse(err));
+  }
+};
+
+const getPost = async (id, userId, query) => {
+  try {
+    const { next, limit } = query;
+
+    const currentPage = Number(next) || 0;
+    const currentLimit = Number(limit) || 6;
+
+    const formattedExclude = {
+      exclude: [
+        "createdAt",
+        "deletedAt",
+        "updatedAt",
+        "province_id",
+        "city_id",
+      ],
+    };
+
+    const formattedInclude = [
+      {
+        model: db.ImagePost,
+        attributes: ["image"],
+      },
+
+      {
+        model: db.Province,
+        attributes: ["name"],
+      },
+      {
+        model: db.City,
+        attributes: ["name"],
+      },
+      { model: db.User, attributes: ["username", "image"] },
+    ];
+
+    const order = [["id", "DESC"]];
+
+    const allPost = await db.Post.findAll({
+      attributes: formattedExclude,
+      include: formattedInclude,
+      limit: currentLimit,
+      offset: currentPage,
+      order,
+    });
+
+    const myPost = await db.Post.findAll({
+      where: { user_id: id },
+      attributes: formattedExclude,
+      include: formattedInclude,
+      limit: currentLimit,
+      offset: currentPage,
+      order,
+    });
+
+    const followTo = await db.Follow.findAll({
+      where: { follow_by: id },
+      attributes: ["follow_to"],
+    });
+
+    const idFollowTo = followTo.map((follow) => follow.follow_to);
+    console.log(idFollowTo);
+
+    const followingPost = await db.Post.findAll({
+      where: {
+        user_id: idFollowTo,
+      },
+      attributes: formattedExclude,
+      include: formattedInclude,
+      limit: currentLimit,
+      offset: currentPage,
+      order,
+    });
+
+    return Promise.resolve({
+      ok: true,
+      message: "Get post successful",
+      result: { allPost, myPost, followingPost },
+    });
+  } catch (err) {
+    console.log([fileName, "get post", "ERROR"], {
+      info: `${err}`,
+    });
+    return Promise.reject(GeneralHelper.errorResponse(err));
+  }
+};
+
+const createPost = async (id, dataObject, image) => {
+  const transaction = await db.sequelize.transaction();
+  try {
+    const { province_id, city_id, caption, location_name } = dataObject;
+
+    if (!image) {
+      return Promise.reject(Boom.badRequest("Image cannot be empty"));
+    }
+
+    let imageResult = null;
+    if (image) {
+      imageResult = await cloudinary.uploadToCloudinary(image, "image");
+      if (!imageResult) throw Boom.internal("Cloudinary image upload failed");
+    }
+
+    const post = await db.Post.create(
+      {
+        user_id: id,
+        province_id: isNaN(Number(province_id)) ? null : Number(province_id),
+        city_id: isNaN(Number(city_id)) ? null : Number(city_id),
+        caption,
+        location_name,
+      },
+      { transaction }
+    );
+
+    await db.ImagePost.create(
+      {
+        post_id: post.id,
+        image: imageResult.url,
+      },
+      { transaction }
+    );
+
+    await transaction.commit();
+    return Promise.resolve({
+      ok: true,
+      message: "Create post successful",
+    });
+  } catch (err) {
+    await transaction.rollback();
+    console.log([fileName, "create post", "ERROR"], {
+      info: `${err}`,
+    });
+    return Promise.reject(GeneralHelper.errorResponse(err));
+  }
+};
+
+const updatePost = async (id, postId, dataObject) => {
+  const transaction = await db.sequelize.transaction();
+  try {
+    const { province_id, city_id, caption, location_name } = dataObject;
+
+    const isPostExist = await db.Post.findOne({
+      where: { id: postId, user_id: id },
+    });
+
+    if (_.isEmpty(isPostExist)) {
+      return Promise.reject(Boom.notFound("Post not found"));
+    }
+
+    await db.Post.update(
+      {
+        user_id: id,
+        province_id: province_id ? Number(province_id) : null,
+        city_id: city_id ? Number(city_id) : null,
+        caption,
+        location_name,
+      },
+      { where: { id: postId, user_id: id }, transaction }
+    );
+
+    await transaction.commit();
+    return Promise.resolve({
+      ok: true,
+      message: "Update post successful",
+    });
+  } catch (err) {
+    await transaction.rollback();
+    console.log([fileName, "update post", "ERROR"], {
+      info: `${err}`,
+    });
+    return Promise.reject(GeneralHelper.errorResponse(err));
+  }
+};
+
+const deletePost = async (id, postId) => {
+  const transaction = await db.sequelize.transaction();
+  try {
+    const isPostExist = await db.Post.findOne({
+      where: { id: postId, user_id: id },
+    });
+
+    if (_.isEmpty(isPostExist)) {
+      return Promise.reject(Boom.notFound("Post not found"));
+    }
+
+    await db.Post.destroy({ where: { id: postId, user_id: id }, transaction });
+
+    await transaction.commit();
+
+    return Promise.resolve({
+      ok: true,
+      message: "Delete post successful",
+    });
+  } catch (err) {
+    console.log([fileName, "delete post", "ERROR"], {
+      info: `${err}`,
+    });
+    return Promise.reject(GeneralHelper.errorResponse(err));
   }
 };
 
 module.exports = {
+  getMyProfile,
   getMyAddress,
   createAddress,
   createRoute,
@@ -455,4 +741,8 @@ module.exports = {
   deleteGroup,
   getRegion,
   getNearBy,
+  getPost,
+  createPost,
+  updatePost,
+  deletePost,
 };

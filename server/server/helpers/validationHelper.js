@@ -160,6 +160,33 @@ const deleteGroup = (data) => {
   }
 };
 
+const getPost = (data) => {
+  const schema = Joi.object({
+    next: Joi.number().optional().description("1"),
+    limit: Joi.number().optional().description("1"),
+  });
+
+  if (schema.validate(data).error) {
+    throw Boom.badRequest(schema.validate(data).error);
+  }
+};
+
+const createPost = (data) => {
+  const schema = Joi.object({
+    province_id: Joi.string().allow("").optional().description("1"),
+    city_id: Joi.string().allow("").optional().description("1"),
+    caption: Joi.string().allow("").optional().description("My post"),
+    location_name: Joi.string()
+      .allow("")
+      .optional()
+      .description("Batu, Malang"),
+  });
+
+  if (schema.validate(data).error) {
+    throw Boom.badRequest(schema.validate(data).error);
+  }
+};
+
 module.exports = {
   registerValidation,
   loginValidation,
@@ -169,4 +196,6 @@ module.exports = {
   addRouteValidation,
   addGroup,
   deleteGroup,
+  getPost,
+  createPost,
 };
