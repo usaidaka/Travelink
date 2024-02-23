@@ -1,0 +1,8 @@
+@import '@styles/base';
+
+.container {
+  margin-top: 10px;
+  @include directionX;
+  width: 100%;
+  justify-content: space-around;
+}

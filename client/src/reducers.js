@@ -4,6 +4,8 @@ import appReducer, { storedKey as storedAppState } from '@containers/App/reducer
 import clientReducer, { storedKey as storedClientState } from '@containers/Client/reducer';
 import registerReducer, { storedKey as storedRegisterState } from '@pages/Register/reducer';
 import routeReducer, { storedKey as storedRouteState } from '@pages/Trip/reducer';
+import homeReducer, { storedKey as storedHomeState } from '@pages/Home/reducer';
+
 import languageReducer from '@containers/Language/reducer';
 
 import { mapWithPersistor } from './persistence';
@@ -13,6 +15,7 @@ const storedReducers = {
   client: { reducer: clientReducer, whitelist: storedClientState },
   register: { reducer: registerReducer, whitelist: storedRegisterState },
   route: { reducer: routeReducer, whitelist: storedRouteState },
+  home: { reducer: homeReducer, whitelist: storedHomeState },
 };
 
 const temporaryReducers = {

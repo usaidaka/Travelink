@@ -6,11 +6,13 @@ import PropTypes from 'prop-types';
 import { createStructuredSelector } from 'reselect';
 import { connect, useDispatch } from 'react-redux';
 import decryptPayload from '@utils/decryptionHelper';
-import { selectProvince } from '@containers/Client/selectors';
+import _ from 'lodash';
+
 import toast, { Toaster } from 'react-hot-toast';
 import { useForm } from 'react-hook-form';
 import encryptPayload from '@utils/encryptionHelper';
 import MyLocationIcon from '@mui/icons-material/MyLocation';
+import { selectProvince } from '@pages/Home/selectors';
 
 import classes from './style.module.scss';
 import { selectCurrentCityList, selectDirectionCityList, selectUserRoute } from './selectors';
@@ -34,11 +36,9 @@ const Trip = ({ location, province, currentCity, directionCity }) => {
     handleSubmit,
     setValue,
   } = useForm();
-  console.log(myRoute);
-  console.log(marker);
 
   useEffect(() => {
-    if (myRoute) {
+    if (!_.isEmpty(myRoute)) {
       setMarker([
         {
           id: 1,
@@ -59,7 +59,7 @@ const Trip = ({ location, province, currentCity, directionCity }) => {
   }, [myRoute]);
 
   useEffect(() => {
-    if (myRoute) {
+    if (!_.isEmpty(myRoute)) {
       setValue('current_province_id', myRoute.current_province_id || '');
       setValue('current_city_id', myRoute.current_city_id || '');
       setValue('current_detail', myRoute.current_detail || '');
@@ -70,16 +70,12 @@ const Trip = ({ location, province, currentCity, directionCity }) => {
   }, [myRoute, setValue]);
 
   const watchID = navigator.geolocation?.watchPosition((position) => {
-    setCurrentLatitude(position.coords?.latitude);
-    setCurrentLongitude(position.coords.longitude);
+    setCurrentLatitude(position?.coords?.latitude);
+    setCurrentLongitude(position?.coords?.longitude);
   });
 
   useEffect(() => {
-    dispatch(getUserRoute());
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (location) {
+    if (!_.isEmpty(location)) {
       setMyRoute(decryptPayload(location));
     }
   }, [location]);
@@ -99,6 +95,7 @@ const Trip = ({ location, province, currentCity, directionCity }) => {
   }, [selectedCurrentProvince]);
 
   useEffect(() => {
+    console.log(selectedDirectionProvince);
     if (selectedDirectionProvince) {
       handleDirectionCityList(selectedDirectionProvince);
     }
@@ -123,12 +120,12 @@ const Trip = ({ location, province, currentCity, directionCity }) => {
       })
     );
   };
-
   return (
     <div className={classes.container}>
       <h1>Trip</h1>
       <div className={classes.maps}>
         <Maps
+          element="Trip"
           marker={marker}
           setSearchResult={setSearchResult}
           zoom={4}
@@ -142,7 +139,7 @@ const Trip = ({ location, province, currentCity, directionCity }) => {
               <h3>
                 <FormattedMessage id="current_location" />
               </h3>
-              <div onClick={watchID} className={classes['my-location']}>
+              <div onClick={() => watchID()} className={classes['my-location']}>
                 <MyLocationIcon />
               </div>
             </div>
@@ -159,7 +156,7 @@ const Trip = ({ location, province, currentCity, directionCity }) => {
                     {...register('current_province_id', {
                       required: 'Select province is a must',
                     })}
-                    onClick={(e) => {
+                    onChange={(e) => {
                       setSelectedCurrentProvince(e.target.value);
                       setMyRoute((prev) => ({ ...prev, current_province_id: e.target.value }));
                     }}
@@ -234,9 +231,14 @@ const Trip = ({ location, province, currentCity, directionCity }) => {
           </div>
 
           <div className={classes.direction}>
-            <h3>
-              <FormattedMessage id="direction_location" />
-            </h3>
+            <div className={classes.header}>
+              <h3>
+                <FormattedMessage id="direction_location" />
+              </h3>
+              <div onClick={() => watchID()} className={classes['my-location']}>
+                <MyLocationIcon />
+              </div>
+            </div>
             <div className={classes['main-wrapper']}>
               <div className={classes.region}>
                 <div className={classes.wrapper}>
@@ -246,7 +248,10 @@ const Trip = ({ location, province, currentCity, directionCity }) => {
                   <select
                     name="direction_province_id"
                     id="direction_province_id"
-                    onClick={(e) => setSelectedDirectionProvince(e.target.value)}
+                    onClick={(e) => {
+                      setSelectedDirectionProvince(e.target.value);
+                      setMyRoute((prev) => ({ ...prev, direction_province_id: e.target.value }));
+                    }}
                     className={classes.input}
                     {...register('direction_province_id', {
                       required: 'Select province is a must',
@@ -318,6 +323,7 @@ const Trip = ({ location, province, currentCity, directionCity }) => {
                   </span>
                 )}
               </div>
+              <span className={classes.note}>test</span>
             </div>
           </div>
         </div>

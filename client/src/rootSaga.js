@@ -5,7 +5,8 @@ import registerSaga from '@pages/Register/saga';
 import loginSaga from '@pages/Login/saga';
 import resetPasswordSaga from '@pages/ResetPassword/saga';
 import routeSaga from '@pages/Trip/saga';
+import homeSaga from '@pages/Home/saga';
 
 export default function* rootSaga() {
-  yield all([appSaga(), loginSaga(), registerSaga(), resetPasswordSaga(), routeSaga()]);
+  yield all([appSaga(), loginSaga(), registerSaga(), resetPasswordSaga(), routeSaga(), homeSaga()]);
 }

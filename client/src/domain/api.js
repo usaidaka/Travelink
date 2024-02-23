@@ -10,9 +10,17 @@ const urls = {
   forgotPassword: 'auth/forgot-password',
   resetPassword: 'auth/reset-password',
 
+  myProfile: 'user/profile',
   myRoute: 'user/my-route',
   addRoute: 'user/route',
   region: 'user/region',
+  nearby: 'user/nearby',
+
+  post: 'user/post',
+};
+
+const headersMultipart = {
+  'Content-Type': 'multipart/form-data; charset=UTF-8',
 };
 
 export const callAPI = async (endpoint, method, header = {}, params = {}, data = {}) => {
@@ -54,6 +62,8 @@ export const login = (data) => callAPI(urls.login, 'POST', {}, {}, data);
 
 export const forgotPassword = (data) => callAPI(urls.forgotPassword, 'POST', {}, {}, data);
 
+export const myProfile = () => callAPI(urls.myProfile, 'GET', {}, {}, {});
+
 export const myRoute = () => callAPI(urls.myRoute, 'GET', {}, {}, {});
 
 export const resetPassword = (data) => callAPI(urls.resetPassword, 'POST', {}, {}, data);
@@ -61,3 +71,9 @@ export const resetPassword = (data) => callAPI(urls.resetPassword, 'POST', {}, {
 export const region = (provinceId) => callAPI(`${urls.region}/${provinceId}`, 'GET', {}, {}, {});
 
 export const addRoute = (data) => callAPI(urls.addRoute, 'POST', {}, {}, data);
+
+export const nearby = () => callAPI(urls.nearby, 'GET');
+
+export const createPost = (data) => callAPI(urls.post, 'POST', headersMultipart, {}, data);
+
+export const getPost = (query) => callAPI(urls.post, 'GET', {}, query, {});

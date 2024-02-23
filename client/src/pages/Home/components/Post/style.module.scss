@@ -1,0 +1,109 @@
+@import '@styles/base';
+
+.header {
+  height: fit-content;
+  box-shadow: rgba(99, 99, 99, 0.6) 0px 2px 8px 0px;
+  border-radius: 6px;
+  padding: 10px;
+  overflow: hidden;
+
+  .create-post {
+    width: 100%;
+    height: 100%;
+    // border: 2px red solid;
+
+    .text {
+      border: none;
+      width: 100%;
+      height: 120px;
+      resize: none;
+      font-family: inherit;
+      padding: 10px;
+      border-bottom: 2px $color-disable-soft solid;
+      outline: none;
+    }
+
+    .preview-image {
+      overflow: hidden;
+      width: 100%;
+      max-height: 360px;
+      position: relative;
+      @include apply-at-xl-size {
+        max-height: 500px;
+      }
+
+      .image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+      }
+      .cancel {
+        cursor: pointer;
+        border-radius: 100%;
+        top: 0;
+        right: 0;
+        position: absolute;
+        background-color: rgba(0, 0, 0, 0.514);
+        color: white;
+        margin: 10px;
+        width: 40px;
+
+        height: 40px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+
+    .upload-ref {
+      margin: 10px 10px;
+      display: flex;
+      flex-shrink: 0;
+      width: 100%;
+      justify-content: space-between;
+
+      .input-image {
+        display: none;
+      }
+
+      .button {
+        display: flex;
+        gap: 6px;
+      }
+
+      .submit {
+        margin-right: 20px;
+      }
+
+      .ref {
+        cursor: pointer;
+        background-color: inherit;
+        color: $color-blue-logo;
+        border: none;
+      }
+
+      .tag-location {
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+}
+
+.wrapper {
+  @include directionY;
+  position: relative;
+  justify-content: center;
+  margin: 10px 0px;
+
+  label {
+    font-size: 12px;
+  }
+}
+
+.input {
+  @include inputTag;
+}

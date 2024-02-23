@@ -65,4 +65,10 @@ export default {
 
   current_location: 'Current Location',
   direction_location: 'Direction Location',
+
+  city: 'City',
+  province: 'Province',
+  location_name: 'Location Name',
+
+  goToProfile: 'Go To Profile',
 };

@@ -66,4 +66,10 @@ export default {
 
   current_location: 'Lokasi Saat ini',
   direction_location: 'Lokasi Tujuan',
+
+  city: 'Kota',
+  province: 'Provinsi',
+  location_name: 'Nama Lokasi',
+
+  goToProfile: 'Lihat Profile',
 };

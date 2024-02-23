@@ -10,7 +10,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import NightsStayIcon from '@mui/icons-material/NightsStay';
 import { createStructuredSelector } from 'reselect';
-import { selectLogin, selectUser } from '@containers/Client/selectors';
+import { selectLogin } from '@containers/Client/selectors';
 import { setLocale, setTheme } from '@containers/App/actions';
 import { Button } from '@mui/material';
 import { logout } from '@utils/logout';
@@ -22,6 +22,8 @@ import PermIdentityOutlinedIcon from '@mui/icons-material/PermIdentityOutlined';
 import ExploreOutlinedIcon from '@mui/icons-material/ExploreOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import HikingIcon from '@mui/icons-material/Hiking';
+import { selectNearby, selectProfile } from '@pages/Home/selectors';
+import _ from 'lodash';
 
 import Maps from '@components/Maps';
 
@@ -30,8 +32,9 @@ import DrawerLeft from './components/DrawerLeft';
 import DrawerRight from './components/DrawerRight';
 import MenuLanguage from './components/MenuLanguage';
 
-const Navbar = ({ locale, theme, isLogin, user, children }) => {
+const Navbar = ({ locale, theme, isLogin, profile, children, nearby }) => {
   const [decryptedUser, setDecryptedUser] = useState({});
+  const [decryptedNearby, setDecryptedNearby] = useState({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [menuPosition, setMenuPosition] = useState(null);
@@ -42,10 +45,14 @@ const Navbar = ({ locale, theme, isLogin, user, children }) => {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    if (user) {
-      setDecryptedUser(decryptPayload(user));
+    if (!_.isEmpty(profile)) {
+      setDecryptedUser(decryptPayload(profile));
     }
-  }, [user]);
+
+    if (!_.isEmpty(nearby)) {
+      setDecryptedNearby(decryptPayload(nearby));
+    }
+  }, [nearby, profile]);
 
   const handleClickDropdown = (event) => {
     setDropdownPosition(event.currentTarget);
@@ -213,7 +220,12 @@ const Navbar = ({ locale, theme, isLogin, user, children }) => {
         <div className={classes.children}>{children}</div>
         <div className={classes['sidebar-right']}>
           <div className={classes.maps}>
-            <Maps zoom={11} />
+            <Maps
+              center={decryptedNearby[0]?.current_position}
+              zoom={9}
+              marker={decryptedNearby}
+              element="SidebarRight"
+            />
           </div>
         </div>
       </div>
@@ -225,13 +237,15 @@ Navbar.propTypes = {
   locale: PropTypes.string.isRequired,
   theme: PropTypes.string,
   isLogin: PropTypes.bool,
-  user: PropTypes.string,
+  profile: PropTypes.string,
   children: PropTypes.element.isRequired,
+  nearby: PropTypes.string,
 };
 
 const mapStateToProps = createStructuredSelector({
   isLogin: selectLogin,
-  user: selectUser,
+  profile: selectProfile,
+  nearby: selectNearby,
 });
 
 export default connect(mapStateToProps)(Navbar);
