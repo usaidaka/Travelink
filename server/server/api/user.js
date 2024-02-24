@@ -142,10 +142,35 @@ const post = async (request, reply) => {
     const { userId } = request.params;
     const query = request.query;
 
-    const response = await UserHelper.getPost(id, userId, query);
+    const response = await UserHelper.getPost(id, query);
     return reply.send(response);
   } catch (err) {
     console.log([fileName, "following Post", "ERROR"], { info: `${err}` });
+    return reply.send(GeneralHelper.errorResponse(err));
+  }
+};
+
+const userPost = async (request, reply) => {
+  try {
+    const { userId } = request.params;
+    const query = request.query;
+
+    const response = await UserHelper.getUserPost(userId, query);
+    return reply.send(response);
+  } catch (err) {
+    console.log([fileName, "post Detail", "ERROR"], { info: `${err}` });
+    return reply.send(GeneralHelper.errorResponse(err));
+  }
+};
+
+const postDetail = async (request, reply) => {
+  try {
+    const { postId } = request.params;
+
+    const response = await UserHelper.getPostDetail(postId);
+    return reply.send(response);
+  } catch (err) {
+    console.log([fileName, "post Detail", "ERROR"], { info: `${err}` });
     return reply.send(GeneralHelper.errorResponse(err));
   }
 };
@@ -195,6 +220,29 @@ const deletePost = async (request, reply) => {
   }
 };
 
+const commentPost = async (request, reply) => {
+  try {
+    const { postId } = request.params;
+    const response = await UserHelper.getCommentPost(postId);
+    return reply.send(response);
+  } catch (err) {
+    console.log([fileName, "comment Post", "ERROR"], { info: `${err}` });
+    return reply.send(GeneralHelper.errorResponse(err));
+  }
+};
+
+const deleteCommentPost = async (request, reply) => {
+  try {
+    const { id } = request.user;
+    const { commentId } = request.params;
+    const response = await UserHelper.deleteCommentPost(id, commentId);
+    return reply.send(response);
+  } catch (err) {
+    console.log([fileName, "delete Coment Post", "ERROR"], { info: `${err}` });
+    return reply.send(GeneralHelper.errorResponse(err));
+  }
+};
+
 // GET
 Router.get("/profile", Middleware.validateToken, Middleware.isUser, myProfile);
 
@@ -205,13 +253,19 @@ Router.get(
   myAddress
 );
 
-Router.get("/post", Middleware.validateToken, Middleware.isUser, post);
-
 Router.get("/my-route", Middleware.validateToken, Middleware.isUser, myRoute);
 
 Router.get("/nearby", Middleware.validateToken, Middleware.isUser, nearBy);
 
 Router.get("/region/:provinceId", region);
+
+Router.get("/post", Middleware.validateToken, Middleware.isUser, post);
+
+Router.get("/user-post/:userId", userPost);
+
+Router.get("/post-detail/:postId", postDetail);
+
+Router.get("/comment/:postId", commentPost);
 
 // POST
 Router.post(
@@ -246,6 +300,13 @@ Router.delete(
   Middleware.validateToken,
   Middleware.isUser,
   deletePost
+);
+
+Router.delete(
+  "/comment/:commentId",
+  Middleware.validateToken,
+  Middleware.isUser,
+  deleteCommentPost
 );
 
 /* UPDATE */

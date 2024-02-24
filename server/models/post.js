@@ -9,12 +9,18 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Post.hasMany(models.ImagePost, { foreignKey: "post_id" });
-      Post.hasMany(models.Comment, { foreignKey: "post_id" });
+
+      Post.hasMany(models.Comment, {
+        foreignKey: { name: "post_id", allowNull: true },
+        onDelete: "CASCADE",
+      });
       Post.belongsTo(models.City, { foreignKey: "city_id" });
       Post.belongsTo(models.Province, { foreignKey: "province_id" });
       Post.belongsTo(models.User, { foreignKey: "user_id" });
-      Post.hasMany(models.ImagePost, { foreignKey: "post_id" });
+      Post.hasMany(models.ImagePost, {
+        foreignKey: { name: "post_id", allowNull: true },
+        onDelete: "CASCADE",
+      });
     }
   }
   Post.init(

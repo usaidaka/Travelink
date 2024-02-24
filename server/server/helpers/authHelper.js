@@ -153,6 +153,7 @@ const login = async (dataObject) => {
     });
 
     const result = {
+      id: user.id,
       username: user.username,
       email: user.email,
       role: user.role,

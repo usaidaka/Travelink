@@ -533,7 +533,7 @@ const getNearBy = async (id, radius = 50) => {
   }
 };
 
-const getPost = async (id, userId, query) => {
+const getPost = async (id, query) => {
   try {
     const { next, limit } = query;
 
@@ -593,6 +593,7 @@ const getPost = async (id, userId, query) => {
 
     const idFollowTo = followTo.map((follow) => follow.follow_to);
     console.log(idFollowTo);
+    idFollowTo.push(id);
 
     const followingPost = await db.Post.findAll({
       where: {
@@ -612,6 +613,110 @@ const getPost = async (id, userId, query) => {
     });
   } catch (err) {
     console.log([fileName, "get post", "ERROR"], {
+      info: `${err}`,
+    });
+    return Promise.reject(GeneralHelper.errorResponse(err));
+  }
+};
+
+const getUserPost = async (userId, query) => {
+  try {
+    const { next, limit } = query;
+
+    const currentPage = Number(next) || 0;
+    const currentLimit = Number(limit) || 6;
+
+    const formattedExclude = {
+      exclude: [
+        "createdAt",
+        "deletedAt",
+        "updatedAt",
+        "province_id",
+        "city_id",
+      ],
+    };
+
+    const formattedInclude = [
+      {
+        model: db.ImagePost,
+        attributes: ["image"],
+      },
+
+      {
+        model: db.Province,
+        attributes: ["name"],
+      },
+      {
+        model: db.City,
+        attributes: ["name"],
+      },
+      { model: db.User, attributes: ["username", "image"] },
+    ];
+
+    const order = [["id", "DESC"]];
+
+    const userPost = await db.Post.findAll({
+      where: { user_id: userId },
+      attributes: formattedExclude,
+      include: formattedInclude,
+      limit: currentLimit,
+      offset: currentPage,
+      order,
+    });
+
+    return Promise.resolve({
+      ok: true,
+      result: userPost,
+    });
+  } catch (err) {
+    console.log([fileName, "get user post", "ERROR"], {
+      info: `${err}`,
+    });
+    return Promise.reject(GeneralHelper.errorResponse(err));
+  }
+};
+
+const getPostDetail = async (postId) => {
+  try {
+    const formattedExclude = {
+      exclude: [
+        "createdAt",
+        "deletedAt",
+        "updatedAt",
+        "province_id",
+        "city_id",
+      ],
+    };
+
+    const formattedInclude = [
+      {
+        model: db.ImagePost,
+        attributes: ["image"],
+      },
+
+      {
+        model: db.Province,
+        attributes: ["name"],
+      },
+      {
+        model: db.City,
+        attributes: ["name"],
+      },
+      { model: db.User, attributes: ["username", "image"] },
+    ];
+
+    const post = await db.Post.findOne({
+      where: { id: postId },
+      attributes: formattedExclude,
+      include: formattedInclude,
+    });
+
+    return Promise.resolve({
+      ok: true,
+      result: post,
+    });
+  } catch (err) {
+    console.log([fileName, "get post detail", "ERROR"], {
       info: `${err}`,
     });
     return Promise.reject(GeneralHelper.errorResponse(err));
@@ -715,6 +820,22 @@ const deletePost = async (id, postId) => {
       return Promise.reject(Boom.notFound("Post not found"));
     }
 
+    const isImageExist = await db.ImagePost.findAll({
+      where: { post_id: postId },
+    });
+
+    const isCommentExist = await db.Comment.findAll({
+      where: { post_id: postId },
+    });
+
+    if (!_.isEmpty(isImageExist)) {
+      await db.ImagePost.destroy({ where: { post_id: postId } }, transaction);
+    }
+
+    if (!_.isEmpty(isCommentExist)) {
+      await db.Comment.destroy({ where: { post_id: postId } }, transaction);
+    }
+
     await db.Post.destroy({ where: { id: postId, user_id: id }, transaction });
 
     await transaction.commit();
@@ -725,6 +846,76 @@ const deletePost = async (id, postId) => {
     });
   } catch (err) {
     console.log([fileName, "delete post", "ERROR"], {
+      info: `${err}`,
+    });
+    return Promise.reject(GeneralHelper.errorResponse(err));
+  }
+};
+
+const getCommentPost = async (postId) => {
+  try {
+    const comment = await db.Comment.findAll({
+      where: { post_id: postId },
+      attributes: { exclude: ["deletedAt", "updatedAt"] },
+      include: [
+        {
+          model: db.User,
+          attributes: ["username", "image"],
+        },
+      ],
+    });
+
+    if (_.isEmpty(comment)) {
+      return Promise.resolve({
+        ok: true,
+        message: "Comment based on post not found",
+        result: comment,
+      });
+    }
+
+    return Promise.resolve({
+      ok: true,
+      result: comment,
+    });
+  } catch (err) {
+    console.log([fileName, "get Comment Post", "ERROR"], {
+      info: `${err}`,
+    });
+    return Promise.reject(GeneralHelper.errorResponse(err));
+  }
+};
+
+const deleteCommentPost = async (id, commentId) => {
+  const transaction = await db.sequelize.transaction();
+  try {
+    const comment = await db.Comment.findAll({
+      where: { id: commentId, user_id: id },
+      attributes: { exclude: ["deletedAt", "updatedAt"] },
+      include: [
+        {
+          model: db.User,
+          attributes: ["username", "image"],
+        },
+      ],
+    });
+
+    if (_.isEmpty(comment)) {
+      return Promise.resolve({
+        ok: true,
+        message: "Comment based on post not found",
+        result: comment,
+      });
+    }
+
+    await db.Comment.destroy({ where: { id: commentId }, transaction });
+
+    await transaction.commit();
+    return Promise.resolve({
+      ok: true,
+      message: "Delete comment successful",
+    });
+  } catch (err) {
+    console.log([fileName, "get Comment Post", "ERROR"], {
       info: `${err}`,
     });
     return Promise.reject(GeneralHelper.errorResponse(err));
@@ -742,7 +933,11 @@ module.exports = {
   getRegion,
   getNearBy,
   getPost,
+  getPostDetail,
+  getUserPost,
   createPost,
   updatePost,
   deletePost,
+  getCommentPost,
+  deleteCommentPost,
 };

@@ -9,13 +9,26 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      ImagePost.belongsTo(models.Post, { foreignKey: "post_id" });
+      ImagePost.belongsTo(models.Post, {
+        foreignKey: { name: "post_id", allowNull: true },
+        onDelete: "CASCADE",
+      });
     }
   }
   ImagePost.init(
     {
-      post_id: DataTypes.INTEGER,
-      image: DataTypes.TEXT,
+      post_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "Post",
+          key: "id",
+        },
+      },
+      image: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
       deletedAt: DataTypes.DATE,
     },
     {
