@@ -8,6 +8,8 @@ import {
   GET_POST,
   SET_POST,
   DO_POST,
+  GET_COMMENT,
+  SET_COMMENT,
 } from './constants';
 
 export const getProfile = (profile) => ({
@@ -40,9 +42,9 @@ export const setProvince = (province) => ({
   province,
 });
 
-export const getPost = (post) => ({
+export const getPost = (query) => ({
   type: GET_POST,
-  post,
+  query,
 });
 
 export const setPost = (post) => ({
@@ -55,3 +57,13 @@ export const doPost = (data, cbSuccess) => ({
   data,
   cbSuccess,
 });
+
+export const getComment = (postId) => ({
+  type: GET_COMMENT,
+  postId,
+});
+
+export const setComment = (comment) => {
+  console.log(comment);
+  return { type: SET_COMMENT, comment };
+};

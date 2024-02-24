@@ -239,7 +239,7 @@ Navbar.propTypes = {
   isLogin: PropTypes.bool,
   profile: PropTypes.string,
   children: PropTypes.element.isRequired,
-  nearby: PropTypes.string,
+  nearby: PropTypes.array,
 };
 
 const mapStateToProps = createStructuredSelector({

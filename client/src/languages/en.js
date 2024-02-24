@@ -71,4 +71,10 @@ export default {
   location_name: 'Location Name',
 
   goToProfile: 'Go To Profile',
+  comment: 'Comment',
+
+  yes: 'Yes',
+  no: 'No',
+
+  deleteCommentConfirmation: 'Are you sure wanna delete this comment?',
 };

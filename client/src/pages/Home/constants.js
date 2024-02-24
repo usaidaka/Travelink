@@ -11,3 +11,6 @@ export const GET_POST = 'Home/GET_POST';
 export const SET_POST = 'Home/SET_POST';
 
 export const DO_POST = 'Home/DO_POST';
+
+export const GET_COMMENT = 'Home/GET_COMMENT';
+export const SET_COMMENT = 'Home/SET_COMMENT';

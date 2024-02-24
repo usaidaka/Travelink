@@ -1,11 +1,12 @@
 import { produce } from 'immer';
-import { SET_NEARBY, SET_PROVINCE, SET_PROFILE, SET_POST } from './constants';
+import { SET_NEARBY, SET_PROVINCE, SET_PROFILE, SET_POST, SET_COMMENT } from './constants';
 
 export const initialState = {
   profile: '',
   province: [],
   nearby: '',
-  post: [],
+  post: {},
+  comment: [],
 };
 
 export const storedKey = ['profile', 'province', 'nearby', 'post'];
@@ -26,6 +27,8 @@ const homeReducer = (state = initialState, action) =>
       case SET_POST:
         draft.post = action.post;
         break;
+      case SET_COMMENT:
+        draft.comment = action.comment;
     }
   });
 

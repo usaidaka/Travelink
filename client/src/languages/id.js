@@ -72,4 +72,10 @@ export default {
   location_name: 'Nama Lokasi',
 
   goToProfile: 'Lihat Profile',
+  comment: 'Komentar',
+
+  yes: 'Ya',
+  no: 'Tidak',
+
+  deleteCommentConfirmation: 'Apakah anda yakin ingin menghapus komentar ini?',
 };

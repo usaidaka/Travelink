@@ -17,6 +17,7 @@ const urls = {
   nearby: 'user/nearby',
 
   post: 'user/post',
+  comment: 'user/comment',
 };
 
 const headersMultipart = {
@@ -76,4 +77,9 @@ export const nearby = () => callAPI(urls.nearby, 'GET');
 
 export const createPost = (data) => callAPI(urls.post, 'POST', headersMultipart, {}, data);
 
-export const getPost = (query) => callAPI(urls.post, 'GET', {}, query, {});
+export const getPost = (query) => {
+  console.log(query);
+  return callAPI(urls.post, 'GET', {}, query, {});
+};
+
+export const getComment = (postId) => callAPI(`${urls.comment}/${postId}`, 'GET');
