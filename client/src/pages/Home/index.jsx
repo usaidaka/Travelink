@@ -16,7 +16,7 @@ import CardPost from './components/CardPost';
 
 const Home = ({ post }) => {
   const dispatch = useDispatch();
-  const [next, setNext] = useState(6);
+  const [next, setNext] = useState(0);
   const [followingData, setFollowingData] = useState([]);
   const [isMore, setIsMore] = useState(false);
 
@@ -29,7 +29,12 @@ const Home = ({ post }) => {
       setFollowingData((prev) => [...prev, ...post.followingPost]);
       setIsMore(post.followingPost?.length >= 6);
     }
-  }, [post]);
+    if (post?.followingPost?.length === 0) {
+      setIsMore(false);
+    }
+  }, [post, post.followingPost]);
+
+  console.log(post?.followingPost?.length === 0);
 
   useEffect(() => {
     dispatch(getProfile());
@@ -41,8 +46,8 @@ const Home = ({ post }) => {
 
   return (
     <div id="top" className={classes.container}>
-      <Post />
-      {followingData.map((data, idx) => (
+      <Post fetch={setFollowingData} next={next} />
+      {followingData?.map((data, idx) => (
         <CardPost key={idx} post={data} />
       ))}
       {(isMore && (
@@ -52,14 +57,13 @@ const Home = ({ post }) => {
           </button>
         </div>
       )) ||
-        (post?.followingPost?.length !== 0 && (
+        (post?.followingPost?.length === 0 && null) || (
           <a href="#top" className={classes.expand}>
             <button type="button">
               <VerticalAlignTopIcon />
             </button>
           </a>
-        )) ||
-        null}
+        )}
     </div>
   );
 };

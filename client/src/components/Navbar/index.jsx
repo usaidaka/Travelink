@@ -17,6 +17,7 @@ import { logout } from '@utils/logout';
 import decryptPayload from '@utils/decryptionHelper';
 import logo from '@assets/logo.png';
 
+import GroupsIcon from '@mui/icons-material/Groups';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import PermIdentityOutlinedIcon from '@mui/icons-material/PermIdentityOutlined';
 import ExploreOutlinedIcon from '@mui/icons-material/ExploreOutlined';
@@ -167,13 +168,14 @@ const Navbar = ({ locale, theme, isLogin, profile, children, nearby }) => {
         </div>
       </div>
       {/* LAYOUT */}
+
       <div className={classes.layout}>
         <div className={classes['sidebar-left']}>
           <div className={classes['profile-bar']}>
             <div className={classes.card}>
-              <div className={classes.image}>
+              <Link to="/profile" className={classes.image}>
                 <img src={decryptedUser.image} alt="" />
-              </div>
+              </Link>
               <div className={classes.user}>
                 <p>@{decryptedUser.username}</p>
                 <p>{decryptedUser.mbti}</p>
@@ -199,6 +201,13 @@ const Navbar = ({ locale, theme, isLogin, profile, children, nearby }) => {
               <PermIdentityOutlinedIcon />
               <span>
                 <FormattedMessage id="people" />
+              </span>
+            </Link>
+
+            <Link to="/group" className={classes.nav} data-active={pathname === '/group'}>
+              <GroupsIcon />
+              <span>
+                <FormattedMessage id="group" />
               </span>
             </Link>
 
@@ -239,7 +248,7 @@ Navbar.propTypes = {
   isLogin: PropTypes.bool,
   profile: PropTypes.string,
   children: PropTypes.element.isRequired,
-  nearby: PropTypes.array,
+  nearby: PropTypes.string,
 };
 
 const mapStateToProps = createStructuredSelector({

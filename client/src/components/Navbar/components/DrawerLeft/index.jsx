@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import { Link, useLocation } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
+import GroupsIcon from '@mui/icons-material/Groups';
 
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import PermIdentityOutlinedIcon from '@mui/icons-material/PermIdentityOutlined';
@@ -42,9 +43,9 @@ const DrawerLeft = ({ user }) => {
       >
         <div className={classes['profile-bar']}>
           <div className={classes.card}>
-            <div className={classes.image}>
+            <Link to="/profile" className={classes.image}>
               <img src={user.image} alt="" />
-            </div>
+            </Link>
             <div className={classes.user}>
               <p>@{user.username}</p>
               <p>{user.mbti}</p>
@@ -80,6 +81,13 @@ const DrawerLeft = ({ user }) => {
             <HikingIcon />
             <span>
               <FormattedMessage id="trip" />
+            </span>
+          </Link>
+
+          <Link to="/group" className={classes.nav} data-active={pathname === '/group'}>
+            <GroupsIcon />
+            <span>
+              <FormattedMessage id="group" />
             </span>
           </Link>
 

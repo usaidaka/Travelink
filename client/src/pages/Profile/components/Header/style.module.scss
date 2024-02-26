@@ -1,0 +1,91 @@
+@import '@styles/base';
+
+.header-container {
+  height: 36rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow:
+    rgba(67, 71, 85, 0.27) 0px 0px 0.25em,
+    rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
+  border-radius: 6px;
+  overflow: hidden;
+
+  @include apply-at-xl-size {
+    height: 28rem;
+  }
+
+  .header {
+    position: relative;
+    height: 100%;
+    .backdrop {
+      height: 65%;
+
+      .maps {
+        height: 100%;
+        position: relative;
+        z-index: 0;
+      }
+    }
+
+    .image-container {
+      z-index: 100;
+      object-position: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: $color-white;
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      border-radius: 100%;
+      border: 4px $color-white solid;
+      overflow: hidden;
+      transform: translate(10%, -70%);
+
+      .image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+      }
+    }
+
+    .information {
+      font-size: 16px;
+      height: 35%;
+      padding: 0px 20px;
+
+      .detail {
+        margin-top: 50px;
+
+        .data {
+          font-weight: 600;
+          text-transform: capitalize;
+
+          .username {
+            font-weight: 300;
+            font-size: 12px;
+            font-style: italic;
+            color: $color-disable;
+          }
+
+          .region {
+            font-size: 8px;
+            font-weight: 400;
+          }
+
+          .measure {
+            display: flex;
+            gap: 20px;
+          }
+
+          .divider {
+            margin: 6px 0px;
+            border: 2px solid $color-disable-soft;
+            border-radius: 4px;
+          }
+        }
+      }
+    }
+  }
+}

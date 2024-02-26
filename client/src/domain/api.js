@@ -18,6 +18,15 @@ const urls = {
 
   post: 'user/post',
   comment: 'user/comment',
+  userList: 'user/user-list',
+  profile: 'user/profile',
+  connection: 'user/my-connection',
+  updatePost: 'user/post',
+  postDetail: 'user/post-detail',
+  follow: 'user/follow',
+  userProfile: 'user/user-profile',
+  userPost: 'user/user-post',
+  userConnection: 'user/connection',
 };
 
 const headersMultipart = {
@@ -83,3 +92,21 @@ export const getPost = (query) => {
 };
 
 export const getComment = (postId) => callAPI(`${urls.comment}/${postId}`, 'GET');
+
+export const userList = (query) => callAPI(urls.userList, 'GET', {}, query, {});
+
+export const profile = () => callAPI(urls.profile, 'GET');
+
+export const connection = () => callAPI(urls.connection, 'GET');
+
+export const updatePost = (postId, data) => callAPI(`${urls.updatePost}/${postId}`, 'PATCH', {}, {}, data);
+
+export const getPostDetail = (postId) => callAPI(`${urls.postDetail}/${postId}`, 'GET');
+
+export const follow = (followTo) => callAPI(`${urls.follow}/${followTo}`, 'PATCH');
+
+export const userProfile = (userId) => callAPI(`${urls.userProfile}/${userId}`, 'GET');
+
+export const userPost = (userId, query) => callAPI(`${urls.userPost}/${userId}`, 'GET', {}, query);
+
+export const userConnection = (userId) => callAPI(`${urls.userConnection}/${userId}`, 'GET');

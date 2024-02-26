@@ -20,7 +20,7 @@ import { doRoute, getCurrentCityList, getDirectionCityList, getUserRoute } from 
 
 const Trip = ({ location, province, currentCity, directionCity }) => {
   const [searchResult, setSearchResult] = useState([]);
-  const [myRoute, setMyRoute] = useState();
+  const [myRoute, setMyRoute] = useState({});
   const [selectedCurrentProvince, setSelectedCurrentProvince] = useState('');
   const [selectedDirectionProvince, setSelectedDirectionProvince] = useState('');
   const [currentLatitude, setCurrentLatitude] = useState(0);

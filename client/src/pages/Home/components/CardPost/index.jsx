@@ -101,6 +101,12 @@ const CardPost = ({ post, comment, user }) => {
             </div>
           </div>
           <div className={classes['comment-section']}>
+            <div className={classes.caption}>
+              <p>{post?.User?.username}</p>
+              <p>{post.caption}</p>
+              <p className={classes.date}>{dayjs(post.createdAt).format('dddd, MMMM D, YYYY h:mm A')}</p>
+              <hr />
+            </div>
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className={classes.wrapper}>
                 <label htmlFor="">

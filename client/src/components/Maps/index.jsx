@@ -11,7 +11,16 @@ import _ from 'lodash';
 import SearchField from './components/SearchField';
 import classes from './style.module.scss';
 
-const Maps = ({ element, center = [-6.224269936812463, 106.84171813081441], marker, setSearchResult, zoom = 50 }) => {
+const Maps = ({
+  isSearch = true,
+  element,
+  center = [-6.224269936812463, 106.84171813081441],
+  marker,
+  setSearchResult,
+  zoom = 50,
+}) => {
+  console.log(marker);
+
   let renderedMarker;
   console.log(marker);
   switch (element) {
@@ -62,6 +71,29 @@ const Maps = ({ element, center = [-6.224269936812463, 106.84171813081441], mark
             </Popup>
           </Marker>
         ));
+
+      break;
+    case 'People':
+      console.log(marker);
+      renderedMarker =
+        !_.isEmpty(marker) && !_.isEmpty(marker[0]?.position[0])
+          ? marker.map((pin) => (
+              <Marker key={pin.id} position={pin.position}>
+                <Popup>
+                  <span>{pin.province}</span>, <span>{pin.city}</span>
+                </Popup>
+              </Marker>
+            ))
+          : null;
+      break;
+
+    case 'UnRoute':
+      renderedMarker = !_.isEmpty(marker) && (
+        <Marker position={center}>
+          <Popup>Current Position</Popup>
+        </Marker>
+      );
+
       break;
 
     default:
@@ -79,11 +111,8 @@ const Maps = ({ element, center = [-6.224269936812463, 106.84171813081441], mark
 
   return (
     <MapContainer center={center} zoom={zoom} scrollWheelZoom={false} className={classes.maps}>
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      <SearchField onSearchResult={handleSearchResult} />
+      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+      {isSearch && <SearchField onSearchResult={handleSearchResult} />}
 
       {renderedMarker}
     </MapContainer>
@@ -95,6 +124,7 @@ Maps.propTypes = {
   setSearchResult: PropTypes.func,
   zoom: PropTypes.number,
   center: PropTypes.array,
+  isSearch: PropTypes.bool,
   marker: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
 };
 

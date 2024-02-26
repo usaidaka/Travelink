@@ -15,7 +15,7 @@ import { selectCurrentCityList } from '@pages/Trip/selectors';
 
 import classes from './style.module.scss';
 import { doPost, getPost } from '../../actions';
-import { selectProvince } from '../../selectors';
+import { selectPost, selectProvince } from '../../selectors';
 
 const style = {
   position: 'absolute',
@@ -29,7 +29,7 @@ const style = {
   p: 4,
 };
 
-const Post = ({ province, city }) => {
+const Post = ({ province, city, fetch, post, next }) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -46,6 +46,10 @@ const Post = ({ province, city }) => {
   const handleCurrentCityList = (provinceId) => {
     dispatch(getCurrentCityList(provinceId));
   };
+
+  useEffect(() => {
+    dispatch(getPost({ next, limit: 6 }));
+  }, [dispatch, next]);
 
   useEffect(() => {
     if (selectedProvince) {
@@ -73,15 +77,23 @@ const Post = ({ province, city }) => {
     formData.append('location_name', data.location_name);
     setLoading(true);
     dispatch(
-      doPost(formData, (message) => {
-        toast.success(message, { duration: 1000 });
-        dispatch(getPost());
-        reset();
-        setShowImage(null);
-        setImage(null);
-        setProvinceName('');
-        setCityName('');
-      })
+      doPost(
+        formData,
+        (message) => {
+          toast.success(message, { duration: 1000 });
+          reset();
+          setShowImage(null);
+          setImage(null);
+          setProvinceName('');
+          setCityName('');
+          setLoading(false);
+          dispatch(getPost({ next, limit: 6 }));
+          fetch(post.followingPost);
+        },
+        () => {
+          setLoading(false);
+        }
+      )
     );
   };
 
@@ -114,6 +126,9 @@ const Post = ({ province, city }) => {
               <div
                 className={classes.cancel}
                 onClick={() => {
+                  if (loading) {
+                    return;
+                  }
                   setShowImage(null);
                   setImage(null);
                 }}
@@ -259,8 +274,18 @@ const Post = ({ province, city }) => {
   );
 };
 
-Post.propTypes = { province: PropTypes.array, city: PropTypes.array };
+Post.propTypes = {
+  province: PropTypes.array,
+  city: PropTypes.array,
+  fetch: PropTypes.func,
+  post: PropTypes.object,
+  next: PropTypes.number,
+};
 
-const mapStateToProps = createStructuredSelector({ province: selectProvince, city: selectCurrentCityList });
+const mapStateToProps = createStructuredSelector({
+  province: selectProvince,
+  city: selectCurrentCityList,
+  post: selectPost,
+});
 
 export default connect(mapStateToProps)(Post);

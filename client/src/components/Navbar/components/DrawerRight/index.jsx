@@ -1,21 +1,26 @@
 // import PropTypes from 'prop-types';
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
-import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
-import ListItem from '@mui/material/ListItem';
-
+import PropTypes from 'prop-types';
 import MapIcon from '@mui/icons-material/Map';
+import Maps from '@components/Maps';
+import { selectNearby } from '@pages/Home/selectors';
+import { createStructuredSelector } from 'reselect';
+import { connect } from 'react-redux';
+import decryptPayload from '@utils/decryptionHelper';
+import _ from 'lodash';
 
 import classes from './style.module.scss';
 
 // eslint-disable-next-line react/function-component-definition
-const DrawerRight = () => {
-  const [state, setState] = React.useState({
+const DrawerRight = ({ nearby }) => {
+  const [state, setState] = useState({
     right: false,
   });
+
+  const [decryptedNearby, setDecryptedNearby] = useState({});
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -25,6 +30,12 @@ const DrawerRight = () => {
     setState({ ...state, [anchor]: open });
   };
 
+  useEffect(() => {
+    if (!_.isEmpty(nearby)) {
+      setDecryptedNearby(decryptPayload(nearby));
+    }
+  }, [nearby]);
+
   const list = (anchor) => (
     <div className={classes['sidebar-right']}>
       <Box
@@ -33,18 +44,14 @@ const DrawerRight = () => {
         onClick={toggleDrawer(anchor, false)}
         onKeyDown={toggleDrawer(anchor, false)}
       >
-        <List>
-          <ListItem>
-            <h1>test</h1>
-          </ListItem>
-        </List>
-
-        <Divider />
-        <List>
-          <ListItem>
-            <h1>test</h1>
-          </ListItem>
-        </List>
+        <div className={classes.maps}>
+          <Maps
+            center={decryptedNearby[0]?.current_position}
+            zoom={9}
+            marker={decryptedNearby}
+            element="SidebarRight"
+          />
+        </div>
       </Box>
     </div>
   );
@@ -65,8 +72,12 @@ const DrawerRight = () => {
   );
 };
 
-// DrawerRight.propTypes = {
-//   user: PropTypes.object,
-// };
+DrawerRight.propTypes = {
+  nearby: PropTypes.string,
+};
 
-export default DrawerRight;
+const mapStateToProps = createStructuredSelector({
+  nearby: selectNearby,
+});
+
+export default connect(mapStateToProps)(DrawerRight);

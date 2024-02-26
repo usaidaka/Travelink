@@ -55,6 +55,7 @@ export default {
   people: 'Pengguna Lain',
   setting: 'Pengaturan',
   trip: 'Perjalanan',
+  group: 'Kelompok',
 
   current_province: 'Provinsi Saat Ini',
   current_city: 'Kota Saat Ini',
@@ -78,4 +79,15 @@ export default {
   no: 'Tidak',
 
   deleteCommentConfirmation: 'Apakah anda yakin ingin menghapus komentar ini?',
+
+  follow: 'Ikuti',
+  unfollow: 'Berhenti Mengikuti',
+  changePassword: 'Ganti Kata Sandi',
+
+  following: 'Mengikuti',
+  follower: 'Pengikut',
+
+  delete: 'Hapus',
+  edit: 'Ubah',
+  caption: 'Keterang',
 };

@@ -1,6 +1,9 @@
 import MainLayout from '@layouts/MainLayout';
 import Dashboard from '@pages/AdminDashboard';
+import ChangePassword from '@pages/ChangePassword';
+import EditPost from '@pages/EditPost';
 import Explore from '@pages/Explore';
+import Group from '@pages/Group';
 
 import Home from '@pages/Home';
 import Login from '@pages/Login';
@@ -11,6 +14,7 @@ import Register from '@pages/Register';
 import ResetPassword from '@pages/ResetPassword';
 import Setting from '@pages/Setting';
 import Trip from '@pages/Trip';
+import UserProfile from '@pages/UserProfile';
 
 const routes = [
   {
@@ -29,6 +33,15 @@ const routes = [
     layout: MainLayout,
     role: 'User',
   },
+  {
+    path: '/post/:postId',
+    name: 'Edit Post',
+    protected: true,
+    component: EditPost,
+    layout: MainLayout,
+    role: 'User',
+  },
+
   {
     path: '/login',
     name: 'Login',
@@ -64,6 +77,14 @@ const routes = [
     role: 'User',
   },
   {
+    path: '/profile/:userId',
+    name: 'User Profile',
+    protected: true,
+    component: UserProfile,
+    layout: MainLayout,
+    role: 'User',
+  },
+  {
     path: '/explore',
     name: 'Explore',
     protected: true,
@@ -84,6 +105,22 @@ const routes = [
     name: 'Setting',
     protected: true,
     component: Setting,
+    layout: MainLayout,
+    role: 'User',
+  },
+  {
+    path: 'setting/change-password',
+    name: 'Change Password',
+    protected: true,
+    component: ChangePassword,
+    layout: MainLayout,
+    role: 'User',
+  },
+  {
+    path: '/group',
+    name: 'Group',
+    protected: true,
+    component: Group,
     layout: MainLayout,
     role: 'User',
   },

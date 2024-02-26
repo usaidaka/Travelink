@@ -43,7 +43,6 @@ function* doGetNearby() {
 function* doGetPost({ query }) {
   setLoading(true);
   try {
-    console.log(query);
     const response = yield call(getPost, query);
 
     yield put(setPost(response.result));
@@ -53,14 +52,19 @@ function* doGetPost({ query }) {
   setLoading(false);
 }
 
-function* doPost({ data, cbSuccess }) {
+function* doPost({ data, cbSuccess, cbFailed }) {
   setLoading(true);
   try {
     const response = yield call(createPost, data);
+
     cbSuccess && cbSuccess(response.message);
   } catch (error) {
-    console.log(error);
-    yield put(showPopup('Error', error.response?.data?.message));
+    cbFailed && cbFailed();
+    if (error.response.data.error) {
+      yield put(showPopup('Error', error.response.data.error));
+    } else {
+      yield put(showPopup('Error', error.response?.data?.message));
+    }
   }
   setLoading(false);
 }

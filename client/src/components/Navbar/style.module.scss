@@ -139,6 +139,7 @@
   height: 100%;
   gap: 10px;
   margin-top: 10px;
+
   @include apply-at-xl-size {
     padding: 0px 10px;
   }

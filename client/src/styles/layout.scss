@@ -8,6 +8,20 @@
   flex-direction: row;
 }
 
+@mixin input {
+  height: 40px;
+  border: 1px solid var(--color-border);
+  border-radius: 5px;
+
+  &:disabled {
+    background-color: rgba($color: #b3b3b3, $alpha: 1);
+  }
+  &[data-type='area'] {
+    height: 100px;
+    resize: none;
+  }
+}
+
 @mixin inputTag {
   height: 35px;
   border: 1px $color-disable solid;

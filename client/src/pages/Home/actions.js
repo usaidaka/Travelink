@@ -52,9 +52,10 @@ export const setPost = (post) => ({
   post,
 });
 
-export const doPost = (data, cbSuccess) => ({
+export const doPost = (data, cbSuccess, cbFailed) => ({
   type: DO_POST,
   data,
+  cbFailed,
   cbSuccess,
 });
 

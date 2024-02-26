@@ -4,3 +4,104 @@
   height: 600px;
   width: 400px;
 }
+
+.container {
+  padding: 20px;
+
+  .expand {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+
+    button {
+      cursor: pointer;
+      height: 40px;
+      width: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 100%;
+      background-color: $color-blue-logo;
+      color: $color-yellow-logo;
+      border: $color-yellow-logo;
+      transition:
+        transform 0.5s,
+        opacity 0.5s;
+
+      &:active {
+        animation: ping 0.5s cubic-bezier(0, 0, 0.2, 1) 1;
+
+        @keyframes ping {
+          75%,
+          100% {
+            transform: scale(1.2);
+            opacity: 0;
+          }
+        }
+      }
+    }
+  }
+
+  .searchContainer {
+    @include directionY;
+
+    background-color: var(--color-bg);
+    width: 100%;
+    margin-bottom: 1rem;
+    border-radius: 10px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+
+    .title {
+      font-size: 1rem;
+    }
+    .input {
+      @include input;
+      width: 100%;
+      padding: 0px 20px;
+    }
+
+    .debounce {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+
+      .resetInput {
+        width: 100%;
+        position: relative;
+
+        .input {
+          position: relative;
+          outline: none;
+        }
+
+        .reset {
+          right: 0;
+          margin: 10px;
+          font-size: 20px;
+          position: absolute;
+          cursor: pointer;
+
+          &:hover {
+            background-color: rgb(191, 191, 191);
+            border-radius: 100%;
+          }
+        }
+      }
+    }
+  }
+
+  .card-container {
+    gap: 20px;
+    display: grid;
+    justify-content: space-evenly;
+    justify-items: center;
+    align-content: space-evenly;
+    align-items: center;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    @include apply-at-xl-size {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+}

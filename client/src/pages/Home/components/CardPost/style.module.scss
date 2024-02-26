@@ -110,7 +110,7 @@
       flex-direction: column;
       justify-content: center;
       width: 100%;
-      height: 100%;
+      height: 95%;
       overflow: hidden;
 
       img {
@@ -128,6 +128,14 @@
       max-height: 50rem;
       height: 100%;
       width: 50%;
+    }
+
+    .caption {
+      margin-bottom: 10px;
+
+      .date {
+        font-size: 12px;
+      }
     }
 
     .error-validation {

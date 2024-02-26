@@ -32,7 +32,7 @@ export default {
   firstName: 'First Name',
   lastName: 'Last Name',
   gender: 'Gender',
-  phone: 'Telefon',
+  phone: 'Phone',
   emailContact: 'Email Contact',
   phoneContact: 'Phone Contact',
   male: 'Male',
@@ -54,6 +54,7 @@ export default {
   people: 'People',
   setting: 'Setting',
   trip: 'Trip',
+  group: 'Group',
 
   current_province: 'Current Province',
   current_city: 'Current City',
@@ -77,4 +78,16 @@ export default {
   no: 'No',
 
   deleteCommentConfirmation: 'Are you sure wanna delete this comment?',
+  deletePostConfirmation: 'Are you sure wanna delete this post?',
+
+  follow: 'Follow',
+  unfollow: 'Unfollow',
+  changePassword: 'Change Password',
+
+  following: 'Following',
+  follower: 'Follower',
+
+  delete: 'Delete',
+  edit: 'Edit',
+  caption: 'Caption',
 };

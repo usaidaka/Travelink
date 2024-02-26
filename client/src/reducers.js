@@ -5,6 +5,10 @@ import clientReducer, { storedKey as storedClientState } from '@containers/Clien
 import registerReducer, { storedKey as storedRegisterState } from '@pages/Register/reducer';
 import routeReducer, { storedKey as storedRouteState } from '@pages/Trip/reducer';
 import homeReducer, { storedKey as storedHomeState } from '@pages/Home/reducer';
+import peopleReducer, { storedKey as storedPeopleState } from '@pages/People/reducer';
+import connectionReducer, { storedKey as storedConnectionState } from '@pages/Profile/reducer';
+import editPostReducer from '@pages/EditPost/reducer';
+import userProfileReducer from '@pages/UserProfile/reducer';
 
 import languageReducer from '@containers/Language/reducer';
 
@@ -16,10 +20,14 @@ const storedReducers = {
   register: { reducer: registerReducer, whitelist: storedRegisterState },
   route: { reducer: routeReducer, whitelist: storedRouteState },
   home: { reducer: homeReducer, whitelist: storedHomeState },
+  people: { reducer: peopleReducer, whitelist: storedPeopleState },
+  connection: { reducer: connectionReducer, whitelist: storedConnectionState },
 };
 
 const temporaryReducers = {
   language: languageReducer,
+  editPost: editPostReducer,
+  userProfile: userProfileReducer,
 };
 
 const createReducer = () => {
