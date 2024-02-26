@@ -72,6 +72,39 @@ const resetPassword = async (request, reply) => {
   }
 };
 
+const updateProfile = async (request, reply) => {
+  try {
+    const { id } = request.user;
+    const image = request.file;
+
+    const decryptedData = decryptPayload(request.body);
+
+    Validation.updateProfileValidation(decryptedData);
+
+    const response = await AuthHelper.updateProfile(id, decryptedData, image);
+
+    return reply.send(response);
+  } catch (err) {
+    console.log([fileName, "update Profile", "ERROR"], { info: `${err}` });
+    return reply.send(GeneralHelper.errorResponse(err));
+  }
+};
+
+const changePassword = async (request, reply) => {
+  try {
+    const { id } = request.user;
+    const decryptedData = decryptPayload(request.body);
+    Validation.changePassword(decryptedData);
+
+    const response = await AuthHelper.changePassword(id, decryptedData);
+
+    return reply.send(response);
+  } catch (err) {
+    console.log([fileName, "change Password", "ERROR"], { info: `${err}` });
+    return reply.send(GeneralHelper.errorResponse(err));
+  }
+};
+
 // eslint-disable-next-line arrow-body-style
 const hello = async (request, reply) => {
   // SAMPLE API WITH JWT MIDDLEWARE
@@ -95,6 +128,13 @@ Router.post("/register", register);
 Router.post("/login", login);
 Router.post("/forgot-password", forgotPassword);
 Router.post("/reset-password", resetPassword);
+Router.patch(
+  "/profile",
+  Middleware.validateToken,
+  handleUploadImage,
+  updateProfile
+);
+Router.patch("/change-password", Middleware.validateToken, changePassword);
 Router.get("/hello", Middleware.validateToken, hello);
 Router.get("/test", handleUploadImage, test);
 

@@ -22,6 +22,32 @@ const myProfile = async (request, reply) => {
   }
 };
 
+const myConnection = async (request, reply) => {
+  try {
+    const { id } = request.user;
+
+    const response = await UserHelper.getMyConnection(id);
+
+    return reply.send(response);
+  } catch (err) {
+    console.log([fileName, "my Connection", "ERROR"], { info: `${err}` });
+    return reply.send(GeneralHelper.errorResponse(err));
+  }
+};
+
+const connectionById = async (request, reply) => {
+  try {
+    const { userId } = request.params;
+
+    const response = await UserHelper.getMyConnection(userId);
+
+    return reply.send(response);
+  } catch (err) {
+    console.log([fileName, "my Connection", "ERROR"], { info: `${err}` });
+    return reply.send(GeneralHelper.errorResponse(err));
+  }
+};
+
 const myAddress = async (request, reply) => {
   try {
     const { id } = request.user;
@@ -238,7 +264,48 @@ const deleteCommentPost = async (request, reply) => {
     const response = await UserHelper.deleteCommentPost(id, commentId);
     return reply.send(response);
   } catch (err) {
-    console.log([fileName, "delete Coment Post", "ERROR"], { info: `${err}` });
+    console.log([fileName, "delete Comment Post", "ERROR"], { info: `${err}` });
+    return reply.send(GeneralHelper.errorResponse(err));
+  }
+};
+
+const userList = async (request, reply) => {
+  try {
+    const { id } = request.user;
+    const query = request.query;
+    const response = await UserHelper.getUserList(id, query);
+    return reply.send(response);
+  } catch (err) {
+    console.log([fileName, "user List", "ERROR"], { info: `${err}` });
+    return reply.send(GeneralHelper.errorResponse(err));
+  }
+};
+
+const follow = async (request, reply) => {
+  try {
+    const { id } = request.user;
+    const { followTo } = request.params;
+    console.log(request.params);
+
+    const response = await UserHelper.createFollowTo(id, followTo);
+
+    return reply.send(response);
+  } catch (err) {
+    console.log([fileName, "user List", "ERROR"], { info: `${err}` });
+    return reply.send(GeneralHelper.errorResponse(err));
+  }
+};
+
+const userProfile = async (request, reply) => {
+  try {
+    const { id } = request.user;
+    const { userId } = request.params;
+
+    const response = await UserHelper.getUserProfile(id, userId);
+
+    return reply.send(response);
+  } catch (err) {
+    console.log([fileName, "user Profile", "ERROR"], { info: `${err}` });
     return reply.send(GeneralHelper.errorResponse(err));
   }
 };
@@ -261,11 +328,34 @@ Router.get("/region/:provinceId", region);
 
 Router.get("/post", Middleware.validateToken, Middleware.isUser, post);
 
-Router.get("/user-post/:userId", userPost);
+Router.get("/user-post/:userId", Middleware.validateToken, userPost);
 
 Router.get("/post-detail/:postId", postDetail);
 
 Router.get("/comment/:postId", commentPost);
+
+Router.get("/user-list", Middleware.validateToken, userList);
+
+Router.get(
+  "/my-connection",
+  Middleware.validateToken,
+  Middleware.isUser,
+  myConnection
+);
+
+Router.get(
+  "/connection/:userId",
+  Middleware.validateToken,
+  Middleware.isUser,
+  connectionById
+);
+
+Router.get(
+  "/user-profile/:userId",
+  Middleware.validateToken,
+  Middleware.isUser,
+  userProfile
+);
 
 // POST
 Router.post(
@@ -315,6 +405,13 @@ Router.patch(
   Middleware.validateToken,
   Middleware.isUser,
   editPost
+);
+
+Router.patch(
+  "/follow/:followTo",
+  Middleware.validateToken,
+  Middleware.isUser,
+  follow
 );
 
 module.exports = Router;

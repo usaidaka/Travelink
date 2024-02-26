@@ -187,6 +187,46 @@ const createPost = (data) => {
   }
 };
 
+const updateProfileValidation = (data) => {
+  const schema = Joi.object({
+    username: Joi.string().optional().description("User's username"),
+    email: Joi.string().optional().description("Active email"),
+    first_name: Joi.string().optional().description("User's first name"),
+    last_name: Joi.string().optional().description("User's last name"),
+    gender: Joi.string().optional().description("Male"),
+    email_contact: Joi.string().optional().description("User's parent email "),
+    phone: Joi.string().optional().description("User's phone "),
+    phone_contact: Joi.string().optional().description("User's parent phone "),
+    mbti: Joi.string().optional(),
+  });
+
+  if (schema.validate(data).error) {
+    throw Boom.badRequest(schema.validate(data).error);
+  }
+};
+
+const changePassword = (data) => {
+  const schema = Joi.object({
+    password: Joi.string()
+      .min(6)
+      .required()
+      .description("Should be between 8-20 characters"),
+    newPassword: Joi.string()
+      .min(6)
+      .required()
+      .description("Should be between 8-20 characters"),
+    confirmPassword: Joi.string()
+      .min(6)
+      .required()
+      .valid(Joi.ref("newPassword"))
+      .description("Should match password"),
+  });
+
+  if (schema.validate(data).error) {
+    throw Boom.badRequest(schema.validate(data).error);
+  }
+};
+
 module.exports = {
   registerValidation,
   loginValidation,
@@ -198,4 +238,6 @@ module.exports = {
   deleteGroup,
   getPost,
   createPost,
+  updateProfileValidation,
+  changePassword,
 };

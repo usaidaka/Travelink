@@ -36,6 +36,232 @@ const getMyProfile = async (id) => {
   }
 };
 
+const getMyConnection = async (id) => {
+  try {
+    const followersData = await db.Follow.findAll({
+      where: { follow_to: id },
+      attributes: { exclude: ["deletedAt", "updatedAt", "following_to"] },
+      include: [
+        {
+          model: db.User,
+          as: "followBy",
+          attributes: ["username", "createdAt", "id", "email", "image"],
+          include: [
+            {
+              model: db.UserDetail,
+              attributes: ["phone"],
+            },
+            {
+              model: db.Route,
+              include: [
+                {
+                  model: db.Province,
+                  as: "current_province",
+                  attributes: ["name"],
+                },
+                { model: db.City, as: "current_city", attributes: ["name"] },
+                {
+                  model: db.Province,
+                  as: "direction_province",
+                  attributes: ["name"],
+                },
+                { model: db.City, as: "direction_city", attributes: ["name"] },
+              ],
+              attributes: [
+                "id",
+                "current_latitude",
+                "current_longitude",
+                "direction_latitude",
+                "direction_longitude",
+              ],
+            },
+          ],
+        },
+      ],
+    });
+
+    const followersCount = await db.Follow.count({ where: { follow_to: id } });
+
+    const followingsData = await db.Follow.findAll({
+      where: { follow_by: id },
+      attributes: { exclude: ["deletedAt", "updatedAt", "following_to"] },
+      include: [
+        {
+          model: db.User,
+          as: "followTo",
+          attributes: ["username", "createdAt", "id", "email", "image"],
+          include: [
+            {
+              model: db.UserDetail,
+              attributes: ["phone"],
+            },
+            {
+              model: db.Route,
+              include: [
+                {
+                  model: db.Province,
+                  as: "current_province",
+                  attributes: ["name"],
+                },
+                { model: db.City, as: "current_city", attributes: ["name"] },
+                {
+                  model: db.Province,
+                  as: "direction_province",
+                  attributes: ["name"],
+                },
+                { model: db.City, as: "direction_city", attributes: ["name"] },
+              ],
+              attributes: [
+                "id",
+                "current_latitude",
+                "current_longitude",
+                "direction_latitude",
+                "direction_longitude",
+              ],
+            },
+          ],
+        },
+      ],
+    });
+
+    const followingsCount = await db.Follow.count({ where: { follow_to: id } });
+
+    const totalPost = await db.Post.count({ where: { user_id: id } });
+
+    const result = {
+      followersData,
+      followersCount,
+      followingsData,
+      followingsCount,
+      totalPost,
+    };
+
+    const resultEncrypted = encryptPayload({ decryptedData: result });
+
+    return Promise.resolve({
+      ok: true,
+      result: resultEncrypted,
+    });
+  } catch (err) {
+    console.log([fileName, "get My Connection", "ERROR"], { info: `${err}` });
+    return Promise.reject(GeneralHelper.errorResponse(err));
+  }
+};
+
+const getConnectionById = async (userId) => {
+  try {
+    const followersData = await db.Follow.findAll({
+      where: { follow_to: userId },
+      attributes: { exclude: ["deletedAt", "updatedAt", "following_to"] },
+      include: [
+        {
+          model: db.User,
+          as: "followBy",
+          attributes: ["username", "createdAt", "id", "email", "image"],
+          include: [
+            {
+              model: db.UserDetail,
+              attributes: ["phone"],
+            },
+            {
+              model: db.Route,
+              include: [
+                {
+                  model: db.Province,
+                  as: "current_province",
+                  attributes: ["name"],
+                },
+                { model: db.City, as: "current_city", attributes: ["name"] },
+                {
+                  model: db.Province,
+                  as: "direction_province",
+                  attributes: ["name"],
+                },
+                { model: db.City, as: "direction_city", attributes: ["name"] },
+              ],
+              attributes: [
+                "id",
+                "current_latitude",
+                "current_longitude",
+                "direction_latitude",
+                "direction_longitude",
+              ],
+            },
+          ],
+        },
+      ],
+    });
+
+    const followersCount = await db.Follow.count({ where: { follow_to: id } });
+
+    const followingsData = await db.Follow.findAll({
+      where: { follow_by: userId },
+      attributes: { exclude: ["deletedAt", "updatedAt", "following_to"] },
+      include: [
+        {
+          model: db.User,
+          as: "followTo",
+          attributes: ["username", "createdAt", "id", "email", "image"],
+          include: [
+            {
+              model: db.UserDetail,
+              attributes: ["phone"],
+            },
+            {
+              model: db.Route,
+              include: [
+                {
+                  model: db.Province,
+                  as: "current_province",
+                  attributes: ["name"],
+                },
+                { model: db.City, as: "current_city", attributes: ["name"] },
+                {
+                  model: db.Province,
+                  as: "direction_province",
+                  attributes: ["name"],
+                },
+                { model: db.City, as: "direction_city", attributes: ["name"] },
+              ],
+              attributes: [
+                "id",
+                "current_latitude",
+                "current_longitude",
+                "direction_latitude",
+                "direction_longitude",
+              ],
+            },
+          ],
+        },
+      ],
+    });
+
+    const followingsCount = await db.Follow.count({
+      where: { follow_to: userId },
+    });
+
+    const totalPost = await db.Post.count({ where: { user_id: userId } });
+
+    const result = {
+      followersData,
+      followersCount,
+      followingsData,
+      followingsCount,
+      totalPost,
+    };
+
+    const resultEncrypted = encryptPayload({ decryptedData: result });
+
+    return Promise.resolve({
+      ok: true,
+      result: resultEncrypted,
+    });
+  } catch (err) {
+    console.log([fileName, "get My Connection", "ERROR"], { info: `${err}` });
+    return Promise.reject(GeneralHelper.errorResponse(err));
+  }
+};
+
 const getMyAddress = async (id) => {
   try {
     const myAddress = await db.Address.findAll({
@@ -541,13 +767,7 @@ const getPost = async (id, query) => {
     const currentLimit = Number(limit) || 6;
 
     const formattedExclude = {
-      exclude: [
-        "createdAt",
-        "deletedAt",
-        "updatedAt",
-        "province_id",
-        "city_id",
-      ],
+      exclude: ["deletedAt", "updatedAt", "province_id", "city_id"],
     };
 
     const formattedInclude = [
@@ -627,13 +847,7 @@ const getUserPost = async (userId, query) => {
     const currentLimit = Number(limit) || 6;
 
     const formattedExclude = {
-      exclude: [
-        "createdAt",
-        "deletedAt",
-        "updatedAt",
-        "province_id",
-        "city_id",
-      ],
+      exclude: ["deletedAt", "updatedAt", "province_id", "city_id"],
     };
 
     const formattedInclude = [
@@ -664,6 +878,10 @@ const getUserPost = async (userId, query) => {
       order,
     });
 
+    if (_.isEmpty(userPost)) {
+      return Promise.reject(Boom.notFound("Post still empty"));
+    }
+
     return Promise.resolve({
       ok: true,
       result: userPost,
@@ -679,13 +897,7 @@ const getUserPost = async (userId, query) => {
 const getPostDetail = async (postId) => {
   try {
     const formattedExclude = {
-      exclude: [
-        "createdAt",
-        "deletedAt",
-        "updatedAt",
-        "province_id",
-        "city_id",
-      ],
+      exclude: ["deletedAt", "updatedAt", "province_id", "city_id"],
     };
 
     const formattedInclude = [
@@ -744,7 +956,7 @@ const createPost = async (id, dataObject, image) => {
         province_id: isNaN(Number(province_id)) ? null : Number(province_id),
         city_id: isNaN(Number(city_id)) ? null : Number(city_id),
         caption,
-        location_name,
+        location_name: location_name === "undefined" && "",
       },
       { transaction }
     );
@@ -845,6 +1057,7 @@ const deletePost = async (id, postId) => {
       message: "Delete post successful",
     });
   } catch (err) {
+    await transaction.rollback();
     console.log([fileName, "delete post", "ERROR"], {
       info: `${err}`,
     });
@@ -915,7 +1128,203 @@ const deleteCommentPost = async (id, commentId) => {
       message: "Delete comment successful",
     });
   } catch (err) {
+    await transaction.rollback();
     console.log([fileName, "get Comment Post", "ERROR"], {
+      info: `${err}`,
+    });
+    return Promise.reject(GeneralHelper.errorResponse(err));
+  }
+};
+
+const getUserList = async (id, query) => {
+  const { next, limit, username } = query;
+
+  const searchUsername = username || "";
+
+  const whereCondition = {
+    id: { [Op.not]: id },
+    role: { [Op.eq]: "User" },
+  };
+
+  if (searchUsername !== "") {
+    whereCondition.username = { [Op.like]: `%${searchUsername}%` };
+  }
+
+  const currentPage = Number(next) || 0;
+  const currentLimit = Number(limit) || 6;
+  try {
+    const userList = await db.User.findAll({
+      where: whereCondition,
+      attributes: {
+        exclude: ["createdAt", "updatedAt", "deletedAt", "password", "role"],
+      },
+      include: [
+        {
+          model: db.Route,
+          include: [
+            {
+              model: db.Province,
+              as: "current_province",
+              attributes: ["name"],
+            },
+            { model: db.City, as: "current_city", attributes: ["name"] },
+            {
+              model: db.Province,
+              as: "direction_province",
+              attributes: ["name"],
+            },
+            { model: db.City, as: "direction_city", attributes: ["name"] },
+          ],
+          attributes: [
+            "id",
+            "current_latitude",
+            "current_longitude",
+            "direction_latitude",
+            "direction_longitude",
+          ],
+        },
+        {
+          model: db.Follow,
+          where: { follow_by: id },
+          attributes: { exclude: ["createdAt", "updatedAt", "deletedAt"] },
+          required: false,
+        },
+        {
+          model: db.UserDetail,
+          attributes: ["phone"],
+        },
+      ],
+      limit: currentLimit,
+      offset: currentPage,
+    });
+
+    const resultEncrypted = encryptPayload({ decryptedData: userList });
+    return Promise.resolve({
+      ok: true,
+      message: "Get user list successful",
+      result: userList,
+    });
+  } catch (err) {
+    console.log([fileName, "get Comment Post", "ERROR"], {
+      info: `${err}`,
+    });
+    return Promise.reject(GeneralHelper.errorResponse(err));
+  }
+};
+
+const createFollowTo = async (id, followTo) => {
+  const transaction = await db.sequelize.transaction();
+  try {
+    console.log(id, followTo);
+    const isFollowed = await db.Follow.findOne({
+      where: { follow_by: id, follow_to: followTo },
+      paranoid: false,
+    });
+
+    if (!isFollowed) {
+      await db.Follow.create(
+        {
+          follow_by: id,
+          follow_to: followTo,
+        },
+        transaction
+      );
+      await transaction.commit();
+
+      return Promise.resolve({
+        ok: true,
+        message: "Following successful",
+      });
+    } else if (!isFollowed.deletedAt) {
+      await db.Follow.destroy(
+        {
+          where: { follow_by: id, follow_to: followTo },
+        },
+        { transaction }
+      );
+      await transaction.commit();
+
+      return Promise.resolve({
+        ok: true,
+        message: "unfollowing successful",
+      });
+    } else if (isFollowed.deletedAt) {
+      await db.Follow.restore({
+        where: { follow_by: id, follow_to: followTo },
+        transaction,
+      });
+
+      await transaction.commit();
+
+      return Promise.resolve({
+        ok: true,
+        message: "following successful",
+      });
+    }
+  } catch (err) {
+    console.log([fileName, "create Follow To", "ERROR"], {
+      info: `${err}`,
+    });
+    return Promise.reject(GeneralHelper.errorResponse(err));
+  }
+};
+
+const getUserProfile = async (id, userId) => {
+  try {
+    console.log(id, userId);
+    const user = await db.User.findByPk(userId, {
+      attributes: { exclude: ["deletedAt", "updatedAt", "role", "password"] },
+      include: [
+        {
+          model: db.UserDetail,
+          attributes: ["phone"],
+        },
+        {
+          model: db.Route,
+          include: [
+            {
+              model: db.Province,
+              as: "current_province",
+              attributes: ["name"],
+            },
+            { model: db.City, as: "current_city", attributes: ["name"] },
+            {
+              model: db.Province,
+              as: "direction_province",
+              attributes: ["name"],
+            },
+            { model: db.City, as: "direction_city", attributes: ["name"] },
+          ],
+          attributes: [
+            "id",
+            "current_latitude",
+            "current_longitude",
+            "direction_latitude",
+            "direction_longitude",
+          ],
+        },
+        {
+          model: db.Follow,
+          where: { follow_by: id },
+          attributes: { exclude: ["createdAt", "updatedAt", "deletedAt"] },
+          required: false,
+        },
+      ],
+    });
+
+    if (!user) {
+      return Promise.reject(Boom.notFound("User not found"));
+    }
+
+    const resultEncrypted = encryptPayload({ decryptedData: user });
+
+    return Promise.resolve({
+      ok: true,
+      message: "get User Profile successful",
+      result: resultEncrypted,
+    });
+  } catch (err) {
+    console.log([fileName, "get ser Profile", "ERROR"], {
       info: `${err}`,
     });
     return Promise.reject(GeneralHelper.errorResponse(err));
@@ -924,6 +1333,8 @@ const deleteCommentPost = async (id, commentId) => {
 
 module.exports = {
   getMyProfile,
+  getMyConnection,
+  getConnectionById,
   getMyAddress,
   createAddress,
   createRoute,
@@ -940,4 +1351,7 @@ module.exports = {
   deletePost,
   getCommentPost,
   deleteCommentPost,
+  getUserList,
+  createFollowTo,
+  getUserProfile,
 };

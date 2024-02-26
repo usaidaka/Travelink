@@ -306,6 +306,116 @@ const resetPassword = async (dataObject) => {
   }
 };
 
+const updateProfile = async (id, dataObject, image) => {
+  const transaction = await db.sequelize.transaction();
+  try {
+    const {
+      username,
+      first_name,
+      last_name,
+      gender,
+      email_contact,
+      phone,
+      phone_contact,
+      mbti,
+    } = dataObject;
+
+    console.log(
+      username,
+      first_name,
+      last_name,
+      gender,
+      email_contact,
+      phone,
+      phone_contact,
+      mbti
+    );
+
+    console.log(image);
+
+    let imageResult = null;
+    if (image) {
+      imageResult = await cloudinary.uploadToCloudinary(image, "image");
+      if (!imageResult) throw Boom.internal("Cloudinary image upload failed");
+    }
+
+    console.log(imageResult.url);
+
+    console.log(id);
+
+    await db.User.update(
+      {
+        username,
+        image: imageResult.url,
+      },
+      { where: { id }, transaction }
+    );
+
+    await db.UserDetail.update(
+      {
+        first_name,
+        last_name,
+        gender,
+        email_contact,
+        phone,
+        phone_contact,
+        mbti,
+      },
+      { where: { user_id: id }, transaction }
+    );
+
+    await transaction.commit();
+    return Promise.resolve({
+      ok: true,
+      message: "Profile successfully updated",
+    });
+  } catch (err) {
+    await transaction.rollback();
+    console.log([fileName, "update Profile", "ERROR"], {
+      info: `${err}`,
+    });
+    return Promise.reject(GeneralHelper.errorResponse(err));
+  }
+};
+
+const changePassword = async (id, dataObject) => {
+  const transaction = await db.sequelize.transaction();
+
+  const { password, newPassword, confirmPassword } = dataObject;
+  try {
+    const user = await db.User.findByPk(id);
+
+    const isPassMatched = __comparePassword(password, user.password);
+    if (!isPassMatched) {
+      return Promise.reject(Boom.badRequest("Wrong Password"));
+    }
+
+    if (!_.isEqual(newPassword, confirmPassword)) {
+      return Promise.reject(
+        Boom.badRequest("Password and Confirm Password must be much")
+      );
+    }
+
+    const hashedPass = __hashPassword(newPassword);
+
+    await db.User.update(
+      {
+        password: hashedPass,
+      },
+      { where: { id }, transaction }
+    );
+    await transaction.commit();
+    return Promise.resolve({
+      ok: true,
+      message: "Change password successfully updated",
+    });
+  } catch (err) {
+    await transaction.rollback();
+    console.log([fileName, "change Password", "ERROR"], { info: `${err}` });
+    return Promise.reject(GeneralHelper.errorResponse(err));
+  }
+};
+
 const test = async (data) => {
   try {
     let imageResult = null;
@@ -323,7 +433,9 @@ const test = async (data) => {
 module.exports = {
   registerUser,
   login,
+  updateProfile,
   test,
   forgotPassword,
   resetPassword,
+  changePassword,
 };
