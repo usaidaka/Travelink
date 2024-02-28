@@ -7,6 +7,8 @@ import { selectPost } from '@pages/Home/selectors';
 import _ from 'lodash';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import VerticalAlignTopIcon from '@mui/icons-material/VerticalAlignTop';
+import { doDeletePost } from '@pages/Profile/actions';
+import toast from 'react-hot-toast';
 
 import classes from './style.module.scss';
 import CardExplore from './CardExplore';
@@ -22,11 +24,19 @@ const Explore = ({ post }) => {
     setNext((prev) => prev + 6);
   };
 
-  console.log(allPostData);
-
   useEffect(() => {
     dispatch(getPost({ next, limit: 6 }));
   }, [dispatch, next]);
+
+  const handleDeletePost = (postId) => {
+    dispatch(
+      doDeletePost(postId, (message) => {
+        toast.success(message, { duration: 1000 });
+        dispatch(getPost({ next, limit: 6 }));
+        setAllPostData([]);
+      })
+    );
+  };
 
   useEffect(() => {
     if (!_.isEmpty(post) && !_.isEmpty(post.allPost)) {
@@ -42,7 +52,7 @@ const Explore = ({ post }) => {
     <div className={classes.container}>
       <div className={classes['card-container']}>
         {allPostData?.map((data, idx) => (
-          <CardExplore key={idx} post={data} />
+          <CardExplore key={idx} post={data} handleDeletePost={handleDeletePost} />
         ))}
       </div>
       {(isMore && (

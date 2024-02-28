@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import _ from 'lodash';
+import MarkerClusterGroup from 'react-leaflet-cluster';
 
 import SearchField from './components/SearchField';
 import classes from './style.module.scss';
@@ -112,9 +113,11 @@ const Maps = ({
   return (
     <MapContainer center={center} zoom={zoom} scrollWheelZoom={false} className={classes.maps}>
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-      {isSearch && <SearchField onSearchResult={handleSearchResult} />}
+      <MarkerClusterGroup chunkedLoading>
+        {isSearch && <SearchField onSearchResult={handleSearchResult} />}
 
-      {renderedMarker}
+        {renderedMarker}
+      </MarkerClusterGroup>
     </MapContainer>
   );
 };

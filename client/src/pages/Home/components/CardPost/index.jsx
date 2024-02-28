@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 import AddCommentIcon from '@mui/icons-material/AddComment';
 import Modal from '@mui/material/Modal';
-import { getComment } from '@pages/Home/actions';
+import { deleteComment, doComment, getComment } from '@pages/Home/actions';
 import { createStructuredSelector } from 'reselect';
 import { selectComment } from '@pages/Home/selectors';
 import { connect, useDispatch } from 'react-redux';
@@ -15,6 +15,7 @@ import dayjs from 'dayjs';
 import { selectUser } from '@containers/Client/selectors';
 import decryptPayload from '@utils/decryptionHelper';
 import DeleteIcon from '@mui/icons-material/Delete';
+import toast, { Toaster } from 'react-hot-toast';
 
 import classes from './style.module.scss';
 
@@ -23,6 +24,7 @@ const CardPost = ({ post, comment, user }) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [decryptedUser, setDecryptedUser] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const [openDelete, setOpenDelete] = useState(false);
   const handleOpenDelete = () => setOpenDelete(true);
@@ -39,18 +41,43 @@ const CardPost = ({ post, comment, user }) => {
 
   console.log(decryptedUser);
 
+  const getCommentPost = () => {
+    dispatch(getComment(post.id));
+  };
+
   useEffect(() => {
     dispatch(getComment(post.id));
   }, [dispatch, post.id]);
 
   const {
     register,
+    reset,
     formState: { errors },
     handleSubmit,
   } = useForm();
 
+  const handleDeleteComment = (commentId) => {
+    console.log(commentId);
+    dispatch(
+      deleteComment(commentId, (message) => {
+        toast.success(message, { duration: 1000 });
+        setLoading(false);
+        dispatch(getComment(post.id));
+        handleCloseDelete();
+      })
+    );
+  };
+
   const onSubmit = (data) => {
-    console.log(data);
+    setLoading(true);
+    dispatch(
+      doComment(post.id, data, (message) => {
+        toast.success(message, { duration: 1000 });
+        setLoading(false);
+        dispatch(getComment(post.id));
+        reset();
+      })
+    );
   };
 
   return (
@@ -81,7 +108,13 @@ const CardPost = ({ post, comment, user }) => {
           ))}
         </Carousel>
       </div>
-      <div onClick={handleOpen} className={classes['button-modal']}>
+      <div
+        onClick={() => {
+          handleOpen();
+          getCommentPost();
+        }}
+        className={classes['button-modal']}
+      >
         <AddCommentIcon />
       </div>
       <Modal
@@ -131,7 +164,7 @@ const CardPost = ({ post, comment, user }) => {
                 )}
               </div>
               <div className={classes['button-wrapper']}>
-                <Button type="submit" size="small" variant="contained">
+                <Button disabled={loading} type="submit" size="small" variant="contained">
                   <FormattedMessage id="send" />
                 </Button>
               </div>
@@ -166,7 +199,13 @@ const CardPost = ({ post, comment, user }) => {
                             <Button onClick={handleCloseDelete} size="small" variant="outlined" color="error">
                               <FormattedMessage id="no" />
                             </Button>
-                            <Button size="small" variant="contained" color="primary">
+                            <Button
+                              size="small"
+                              variant="contained"
+                              color="primary"
+                              onClick={() => handleDeleteComment(content.id)}
+                              disabled={loading}
+                            >
                               <FormattedMessage id="yes" />
                             </Button>
                           </div>
@@ -180,6 +219,7 @@ const CardPost = ({ post, comment, user }) => {
           </div>
         </div>
       </Modal>
+      <Toaster position="top-center" reverseOrder={false} />
     </div>
   );
 };

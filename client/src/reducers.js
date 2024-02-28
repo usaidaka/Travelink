@@ -9,6 +9,7 @@ import peopleReducer, { storedKey as storedPeopleState } from '@pages/People/red
 import connectionReducer, { storedKey as storedConnectionState } from '@pages/Profile/reducer';
 import editPostReducer from '@pages/EditPost/reducer';
 import userProfileReducer from '@pages/UserProfile/reducer';
+import groupReducer from '@pages/Group/reducer';
 
 import languageReducer from '@containers/Language/reducer';
 
@@ -28,6 +29,7 @@ const temporaryReducers = {
   language: languageReducer,
   editPost: editPostReducer,
   userProfile: userProfileReducer,
+  group: groupReducer,
 };
 
 const createReducer = () => {

@@ -11,15 +11,16 @@ import { selectUser } from '@containers/Client/selectors';
 import { connect, useDispatch } from 'react-redux';
 import decryptPayload from '@utils/decryptionHelper';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { getComment } from '@pages/Home/actions';
+import { deleteComment, doComment, getComment } from '@pages/Home/actions';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { Link } from 'react-router-dom';
+import toast, { Toaster } from 'react-hot-toast';
 
 import classes from './style.module.scss';
 
-const CardExplore = ({ post, comment, user }) => {
+const CardExplore = ({ post, comment, user, handleDeletePost }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const openMenu = Boolean(anchorEl);
   const handleClickMenu = (event) => {
@@ -39,6 +40,12 @@ const CardExplore = ({ post, comment, user }) => {
   const handleOpenDelete = () => setOpenDelete(true);
   const handleCloseDelete = () => setOpenDelete(false);
 
+  const [openDeleteComment, setOpenDeleteComment] = useState(false);
+  const handleOpenDeleteComment = () => setOpenDeleteComment(true);
+  const handleCloseDeleteComment = () => setOpenDeleteComment(false);
+
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     setDecryptedUser(decryptPayload(user));
   }, [user]);
@@ -49,18 +56,49 @@ const CardExplore = ({ post, comment, user }) => {
 
   const {
     register,
+    reset,
     formState: { errors },
     handleSubmit,
   } = useForm();
 
+  const getCommentPost = (postId) => {
+    dispatch(getComment(postId));
+  };
+
+  const handleDeleteComment = (commentId) => {
+    console.log(commentId);
+    dispatch(
+      deleteComment(commentId, (message) => {
+        toast.success(message, { duration: 1000 });
+        setLoading(false);
+        handleCloseDeleteComment();
+        dispatch(getComment(post.id));
+      })
+    );
+  };
+
   const onSubmit = (data) => {
     console.log(data);
+    setLoading(true);
+    dispatch(
+      doComment(post.id, data, (message) => {
+        toast.success(message, { duration: 1000 });
+        setLoading(false);
+        dispatch(getComment(post.id));
+        reset();
+      })
+    );
   };
 
   return (
     <div className={classes.card}>
       <div className={classes['image-container']}>
-        <span onClick={handleOpen}>
+        <span
+          onClick={() => {
+            handleOpen();
+            getCommentPost(post.id);
+          }}
+        >
           <img src={post?.ImagePosts[0]?.image} alt="" className={classes.image} />
         </span>
         {decryptedUser.id === post.user_id && (
@@ -103,12 +141,17 @@ const CardExplore = ({ post, comment, user }) => {
                 >
                   <div className={classes['delete-modal']}>
                     <div className={classes.message}>
-                      <FormattedMessage id="deleteCommentConfirmation" />
+                      <FormattedMessage id="deletePostConfirmation" />
                       <div className={classes.button}>
                         <Button onClick={handleCloseDelete} size="small" variant="outlined" color="error">
                           <FormattedMessage id="no" />
                         </Button>
-                        <Button size="small" variant="contained" color="primary">
+                        <Button
+                          onClick={() => handleDeletePost(post.id)}
+                          size="small"
+                          variant="contained"
+                          color="primary"
+                        >
                           <FormattedMessage id="yes" />
                         </Button>
                       </div>
@@ -196,12 +239,12 @@ const CardExplore = ({ post, comment, user }) => {
                 <span>{content.comment}</span>
                 {decryptedUser.id === content.user_id && (
                   <>
-                    <div onClick={handleOpen} className={classes.delete}>
+                    <div onClick={handleOpenDeleteComment} className={classes.delete}>
                       <DeleteIcon className={classes.icon} />
                     </div>
                     <Modal
-                      open={open}
-                      onClose={handleClose}
+                      open={openDeleteComment}
+                      onClose={handleCloseDeleteComment}
                       aria-labelledby="modal-modal-title"
                       aria-describedby="modal-modal-description"
                     >
@@ -212,7 +255,13 @@ const CardExplore = ({ post, comment, user }) => {
                             <Button onClick={handleClose} size="small" variant="outlined" color="error">
                               <FormattedMessage id="no" />
                             </Button>
-                            <Button size="small" variant="contained" color="primary">
+                            <Button
+                              onClick={() => handleDeleteComment(content.id)}
+                              size="small"
+                              variant="contained"
+                              color="primary"
+                              disabled={loading}
+                            >
                               <FormattedMessage id="yes" />
                             </Button>
                           </div>
@@ -226,6 +275,7 @@ const CardExplore = ({ post, comment, user }) => {
           </div>
         </div>
       </Modal>
+      <Toaster position="top-center" reverseOrder={false} />
     </div>
   );
 };
@@ -234,6 +284,7 @@ CardExplore.propTypes = {
   post: PropTypes.object,
   comment: PropTypes.array,
   user: PropTypes.string,
+  handleDeletePost: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({

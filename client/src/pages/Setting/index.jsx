@@ -4,13 +4,17 @@ import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { connect, useDispatch } from 'react-redux';
 import { selectProfile } from '@pages/Home/selectors';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import decryptPayload from '@utils/decryptionHelper';
 import { Button } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import { Link } from 'react-router-dom';
+import toast, { Toaster } from 'react-hot-toast';
+import { getProfile } from '@pages/Home/actions';
+import encryptPayload from '@utils/encryptionHelper';
 
 import classes from './style.module.scss';
+import { doUpdateProfile } from './actions';
 
 const mbtiPersonality = [
   'ISTJ',
@@ -33,8 +37,11 @@ const mbtiPersonality = [
 
 const Setting = ({ profile }) => {
   const [decryptedProfile, setDecryptedProfile] = useState('');
-
+  const [loading, setLoading] = useState(false);
+  const [showImage, setShowImage] = useState(null);
+  const [image, setImage] = useState(null);
   const dispatch = useDispatch();
+  const uploadRef = useRef();
 
   useEffect(() => {
     setDecryptedProfile(decryptPayload(profile));
@@ -47,15 +54,55 @@ const Setting = ({ profile }) => {
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data);
+    setLoading(true);
+    const formData = new FormData();
+
+    const dataJSON = {
+      username: data.username,
+    };
+
+    const encryptedData = encryptPayload(dataJSON);
+
+    formData.append('encryptedData', encryptedData);
+    image && formData.append('file', image);
+
+    dispatch(
+      doUpdateProfile(
+        formData,
+        (message) => {
+          toast.success(message, { duration: 1000 });
+          dispatch(getProfile());
+          setLoading(false);
+        },
+        () => {
+          setLoading(false);
+        }
+      )
+    );
   };
 
-  console.log('object');
+  const handleFile = (e) => {
+    const selectedImage = e.target.files[0];
+    setShowImage(URL.createObjectURL(selectedImage));
+    setImage(selectedImage);
+  };
+
   return (
     <form action="" onSubmit={handleSubmit(onSubmit)} className={classes.container}>
+      <input type="file" name="" id="" className={classes.upload} ref={uploadRef} onChange={handleFile} />
       <div className={classes['main-wrapper']}>
-        <div className={classes['image-container']}>
-          <img src={decryptedProfile.image} alt="" className={classes.image} />
+        <div
+          className={classes['image-container']}
+          onClick={() => {
+            uploadRef.current.click();
+          }}
+        >
+          <div className={classes['text-change']}>
+            <h3>
+              <FormattedMessage id="changePhoto" />
+            </h3>
+          </div>
+          <img src={showImage || decryptedProfile.image} alt="" className={classes.image} />
         </div>
         <div className={classes.form}>
           <div className={classes.group}>
@@ -343,7 +390,6 @@ const Setting = ({ profile }) => {
           </div>
         </div>
       </div>
-
       <div className={classes['password-wrapper']}>
         <div className={classes.wrapper}>
           <label htmlFor="">
@@ -358,10 +404,11 @@ const Setting = ({ profile }) => {
         </Link>
       </div>
       <div className={classes.submit}>
-        <Button type="submit" size="small" variant="contained">
+        <Button disabled={loading} type="submit" size="small" variant="contained">
           <FormattedMessage id="submit" />
         </Button>
       </div>
+      <Toaster position="top-center" reverseOrder={false} />
     </form>
   );
 };

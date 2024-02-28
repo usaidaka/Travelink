@@ -30,24 +30,14 @@ const People = ({ userList }) => {
   const [isMore, setIsMore] = useState(false);
   const [search, setSearch] = useState('');
 
-  const getUserListSearch = (query) => {
+  const getUserListSearch = (query, nextLoad) => {
     console.log(query);
     if (query) {
       setSearchParams({ username: query });
     } else {
       setSearchParams({});
     }
-    dispatch(getUserList({ ...(query !== '' && { username: query, next }) }));
-  };
-
-  const handleFollow = (followTo) => {
-    dispatch(
-      doFollow(followTo, (message) => {
-        console.log(message);
-        toast.success(message, { duration: 1000 });
-        getUserListSearch();
-      })
-    );
+    dispatch(getUserList({ ...(query !== '' && { username: query, next: nextLoad, limit: 6 }) }));
   };
 
   const getUserListFromApi = () => {
@@ -63,9 +53,13 @@ const People = ({ userList }) => {
   console.log(userListData);
 
   const handleLoadMore = () => {
-    setNext((prev) => prev + 6);
-    getUserListSearch();
+    setNext((prev) => {
+      getUserListSearch(null, prev + 6);
+      return prev + 6;
+    });
   };
+
+  console.log(next);
 
   useEffect(() => {
     if (userList) {
@@ -84,6 +78,20 @@ const People = ({ userList }) => {
       getUserListSearch(searchQuery);
     }
   }, []);
+
+  const handleFollow = (followTo) => {
+    dispatch(
+      doFollow(followTo, (message) => {
+        toast.success(message, { duration: 1000 });
+        if (search) {
+          handleSearch();
+        } else {
+          getUserListFromApi();
+          setUserListData([]);
+        }
+      })
+    );
+  };
 
   return (
     <div className={classes.container}>
@@ -104,6 +112,7 @@ const People = ({ userList }) => {
               <ClearIcon
                 onClick={() => {
                   getUserListFromApi();
+                  setUserListData([]);
                   setSearch('');
                   setSearchParams({});
                 }}

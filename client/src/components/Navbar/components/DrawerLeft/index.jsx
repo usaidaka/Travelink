@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import GroupsIcon from '@mui/icons-material/Groups';
 
@@ -14,6 +14,9 @@ import ExploreOutlinedIcon from '@mui/icons-material/ExploreOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import HikingIcon from '@mui/icons-material/Hiking';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { useDispatch } from 'react-redux';
+import { logout } from '@utils/logout';
 
 import classes from './style.module.scss';
 
@@ -22,6 +25,9 @@ const DrawerLeft = ({ user }) => {
   const [state, setState] = React.useState({
     left: false,
   });
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -32,6 +38,10 @@ const DrawerLeft = ({ user }) => {
   };
 
   const { pathname } = useLocation();
+
+  const handleLogout = () => {
+    logout(dispatch, navigate);
+  };
 
   const list = (anchor) => (
     <div className={classes['sidebar-left']}>
@@ -97,6 +107,12 @@ const DrawerLeft = ({ user }) => {
               <FormattedMessage id="setting" />
             </span>
           </Link>
+          <div onClick={handleLogout} className={classes.logout}>
+            <LogoutIcon />
+            <span>
+              <FormattedMessage id="logout" />
+            </span>
+          </div>
         </div>
       </Box>
     </div>

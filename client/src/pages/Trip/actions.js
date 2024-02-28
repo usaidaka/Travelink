@@ -8,9 +8,8 @@ import {
   SET_USER_ROUTE,
 } from './constants';
 
-export const getUserRoute = (location) => ({
+export const getUserRoute = () => ({
   type: GET_USER_ROUTE,
-  location,
 });
 
 export const setUserRoute = (location) => ({ type: SET_USER_ROUTE, location });

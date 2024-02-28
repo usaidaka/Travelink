@@ -1,3 +1,4 @@
+import CreateGroup from './components/CreateGroup';
 import classes from './style.module.scss';
 
 const Group = () => {
@@ -6,7 +7,7 @@ const Group = () => {
   console.log('object');
   return (
     <div className={classes.container}>
-      <h1>group</h1>
+      <CreateGroup />
     </div>
   );
 };

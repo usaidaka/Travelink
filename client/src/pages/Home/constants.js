@@ -14,3 +14,7 @@ export const DO_POST = 'Home/DO_POST';
 
 export const GET_COMMENT = 'Home/GET_COMMENT';
 export const SET_COMMENT = 'Home/SET_COMMENT';
+
+export const DO_COMMENT = 'Home/DO_COMMENT';
+
+export const DELETE_COMMENT = 'Home/DELETE_COMMENT';

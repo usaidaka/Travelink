@@ -10,7 +10,8 @@ export const setUserList = (userList) => ({
   userList,
 });
 
-export const doFollow = (followTo) => ({
+export const doFollow = (followTo, cbSuccess) => ({
   type: DO_FOLLOW,
   followTo,
+  cbSuccess,
 });

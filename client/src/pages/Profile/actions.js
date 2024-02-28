@@ -1,4 +1,4 @@
-import { GET_CONNECTION_DATA, SET_CONNECTION_DATA } from './constants';
+import { DELETE_POST, GET_CONNECTION_DATA, SET_CONNECTION_DATA } from './constants';
 
 export const getConnectionData = () => ({
   type: GET_CONNECTION_DATA,
@@ -11,3 +11,9 @@ export const setConnectionData = (connection) => {
     connection,
   };
 };
+
+export const doDeletePost = (postId, cbSuccess) => ({
+  type: DELETE_POST,
+  postId,
+  cbSuccess,
+});

@@ -11,8 +11,9 @@ export const setPostDetail = (postDetail) => ({
   postDetail,
 });
 
-export const doEditPost = (postId, data) => ({
+export const doEditPost = (postId, data, cbSuccess) => ({
   type: DO_EDIT_POST,
   postId,
   data,
+  cbSuccess,
 });

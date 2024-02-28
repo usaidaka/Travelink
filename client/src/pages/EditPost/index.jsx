@@ -1,5 +1,5 @@
 import { connect, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { createStructuredSelector } from 'reselect';
@@ -11,12 +11,14 @@ import { getCurrentCityList } from '@pages/Trip/actions';
 import Loader from '@components/Loader';
 import { selectProvince } from '@pages/Home/selectors';
 import { selectCurrentCityList } from '@pages/Trip/selectors';
+import toast, { Toaster } from 'react-hot-toast';
 
 import classes from './style.module.scss';
-import { getPostDetail } from './actions';
+import { doEditPost, getPostDetail } from './actions';
 import { selectPostDetail } from './selectors';
 
 const EditPost = ({ province, city, postDetail }) => {
+  const [loading, setLoading] = useState(false);
   const [render, setRender] = useState(true);
   const { postId } = useParams();
   const [selectedProvince, setSelectedProvince] = useState('');
@@ -24,6 +26,7 @@ const EditPost = ({ province, city, postDetail }) => {
   const [provinceName, setProvinceName] = useState('');
   const [postDetailData, setPostDetailData] = useState({});
 
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   console.log(cityName);
@@ -48,6 +51,16 @@ const EditPost = ({ province, city, postDetail }) => {
   }, [selectedProvince]);
 
   const onSubmit = (data) => {
+    setLoading(true);
+    dispatch(
+      doEditPost(postId, data, (message) => {
+        toast.success(message, { duration: 1000 });
+        setTimeout(() => {
+          navigate('/profile');
+          setLoading(false);
+        }, 2000);
+      })
+    );
     console.log(data);
   };
 
@@ -58,7 +71,7 @@ const EditPost = ({ province, city, postDetail }) => {
       })
     );
   }, [dispatch, postId]);
-  console.log(postDetailData);
+  console.log(postDetailData.location_name);
   if (render) {
     return <Loader isLoading={render} />;
   }
@@ -188,10 +201,11 @@ const EditPost = ({ province, city, postDetail }) => {
       </div>
 
       <div className={classes.submit}>
-        <Button type="submit" size="small" variant="contained">
+        <Button disabled={loading} type="submit" size="small" variant="contained">
           <FormattedMessage id="submit" />
         </Button>
       </div>
+      <Toaster position="top-center" reverseOrder={false} />
     </form>
   );
 };

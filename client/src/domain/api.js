@@ -9,6 +9,7 @@ const urls = {
   register: 'auth/register',
   forgotPassword: 'auth/forgot-password',
   resetPassword: 'auth/reset-password',
+  updateProfile: 'auth/profile',
 
   myProfile: 'user/profile',
   myRoute: 'user/my-route',
@@ -27,6 +28,12 @@ const urls = {
   userProfile: 'user/user-profile',
   userPost: 'user/user-post',
   userConnection: 'user/connection',
+  myGroup: 'user/my-group',
+  addGroup: 'user/group',
+  leaveGroup: 'user/leave-group',
+  removeGroup: 'user/group',
+  updateGroup: 'user/group',
+  deleteMember: 'user/group/update-member',
 };
 
 const headersMultipart = {
@@ -76,6 +83,8 @@ export const myProfile = () => callAPI(urls.myProfile, 'GET', {}, {}, {});
 
 export const myRoute = () => callAPI(urls.myRoute, 'GET', {}, {}, {});
 
+export const updateProfile = (data) => callAPI(urls.updateProfile, 'PATCH', headersMultipart, {}, data);
+
 export const resetPassword = (data) => callAPI(urls.resetPassword, 'POST', {}, {}, data);
 
 export const region = (provinceId) => callAPI(`${urls.region}/${provinceId}`, 'GET', {}, {}, {});
@@ -86,10 +95,7 @@ export const nearby = () => callAPI(urls.nearby, 'GET');
 
 export const createPost = (data) => callAPI(urls.post, 'POST', headersMultipart, {}, data);
 
-export const getPost = (query) => {
-  console.log(query);
-  return callAPI(urls.post, 'GET', {}, query, {});
-};
+export const getPost = (query) => callAPI(urls.post, 'GET', {}, query, {});
 
 export const getComment = (postId) => callAPI(`${urls.comment}/${postId}`, 'GET');
 
@@ -110,3 +116,21 @@ export const userProfile = (userId) => callAPI(`${urls.userProfile}/${userId}`, 
 export const userPost = (userId, query) => callAPI(`${urls.userPost}/${userId}`, 'GET', {}, query);
 
 export const userConnection = (userId) => callAPI(`${urls.userConnection}/${userId}`, 'GET');
+
+export const createComment = (postId, data) => callAPI(`${urls.comment}/${postId}`, 'POST', {}, {}, data);
+
+export const deleteCommentPost = (commentId) => callAPI(`${urls.comment}/${commentId}`, 'DELETE');
+
+export const deletePost = (postId) => callAPI(`${urls.post}/${postId}`, 'DELETE');
+
+export const myGroup = () => callAPI(urls.myGroup, 'GET');
+
+export const addGroup = (data) => callAPI(urls.addGroup, 'POST', {}, {}, data);
+
+export const leaveGroup = (groupId) => callAPI(`${urls.leaveGroup}/${groupId}`, 'DELETE');
+
+export const removeGroup = (groupId) => callAPI(`${urls.removeGroup}/${groupId}`, 'DELETE');
+
+export const updateGroup = (groupId, data) => callAPI(`${urls.updateGroup}/${groupId}`, 'PATCH', {}, {}, data);
+
+export const deleteMember = (userId, groupId) => callAPI(`${urls.deleteMember}/${userId}/${groupId}`, 'PATCH');

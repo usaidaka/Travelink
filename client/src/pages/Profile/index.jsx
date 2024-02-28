@@ -11,10 +11,12 @@ import CardExplore from '@pages/Explore/CardExplore';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { getPost } from '@pages/Home/actions';
 import VerticalAlignTopIcon from '@mui/icons-material/VerticalAlignTop';
+import Loader from '@components/Loader';
+import toast from 'react-hot-toast';
 
 import classes from './style.module.scss';
 import Header from './components/Header';
-import { getConnectionData } from './actions';
+import { doDeletePost, getConnectionData } from './actions';
 import { selectConnection } from './selectors';
 
 const Profile = ({ post, profile, location, connection }) => {
@@ -25,6 +27,7 @@ const Profile = ({ post, profile, location, connection }) => {
   const [isMore, setIsMore] = useState(false);
 
   const [marker, setMarker] = useState([]);
+  const [render, setRender] = useState(true);
 
   const [myPosts, setMyPosts] = useState([]);
 
@@ -62,8 +65,22 @@ const Profile = ({ post, profile, location, connection }) => {
     setNext((prev) => prev + 6);
   };
 
+  const handleDeletePost = (postId) => {
+    dispatch(
+      doDeletePost(postId, (message) => {
+        toast.success(message, { duration: 1000 });
+        dispatch(getPost());
+        setMyPosts(myPosts.filter((postTest) => postTest.id !== postId));
+      })
+    );
+  };
+
   useEffect(() => {
-    dispatch(getPost({ next, limit: 6 }));
+    dispatch(
+      getPost({ next, limit: 6 }, () => {
+        setRender(false);
+      })
+    );
   }, [dispatch, next]);
 
   useEffect(() => {
@@ -89,6 +106,10 @@ const Profile = ({ post, profile, location, connection }) => {
     }
   }, [connection, location, profile]);
 
+  if (render) {
+    return <Loader isLoading={render} />;
+  }
+
   return (
     <div className={classes.container}>
       <Header
@@ -101,7 +122,7 @@ const Profile = ({ post, profile, location, connection }) => {
       />
       <div className={classes['card-container']}>
         {myPosts?.map((data, idx) => (
-          <CardExplore key={idx} post={data} />
+          <CardExplore key={idx} post={data} handleDeletePost={handleDeletePost} />
         ))}
       </div>
       {(isMore && (

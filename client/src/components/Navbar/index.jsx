@@ -28,6 +28,8 @@ import _ from 'lodash';
 
 import Maps from '@components/Maps';
 
+import { getProfile } from '@pages/Home/actions';
+
 import classes from './style.module.scss';
 import DrawerLeft from './components/DrawerLeft';
 import DrawerRight from './components/DrawerRight';
@@ -53,7 +55,13 @@ const Navbar = ({ locale, theme, isLogin, profile, children, nearby }) => {
     if (!_.isEmpty(nearby)) {
       setDecryptedNearby(decryptPayload(nearby));
     }
+
+    console.log(decryptPayload(profile));
   }, [nearby, profile]);
+
+  useEffect(() => {
+    dispatch(getProfile());
+  }, [dispatch]);
 
   const handleClickDropdown = (event) => {
     setDropdownPosition(event.currentTarget);

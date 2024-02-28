@@ -59,7 +59,7 @@
   background-color: $color-white;
 
   border-radius: 6px;
-  overflow: hidden;
+  overflow: scroll;
   width: 90%;
   height: 60%;
   @include apply-at-xl-size {
@@ -104,6 +104,7 @@
     padding: 20px;
     overflow-y: scroll;
     @include apply-at-xl-size {
+      overflow-y: scroll;
       max-height: 50rem;
       height: 100%;
       width: 50%;
@@ -235,12 +236,17 @@
   transform: translate(-50%, -50%);
   background-color: $color-white;
   display: flex;
+  justify-content: center;
+  align-items: center;
   outline: none;
   border-radius: 7px;
   overflow: hidden;
-  width: 25%;
   height: 25%;
   padding: 20px;
+  width: 90%;
+  @include apply-at-xl-size {
+    width: 25%;
+  }
 
   .message {
     font-size: 16px;

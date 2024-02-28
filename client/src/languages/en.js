@@ -23,6 +23,7 @@ export default {
   dashboard: 'Dashboard',
   admin: 'Admin',
   profile: 'Profile',
+  changePhoto: 'Change Photo',
 
   email: 'Email',
   username: 'Username',
@@ -79,6 +80,10 @@ export default {
 
   deleteCommentConfirmation: 'Are you sure wanna delete this comment?',
   deletePostConfirmation: 'Are you sure wanna delete this post?',
+  deleteGroupConfirmation: 'Are you sure wanna delete this group?',
+  deleteGroupMemberConfirmation: 'Are you sure wanna remove this member?',
+  leaveGroupConfirmation: 'Are you sure wanna leave this group?',
+  rejectGroupConfirmation: 'Are you sure wanna reject this group?',
 
   follow: 'Follow',
   unfollow: 'Unfollow',
@@ -90,4 +95,7 @@ export default {
   delete: 'Delete',
   edit: 'Edit',
   caption: 'Caption',
+  groupName: 'Group Name',
+  inviteMember: 'Invite',
+  startJourney: 'Start Your Journey With Friends',
 };

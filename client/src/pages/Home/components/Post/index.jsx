@@ -29,7 +29,7 @@ const style = {
   p: 4,
 };
 
-const Post = ({ province, city, fetch, post, next }) => {
+const Post = ({ province, city, fetch, next }) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -87,8 +87,8 @@ const Post = ({ province, city, fetch, post, next }) => {
           setProvinceName('');
           setCityName('');
           setLoading(false);
-          dispatch(getPost({ next, limit: 6 }));
-          fetch(post.followingPost);
+          dispatch(getPost());
+          fetch([]);
         },
         () => {
           setLoading(false);

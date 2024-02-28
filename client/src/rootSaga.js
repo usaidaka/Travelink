@@ -10,6 +10,8 @@ import peopleSaga from '@pages/People/saga';
 import connectionSaga from '@pages/Profile/saga';
 import editPostSaga from '@pages/EditPost/saga';
 import userProfileSaga from '@pages/UserProfile/saga';
+import groupSaga from '@pages/Group/saga';
+import settingSaga from '@pages/Setting/saga';
 
 export default function* rootSaga() {
   yield all([
@@ -23,5 +25,7 @@ export default function* rootSaga() {
     connectionSaga(),
     editPostSaga(),
     userProfileSaga(),
+    groupSaga(),
+    settingSaga(),
   ]);
 }

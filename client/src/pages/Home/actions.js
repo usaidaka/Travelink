@@ -10,11 +10,13 @@ import {
   DO_POST,
   GET_COMMENT,
   SET_COMMENT,
+  DO_COMMENT,
+  DELETE_COMMENT,
 } from './constants';
 
-export const getProfile = (profile) => ({
+export const getProfile = (cbSuccess) => ({
   type: GET_PROFILE,
-  profile,
+  cbSuccess,
 });
 
 export const setProfile = (profile) => ({
@@ -22,9 +24,9 @@ export const setProfile = (profile) => ({
   profile,
 });
 
-export const getNearby = (nearby) => ({
+export const getNearby = (cbSuccess) => ({
   type: GET_NEARBY,
-  nearby,
+  cbSuccess,
 });
 
 export const setNearby = (nearby) => ({
@@ -32,9 +34,9 @@ export const setNearby = (nearby) => ({
   nearby,
 });
 
-export const getProvince = (province) => ({
+export const getProvince = (cbSuccess) => ({
   type: GET_PROVINCE,
-  province,
+  cbSuccess,
 });
 
 export const setProvince = (province) => ({
@@ -42,9 +44,10 @@ export const setProvince = (province) => ({
   province,
 });
 
-export const getPost = (query) => ({
+export const getPost = (query, cbSuccess) => ({
   type: GET_POST,
   query,
+  cbSuccess,
 });
 
 export const setPost = (post) => ({
@@ -59,12 +62,26 @@ export const doPost = (data, cbSuccess, cbFailed) => ({
   cbSuccess,
 });
 
-export const getComment = (postId) => ({
+export const getComment = (postId, cbSuccess) => ({
   type: GET_COMMENT,
   postId,
+  cbSuccess,
 });
 
 export const setComment = (comment) => {
   console.log(comment);
   return { type: SET_COMMENT, comment };
 };
+
+export const doComment = (postId, data, cbSuccess) => ({
+  type: DO_COMMENT,
+  postId,
+  data,
+  cbSuccess,
+});
+
+export const deleteComment = (commentId, cbSuccess) => ({
+  type: DELETE_COMMENT,
+  commentId,
+  cbSuccess,
+});

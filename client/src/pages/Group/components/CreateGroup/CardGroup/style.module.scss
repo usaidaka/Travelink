@@ -1,0 +1,93 @@
+@import '@styles/base';
+
+.container {
+  width: 100%;
+  position: relative;
+
+  .maps {
+    height: 80vh;
+    position: relative;
+    z-index: 0;
+
+    @include apply-at-xl-size {
+      height: 600px;
+    }
+  }
+
+  .member {
+    padding: 10px;
+    width: 100%;
+    display: flex;
+    position: absolute;
+    bottom: 0;
+  }
+
+  .group-name {
+    padding: 10px;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+  }
+}
+
+.pop-over-container {
+  font-size: 12px;
+  padding: 4px;
+  .pop-over {
+    width: 120px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+
+    .icon {
+      width: 20px;
+      cursor: pointer;
+      color: red;
+    }
+  }
+  a {
+    color: $color-blue-logo;
+    transition: 0.3s;
+
+    &:hover {
+      color: $color-yellow-logo;
+      transition: 0.3s;
+    }
+  }
+}
+
+.delete-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: $color-white;
+  display: flex;
+  outline: none;
+  border-radius: 7px;
+  overflow: hidden;
+  height: 25%;
+  padding: 20px;
+  width: 90%;
+  @include apply-at-xl-size {
+    width: 25%;
+  }
+
+  .message {
+    font-size: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
+  }
+
+  .button {
+    width: 100%;
+    justify-content: space-around;
+    align-items: center;
+    display: flex;
+  }
+}

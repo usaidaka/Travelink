@@ -24,6 +24,7 @@ export default {
   dashboard: 'Dasbor',
   admin: 'Admin',
   profile: 'Profil',
+  changePhoto: 'Ganti Foto',
 
   email: 'Surel',
   username: 'Nama Pengguna',
@@ -79,6 +80,11 @@ export default {
   no: 'Tidak',
 
   deleteCommentConfirmation: 'Apakah anda yakin ingin menghapus komentar ini?',
+  deletePostConfirmation: 'Apakah anda yakin ingin menghapus post ini?',
+  deleteGroupConfirmation: 'Apakah anda yakin ingin menghapus group ini?',
+  deleteGroupMemberConfirmation: 'Apakah anda yakin ingin menghapus member ini?',
+  leaveGroupConfirmation: 'Apakah anda yakin ingin keluar group ini?',
+  rejectGroupConfirmation: 'Apakah anda yakin ingin menolak group ini?',
 
   follow: 'Ikuti',
   unfollow: 'Berhenti Mengikuti',
@@ -90,4 +96,7 @@ export default {
   delete: 'Hapus',
   edit: 'Ubah',
   caption: 'Keterang',
+  groupName: 'Nama Kelompok',
+  inviteMember: 'Ajak',
+  startJourney: 'Mulai Petualanganmu Bersama Teman',
 };

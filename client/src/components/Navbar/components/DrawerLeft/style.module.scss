@@ -61,5 +61,13 @@
         color: $color-pink;
       }
     }
+
+    .logout {
+      @extend .nav;
+      background-color: red;
+      border-radius: 6px;
+      color: white;
+      padding: 6px 2px;
+    }
   }
 }

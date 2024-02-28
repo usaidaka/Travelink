@@ -1,14 +1,32 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
-import { region, myProfile, nearby, getPost, createPost, getComment } from '@domain/api';
+import {
+  region,
+  myProfile,
+  nearby,
+  getPost,
+  createPost,
+  getComment,
+  createComment,
+  deleteCommentPost,
+} from '@domain/api';
 import { setLoading, showPopup } from '@containers/App/actions';
-import { DO_POST, GET_POST, GET_NEARBY, GET_PROFILE, GET_PROVINCE, GET_COMMENT } from './constants';
+import {
+  DO_POST,
+  GET_POST,
+  GET_NEARBY,
+  GET_PROFILE,
+  GET_PROVINCE,
+  GET_COMMENT,
+  DO_COMMENT,
+  DELETE_COMMENT,
+} from './constants';
 import { setComment, setNearby, setPost, setProfile, setProvince } from './actions';
 
-function* doGetRegion() {
+function* doGetRegion({ cbSuccess }) {
   setLoading(true);
   try {
     const response = yield call(region);
-
+    cbSuccess && cbSuccess();
     yield put(setProvince(response.result?.province));
   } catch (error) {
     yield put(showPopup('Error', error.response?.data?.message));
@@ -16,11 +34,11 @@ function* doGetRegion() {
   setLoading(false);
 }
 
-function* doGetProfile() {
+function* doGetProfile({ cbSuccess }) {
   setLoading(true);
   try {
     const response = yield call(myProfile);
-
+    cbSuccess && cbSuccess();
     yield put(setProfile(response.result));
   } catch (error) {
     yield put(showPopup('Error', error.response?.data?.message));
@@ -28,11 +46,11 @@ function* doGetProfile() {
   setLoading(false);
 }
 
-function* doGetNearby() {
+function* doGetNearby({ cbSuccess }) {
   setLoading(true);
   try {
     const response = yield call(nearby);
-
+    cbSuccess && cbSuccess();
     yield put(setNearby(response.result));
   } catch (error) {
     yield put(showPopup('Error', error.response?.data?.message));
@@ -40,12 +58,14 @@ function* doGetNearby() {
   setLoading(false);
 }
 
-function* doGetPost({ query }) {
+function* doGetPost({ query, cbSuccess }) {
   setLoading(true);
   try {
     const response = yield call(getPost, query);
 
     yield put(setPost(response.result));
+
+    cbSuccess && cbSuccess();
   } catch (error) {
     yield put(showPopup('Error', error.response?.data?.message));
   }
@@ -69,13 +89,36 @@ function* doPost({ data, cbSuccess, cbFailed }) {
   setLoading(false);
 }
 
-function* doGetComment({ postId }) {
+function* doGetComment({ postId, cbSuccess }) {
   setLoading(true);
   try {
-    console.log(postId);
     const response = yield call(getComment, postId);
-    console.log(response);
     yield put(setComment(response.result));
+    cbSuccess && cbSuccess();
+  } catch (error) {
+    yield put(showPopup('Error', error.response?.data?.message));
+  }
+  setLoading(false);
+}
+
+function* doComment({ postId, data, cbSuccess }) {
+  setLoading(true);
+  try {
+    const response = yield call(createComment, postId, data);
+
+    cbSuccess && cbSuccess(response.message);
+  } catch (error) {
+    yield put(showPopup('Error', error.response?.data?.message));
+  }
+  setLoading(false);
+}
+
+function* deleteComment({ commentId, cbSuccess }) {
+  setLoading(true);
+  try {
+    const response = yield call(deleteCommentPost, commentId);
+    console.log(response);
+    cbSuccess && cbSuccess(response.message);
   } catch (error) {
     yield put(showPopup('Error', error.response?.data?.message));
   }
@@ -89,4 +132,6 @@ export default function* homeSaga() {
   yield takeLatest(GET_POST, doGetPost);
   yield takeLatest(GET_COMMENT, doGetComment);
   yield takeLatest(DO_POST, doPost);
+  yield takeLatest(DO_COMMENT, doComment);
+  yield takeLatest(DELETE_COMMENT, deleteComment);
 }

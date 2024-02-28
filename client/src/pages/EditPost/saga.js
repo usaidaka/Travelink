@@ -19,12 +19,12 @@ function* doGetPostDetail({ postId, cbSuccess }) {
   setLoading(false);
 }
 
-function* doEditPostDetail({ postId, data }) {
+function* doEditPostDetail({ postId, data, cbSuccess }) {
   setLoading(true);
   try {
     const response = yield call(updatePost, postId, data);
     console.log(response);
-    yield put(setPostDetail(response.result));
+    cbSuccess && cbSuccess(response.message);
   } catch (error) {
     console.log(error);
     console.log(error.response);

@@ -1,7 +1,7 @@
 @import '@styles/base';
 
 .header-container {
-  height: 36rem;
+  height: 40rem;
   display: flex;
   flex-direction: column;
   box-shadow:
@@ -27,6 +27,96 @@
       }
     }
 
+    .footer-header {
+      display: flex;
+      justify-content: space-between;
+
+      .information {
+        width: 50%;
+        font-size: 16px;
+        height: 35%;
+        padding: 0px 20px;
+
+        .detail {
+          margin-top: 50px;
+
+          .data {
+            font-weight: 600;
+            text-transform: capitalize;
+
+            .username {
+              font-weight: 300;
+              font-size: 12px;
+              font-style: italic;
+              color: $color-disable;
+            }
+
+            .region {
+              font-size: 8px;
+              font-weight: 400;
+            }
+
+            .measure {
+              display: flex;
+              gap: 20px;
+            }
+
+            .divider {
+              margin: 6px 0px;
+              border: 2px solid $color-disable-soft;
+              border-radius: 4px;
+            }
+          }
+        }
+      }
+
+      .button-wrapper {
+        width: 50%;
+        display: flex;
+        justify-content: end;
+        margin-right: 10%;
+        align-items: center;
+
+        .follow {
+          font-size: 16px;
+          cursor: pointer;
+          border-radius: 6px;
+          border: none;
+          outline: none;
+          color: $color-white;
+          width: fit-content;
+          padding: 0px 30px;
+          height: 40px;
+          font-family: inherit;
+          background-color: #1976d2;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 10px;
+
+          @include apply-at-xl-size {
+            font-size: 12px;
+            padding: 0px 10px;
+          }
+          .icon {
+            width: 20px;
+          }
+        }
+
+        .unfollow {
+          @extend .follow;
+          background-color: red;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 10px;
+          .icon {
+            width: 20px;
+          }
+        }
+      }
+    }
+
     .image-container {
       z-index: 100;
       object-position: center;
@@ -47,44 +137,6 @@
         height: 100%;
         object-fit: cover;
         object-position: center;
-      }
-    }
-
-    .information {
-      font-size: 16px;
-      height: 35%;
-      padding: 0px 20px;
-
-      .detail {
-        margin-top: 50px;
-
-        .data {
-          font-weight: 600;
-          text-transform: capitalize;
-
-          .username {
-            font-weight: 300;
-            font-size: 12px;
-            font-style: italic;
-            color: $color-disable;
-          }
-
-          .region {
-            font-size: 8px;
-            font-weight: 400;
-          }
-
-          .measure {
-            display: flex;
-            gap: 20px;
-          }
-
-          .divider {
-            margin: 6px 0px;
-            border: 2px solid $color-disable-soft;
-            border-radius: 4px;
-          }
-        }
       }
     }
   }

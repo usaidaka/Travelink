@@ -9,6 +9,8 @@ import CardExplore from '@pages/Explore/CardExplore';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import VerticalAlignTopIcon from '@mui/icons-material/VerticalAlignTop';
 import Header from '@pages/Profile/components/Header';
+import { doFollow } from '@pages/People/actions';
+import toast from 'react-hot-toast';
 
 import { getUserConnection, getUserPost, getUserProfile } from './actions';
 import classes from './style.module.scss';
@@ -79,6 +81,17 @@ const UserProfile = ({ userProfile, posts, userConnection }) => {
   }, [posts]);
 
   console.log(decryptedUserProfile.Follow);
+
+  const handleFollow = (followTo) => {
+    dispatch(
+      doFollow(followTo, (message) => {
+        console.log(message);
+        toast.success(message, { duration: 1000 });
+        dispatch(getUserProfile(followTo));
+        setDecryptedUserProfile(decryptPayload(userProfile));
+      })
+    );
+  };
   console.log(marker);
 
   console.log(userId);
@@ -90,6 +103,7 @@ const UserProfile = ({ userProfile, posts, userConnection }) => {
       <Header
         src={decryptedUserProfile.image}
         marker={marker}
+        handleFollow={handleFollow}
         profile={decryptedUserProfile}
         followerCount={decryptedUserConnection.followersCount}
         followingCount={decryptedUserConnection.followingsCount}

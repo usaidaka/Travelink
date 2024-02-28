@@ -13,12 +13,14 @@ import { getPost, getNearby, getProfile, getProvince } from './actions';
 import Post from './components/Post';
 import { selectPost } from './selectors';
 import CardPost from './components/CardPost';
+import Loader from '@components/Loader';
 
 const Home = ({ post }) => {
   const dispatch = useDispatch();
   const [next, setNext] = useState(0);
   const [followingData, setFollowingData] = useState([]);
   const [isMore, setIsMore] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const handleLoadMore = () => {
     setNext((prev) => prev + 6);
@@ -37,13 +39,28 @@ const Home = ({ post }) => {
   console.log(post?.followingPost?.length === 0);
 
   useEffect(() => {
-    dispatch(getProfile());
-    dispatch(getProvince());
-    dispatch(getNearby());
+    dispatch(
+      getProfile(() => {
+        setLoading(false);
+      })
+    );
+    dispatch(
+      getProvince(() => {
+        setLoading(false);
+      })
+    );
+    dispatch(
+      getNearby(() => {
+        setLoading(false);
+      })
+    );
     dispatch(getUserRoute());
     dispatch(getPost({ next, limit: 6 }));
   }, [dispatch, next]);
 
+  if (loading) {
+    return <Loader isLoading={loading} />;
+  }
   return (
     <div id="top" className={classes.container}>
       <Post fetch={setFollowingData} next={next} />
