@@ -107,6 +107,8 @@ const myRoute = async (request, reply) => {
   }
 };
 
+/* GROUP START */
+
 const addTeam = async (request, reply) => {
   try {
     const { id } = request.user;
@@ -136,6 +138,99 @@ const removeTeam = async (request, reply) => {
     return reply.send(GeneralHelper.errorResponse(err));
   }
 };
+
+const leaveGroup = async (request, reply) => {
+  try {
+    const { id } = request.user;
+    const { groupId } = request.params;
+
+    const response = await UserHelper.leaveGroup(id, groupId);
+
+    return reply.send(response);
+  } catch (err) {
+    console.log([fileName, "leave Group", "ERROR"], { info: `${err}` });
+    return reply.send(GeneralHelper.errorResponse(err));
+  }
+};
+
+// const rejectGroupInvitation = async (request, reply) => {
+//   try {
+//     const { id } = request.user;
+//     const { groupId } = request.params;
+
+//     const response = await UserHelper.rejectGroupInvitation(id, groupId);
+
+//     return reply.send(response);
+//   } catch (err) {
+//     console.log([fileName, "reject Group Invitation", "ERROR"], {
+//       info: `${err}`,
+//     });
+//     return reply.send(GeneralHelper.errorResponse(err));
+//   }
+// };
+
+// const approveGroupInvitation = async (request, reply) => {
+//   try {
+//     const { id } = request.user;
+//     const { groupId } = request.params;
+
+//     const response = await UserHelper.approveGroupInvitation(id, groupId);
+
+//     return reply.send(response);
+//   } catch (err) {
+//     console.log([fileName, "approve Group Invitation", "ERROR"], {
+//       info: `${err}`,
+//     });
+//     return reply.send(GeneralHelper.errorResponse(err));
+//   }
+// };
+
+const updateMemberGroup = async (request, reply) => {
+  try {
+    const { id } = request.user;
+    const { userId, groupId } = request.params;
+    const response = await UserHelper.updateMemberGroup(id, userId, groupId);
+    return reply.send(response);
+  } catch (err) {
+    console.log([fileName, "update Member Group", "ERROR"], {
+      info: `${err}`,
+    });
+    return reply.send(GeneralHelper.errorResponse(err));
+  }
+};
+
+const editGroup = async (request, reply) => {
+  try {
+    const { id } = request.user;
+    const { groupId } = request.params;
+    const data = request.body;
+
+    const response = await UserHelper.editGroup(id, groupId, data);
+    return reply.send(response);
+  } catch (err) {
+    console.log([fileName, "edit Group", "ERROR"], {
+      info: `${err}`,
+    });
+    return reply.send(GeneralHelper.errorResponse(err));
+  }
+};
+
+const myGroup = async (request, reply) => {
+  try {
+    const { id } = request.user;
+
+    const response = await UserHelper.getMyGroup(id);
+
+    return reply.send(response);
+  } catch (err) {
+    console.log([fileName, "edit Group", "ERROR"], {
+      info: `${err}`,
+    });
+    return reply.send(GeneralHelper.errorResponse(err));
+  }
+};
+
+/* GROUP END */
 
 const region = async (request, reply) => {
   try {
@@ -239,6 +334,23 @@ const deletePost = async (request, reply) => {
     const { id } = request.user;
     const { postId } = request.params;
     const response = await UserHelper.deletePost(id, postId);
+    return reply.send(response);
+  } catch (err) {
+    console.log([fileName, "delete Post", "ERROR"], { info: `${err}` });
+    return reply.send(GeneralHelper.errorResponse(err));
+  }
+};
+
+const comment = async (request, reply) => {
+  try {
+    const { id } = request.user;
+    const { postId } = request.params;
+    const data = request.body;
+
+    Validation.comment(data);
+
+    const response = await UserHelper.comment(id, postId, data);
+
     return reply.send(response);
   } catch (err) {
     console.log([fileName, "add Post", "ERROR"], { info: `${err}` });
@@ -357,6 +469,8 @@ Router.get(
   userProfile
 );
 
+Router.get("/my-group", Middleware.validateToken, Middleware.isUser, myGroup);
+
 // POST
 Router.post(
   "/address",
@@ -376,6 +490,13 @@ Router.post(
 Router.post("/route", Middleware.validateToken, Middleware.isUser, addRoute);
 
 Router.post("/group", Middleware.validateToken, Middleware.isUser, addTeam);
+
+Router.post(
+  "/comment/:postId",
+  Middleware.validateToken,
+  Middleware.isUser,
+  comment
+);
 
 // DELETE
 Router.delete(
@@ -399,6 +520,20 @@ Router.delete(
   deleteCommentPost
 );
 
+Router.delete(
+  "/leave-group/:groupId",
+  Middleware.validateToken,
+  Middleware.isUser,
+  leaveGroup
+);
+
+// Router.delete(
+//   "/reject-group/:groupId",
+//   Middleware.validateToken,
+//   Middleware.isUser,
+//   rejectGroupInvitation
+// );
+
 /* UPDATE */
 Router.patch(
   "/post/:postId",
@@ -412,6 +547,27 @@ Router.patch(
   Middleware.validateToken,
   Middleware.isUser,
   follow
+);
+
+// Router.patch(
+//   "/approve-group/:groupId",
+//   Middleware.validateToken,
+//   Middleware.isUser,
+//   approveGroupInvitation
+// );
+
+Router.patch(
+  "/group/update-member/:userId/:groupId",
+  Middleware.validateToken,
+  Middleware.isUser,
+  updateMemberGroup
+);
+
+Router.patch(
+  "/group/:groupId",
+  Middleware.validateToken,
+  Middleware.isUser,
+  editGroup
 );
 
 module.exports = Router;

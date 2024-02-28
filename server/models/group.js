@@ -12,7 +12,11 @@ module.exports = (sequelize, DataTypes) => {
       Group.belongsToMany(models.User, {
         through: "GroupPivot",
         foreignKey: "group_id",
-        as: "Group",
+        as: "users",
+      });
+
+      Group.belongsTo(models.Route, {
+        foreignKey: "route_id",
       });
     }
   }

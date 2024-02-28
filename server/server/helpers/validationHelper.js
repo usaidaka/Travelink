@@ -143,6 +143,8 @@ const addRouteValidation = (data) => {
 const addGroup = (data) => {
   const schema = Joi.object({
     group_name: Joi.string().required().description("MTMA"),
+    member: Joi.array().optional().allow(null),
+    route_id: Joi.number().optional(),
   });
 
   if (schema.validate(data).error) {
@@ -189,6 +191,11 @@ const createPost = (data) => {
 
 const updateProfileValidation = (data) => {
   const schema = Joi.object({
+    file: Joi.object({
+      mimetype: Joi.string()
+        .valid("image/jpeg", "image/png", "application/pdf")
+        .optional(),
+    }).optional(),
     username: Joi.string().optional().description("User's username"),
     email: Joi.string().optional().description("Active email"),
     first_name: Joi.string().optional().description("User's first name"),
@@ -227,6 +234,18 @@ const changePassword = (data) => {
   }
 };
 
+const comment = (data) => {
+  const schema = Joi.object({
+    comment: Joi.string()
+      .required()
+      .description("Should be between 8-20 characters"),
+  });
+
+  if (schema.validate(data).error) {
+    throw Boom.badRequest(schema.validate(data).error);
+  }
+};
+
 module.exports = {
   registerValidation,
   loginValidation,
@@ -240,4 +259,5 @@ module.exports = {
   createPost,
   updateProfileValidation,
   changePassword,
+  comment,
 };

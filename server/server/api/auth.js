@@ -76,9 +76,11 @@ const updateProfile = async (request, reply) => {
   try {
     const { id } = request.user;
     const image = request.file;
-
+    console.log(image, "<<< IMAGES");
+    console.log(request.body, "request.body");
     const decryptedData = decryptPayload(request.body);
 
+    console.log(decryptedData, "<<<<decryptedData>>>>>");
     Validation.updateProfileValidation(decryptedData);
 
     const response = await AuthHelper.updateProfile(id, decryptedData, image);

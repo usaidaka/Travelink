@@ -12,12 +12,12 @@ module.exports = (sequelize, DataTypes) => {
       GroupPivot.belongsTo(models.User, {
         through: "User",
         foreignKey: "user_id",
-        as: "User",
+        as: "users",
       });
       GroupPivot.belongsTo(models.Group, {
         through: "Group",
         foreignKey: "group_id",
-        as: "Group",
+        as: "groups",
       });
     }
   }

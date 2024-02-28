@@ -26,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
         as: "direction_province",
       });
       Route.belongsTo(models.User, { foreignKey: "user_id" });
+      Route.hasMany(models.Group, { foreignKey: "route_id" });
     }
   }
   Route.init(

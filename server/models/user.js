@@ -20,13 +20,13 @@ module.exports = (sequelize, DataTypes) => {
       User.belongsToMany(models.Group, {
         through: "GroupPivot",
         foreignKey: "user_id",
-        as: "user",
+        as: "groups",
       });
     }
   }
   User.init(
     {
-      username: DataTypes.STRING,
+      username: { type: DataTypes.STRING, unique: true },
       password: DataTypes.STRING,
       email: DataTypes.STRING,
       image: DataTypes.TEXT,

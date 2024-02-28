@@ -66,6 +66,16 @@ const registerUser = async (dataObject) => {
     const userDetail = await db.UserDetail.findOne({
       where: { phone },
     });
+
+    const isUsernameExist = await db.User.findOne({
+      where: { username },
+    });
+
+    if (isUsernameExist) {
+      await transaction.rollback();
+      return Promise.reject(Boom.badRequest("Username has been used"));
+    }
+
     if (!_.isEmpty(user)) {
       await transaction.rollback();
       return Promise.reject(Boom.badRequest("Email has been used"));
@@ -308,6 +318,9 @@ const resetPassword = async (dataObject) => {
 
 const updateProfile = async (id, dataObject, image) => {
   const transaction = await db.sequelize.transaction();
+
+  console.log(dataObject, ">>>dataObject<<<");
+  console.log(image, "<<<<<<image");
   try {
     const {
       username,
@@ -333,33 +346,69 @@ const updateProfile = async (id, dataObject, image) => {
 
     console.log(image);
 
+    const isExist = await db.User.findOne({
+      where: { id },
+      include: [{ model: db.UserDetail }],
+    });
+
+    if (isExist.username === username) {
+      await transaction.rollback();
+      return Promise.reject(Boom.notFound("Username alreeady used"));
+    }
+
+    if (isExist.UserDetail.phone === phone) {
+      await transaction.rollback();
+      return Promise.reject(Boom.notFound("Phone already used"));
+    }
+
     let imageResult = null;
     if (image) {
       imageResult = await cloudinary.uploadToCloudinary(image, "image");
       if (!imageResult) throw Boom.internal("Cloudinary image upload failed");
     }
 
-    console.log(imageResult.url);
+    // console.log(imageResult.url);
 
     console.log(id);
 
+    if (username) {
+      await db.User.update(
+        {
+          username,
+        },
+        { where: { id }, transaction }
+      );
+    }
+
     await db.User.update(
       {
-        username,
-        image: imageResult.url,
+        image: image ? imageResult.url : isExist.image,
       },
       { where: { id }, transaction }
     );
 
+    if (phone) {
+      await db.UserDetail.update(
+        {
+          phone,
+        },
+        { where: { user_id: id }, transaction }
+      );
+    }
+
     await db.UserDetail.update(
       {
-        first_name,
-        last_name,
-        gender,
-        email_contact,
-        phone,
-        phone_contact,
-        mbti,
+        first_name: first_name ? first_name : isExist?.UserDetail?.first_name,
+        last_name: last_name ? last_name : isExist?.UserDetail?.last_name,
+        gender: gender ? gender : isExist?.UserDetail?.gender,
+        email_contact: email_contact
+          ? email_contact
+          : isExist?.UserDetail?.email_contact,
+
+        phone_contact: phone_contact
+          ? phone_contact
+          : isExist?.UserDetail?.phone_contact,
+        mbti: mbti ? mbti : isExist?.UserDetail?.mbti,
       },
       { where: { user_id: id }, transaction }
     );

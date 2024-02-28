@@ -462,10 +462,12 @@ const getMyRoute = async (id) => {
   }
 };
 
+/* GROUP START */
+
 const createGroup = async (id, dataObject) => {
   const transaction = await db.sequelize.transaction();
   try {
-    const { group_name } = dataObject;
+    const { group_name, member } = dataObject;
 
     const isUserInGroup = await db.GroupPivot.findOne({
       where: { user_id: id },
@@ -498,6 +500,38 @@ const createGroup = async (id, dataObject) => {
       );
     }
 
+    let memberId = [];
+    if (!_.isEmpty(member)) {
+      const userMember = await db.User.findAll({
+        where: {
+          username: {
+            [Op.in]: member,
+          },
+        },
+        attributes: ["id", "username"],
+      });
+
+      console.log(userMember);
+
+      memberId = userMember.map((user) => user.id);
+
+      const isUserAlreadyInAnotherGroup = await db.GroupPivot.findAll({
+        where: {
+          user_id: {
+            [Op.in]: memberId,
+          },
+        },
+      });
+
+      if (!_.isEmpty(isUserAlreadyInAnotherGroup)) {
+        await transaction.rollback();
+        return Promise.reject(
+          Boom.badRequest("Member already in another group")
+        );
+      }
+    }
+
+    // register my group
     const newGroup = await db.Group.create(
       {
         user_id: id,
@@ -506,7 +540,6 @@ const createGroup = async (id, dataObject) => {
       },
       { transaction }
     );
-
     await db.GroupPivot.create(
       {
         user_id: id,
@@ -515,6 +548,22 @@ const createGroup = async (id, dataObject) => {
       },
       { transaction }
     );
+
+    // register member
+    if (!_.isEmpty(member)) {
+      await Promise.all(
+        memberId.map(async (member) =>
+          db.GroupPivot.create(
+            {
+              user_id: member,
+              group_id: newGroup.id,
+              is_leader: false,
+            },
+            { transaction }
+          )
+        )
+      );
+    }
 
     await transaction.commit();
     return Promise.resolve({
@@ -589,6 +638,367 @@ const deleteGroup = async (id, groupId) => {
   }
 };
 
+const leaveGroup = async (id, groupId) => {
+  const transaction = await db.sequelize.transaction();
+  try {
+    const isUserLeader = await db.GroupPivot.findOne({
+      where: { user_id: id, group_id: groupId, is_leader: true },
+    });
+
+    if (isUserLeader) {
+      await transaction.rollback();
+      return Promise.reject(
+        Boom.badRequest("You cannot leave the group. You are the leader")
+      );
+    }
+
+    const isUserInGroup = await db.GroupPivot.findOne({
+      where: { user_id: id, group_id: groupId },
+    });
+
+    if (!isUserInGroup) {
+      await transaction.rollback();
+      return Promise.reject(
+        Boom.badRequest("You are not joining any group yet")
+      );
+    }
+
+    await db.GroupPivot.destroy(
+      {
+        where: { user_id: id, group_id: groupId },
+      },
+      transaction
+    );
+
+    await transaction.commit();
+    console.log(isUserLeader);
+    return Promise.resolve({
+      ok: true,
+      message: "Leave group successfully",
+    });
+  } catch (err) {
+    await transaction.rollback();
+    console.log([fileName, "delete Group", "ERROR"], {
+      info: `${err}`,
+    });
+    return Promise.reject(GeneralHelper.errorResponse(err));
+  }
+};
+
+// const rejectGroupInvitation = async (id, groupId) => {
+//   const transaction = await db.sequelize.transaction();
+//   try {
+//     const isUserLeader = await db.GroupPivot.findOne({
+//       where: { user_id: id, group_id: groupId, is_leader: true },
+//     });
+
+//     if (isUserLeader) {
+//       await transaction.rollback();
+//       return Promise.reject(
+//         Boom.badRequest("You cannot leave the group. You are the leader")
+//       );
+//     }
+
+//     const isUserInGroup = await db.GroupPivot.findOne({
+//       where: { user_id: id, group_id: groupId },
+//     });
+
+//     if (!isUserInGroup) {
+//       await transaction.rollback();
+//       return Promise.reject(
+//         Boom.badRequest("You are not joining any group yet")
+//       );
+//     }
+
+//     const isInvited = await db.GroupPivot.findOne({
+//       where: { user_id: id, group_id: groupId, is_allow: true },
+//     });
+
+//     if (isInvited) {
+//       await transaction.rollback();
+//       return Promise.reject(Boom.badRequest("You already joined the group"));
+//     }
+
+//     await db.GroupPivot.destroy(
+//       {
+//         where: { user_id: id, group_id: groupId },
+//       },
+//       transaction
+//     );
+
+//     await transaction.commit();
+//     return Promise.resolve({
+//       ok: true,
+//       message: "Group invitation rejected",
+//     });
+//   } catch (err) {
+//     await transaction.rollback();
+//     console.log([fileName, "reject Group Invitation", "ERROR"], {
+//       info: `${err}`,
+//     });
+//     return Promise.reject(GeneralHelper.errorResponse(err));
+//   }
+// };
+
+// const approveGroupInvitation = async (id, groupId) => {
+//   const transaction = await db.sequelize.transaction();
+//   try {
+//     const isUserLeader = await db.GroupPivot.findOne({
+//       where: { user_id: id, group_id: groupId, is_leader: true },
+//     });
+
+//     if (isUserLeader) {
+//       await transaction.rollback();
+//       return Promise.reject(
+//         Boom.badRequest("You are the leader, you already in the group")
+//       );
+//     }
+
+//     const isUserInGroup = await db.GroupPivot.findOne({
+//       where: { user_id: id, group_id: groupId },
+//     });
+
+//     if (!isUserInGroup) {
+//       await transaction.rollback();
+//       return Promise.reject(
+//         Boom.badRequest("You are not joining any group yet")
+//       );
+//     }
+
+//     const isInvited = await db.GroupPivot.findOne({
+//       where: { user_id: id, group_id: groupId, is_allow: true },
+//     });
+
+//     if (isInvited) {
+//       await transaction.rollback();
+//       return Promise.reject(Boom.badRequest("You already joined the group"));
+//     }
+
+//     await db.GroupPivot.update(
+//       {
+//         is_allow: true,
+//       },
+//       {
+//         where: { user_id: id, group_id: groupId, is_allow: false },
+//         transaction,
+//       }
+//     );
+
+//     await transaction.commit();
+//     return Promise.resolve({
+//       ok: true,
+//       message: "Group invitation approved",
+//     });
+//   } catch (err) {
+//     await transaction.rollback();
+//     console.log([fileName, "approve Group Invitation", "ERROR"], {
+//       info: `${err}`,
+//     });
+//     return Promise.reject(GeneralHelper.errorResponse(err));
+//   }
+// };
+
+const updateMemberGroup = async (id, userId, groupId) => {
+  const transaction = await db.sequelize.transaction();
+  try {
+    console.log(userId);
+    if (Number(id) === Number(userId)) {
+      await transaction.rollback();
+      return Promise.reject(
+        Boom.badRequest("You cannot update member on your own self")
+      );
+    }
+
+    const isUserLeader = await db.GroupPivot.findOne({
+      where: { user_id: id, group_id: groupId, is_leader: true },
+    });
+
+    const isUserInGroup = await db.GroupPivot.findOne({
+      where: { user_id: userId, group_id: groupId },
+    });
+
+    if (!isUserInGroup) {
+      await transaction.rollback();
+      return Promise.reject(Boom.badRequest("User not found in group member"));
+    }
+
+    if (!isUserLeader) {
+      await transaction.rollback();
+      return Promise.reject(
+        Boom.badRequest("Cannot update group. Must be a leader")
+      );
+    }
+
+    await db.GroupPivot.destroy(
+      {
+        where: { user_id: userId, group_id: groupId },
+      },
+      transaction
+    );
+
+    await transaction.commit();
+
+    return Promise.resolve({
+      ok: true,
+      message: "Update group member successful",
+    });
+  } catch (err) {
+    await transaction.rollback();
+    console.log([fileName, "approve Group Invitation", "ERROR"], {
+      info: `${err}`,
+    });
+    return Promise.reject(GeneralHelper.errorResponse(err));
+  }
+};
+
+const editGroup = async (id, groupId, data) => {
+  const transaction = await db.sequelize.transaction();
+  try {
+    const { group_name, member } = data;
+    const isGroupCreatedByUser = await db.Group.findOne({
+      where: { user_id: id },
+    });
+
+    if (!isGroupCreatedByUser) {
+      await transaction.rollback();
+      return Promise.reject(
+        Boom.badRequest("Update group must do by the leader")
+      );
+    }
+
+    await db.Group.update(
+      {
+        group_name,
+      },
+      {
+        where: {
+          user_id: id,
+        },
+        transaction,
+      }
+    );
+
+    let memberId = [];
+    if (!_.isEmpty(member)) {
+      const userMember = await db.User.findAll({
+        where: {
+          username: {
+            [Op.in]: member,
+          },
+        },
+        attributes: ["id", "username"],
+      });
+
+      console.log(userMember);
+
+      memberId = userMember.map((user) => user.id);
+
+      const isUserAlreadyInAnotherGroup = await db.GroupPivot.findAll({
+        where: {
+          user_id: {
+            [Op.in]: memberId,
+          },
+        },
+      });
+
+      if (!_.isEmpty(isUserAlreadyInAnotherGroup)) {
+        return Boom.badRequest("Member already in another group");
+      }
+    }
+
+    if (!_.isEmpty(member)) {
+      await Promise.all(
+        memberId.map(async (member) =>
+          db.GroupPivot.create(
+            {
+              user_id: member,
+              group_id: groupId,
+              is_leader: false,
+            },
+            { transaction }
+          )
+        )
+      );
+    }
+
+    await transaction.commit();
+    return Promise.resolve({
+      ok: true,
+      message: "Update group name successful",
+    });
+  } catch (err) {
+    await transaction.rollback();
+    console.log([fileName, "edit Group", "ERROR"], {
+      info: `${err}`,
+    });
+    return Promise.reject(GeneralHelper.errorResponse(err));
+  }
+};
+
+const getMyGroup = async (id) => {
+  try {
+    const myGroups = await db.GroupPivot.findOne({
+      where: { user_id: id },
+      attributes: ["is_leader", "user_id", "is_allow", "createdAt"],
+      include: [
+        {
+          model: db.Group,
+          as: "groups",
+          attributes: ["id", "route_id", "group_name"],
+
+          include: [
+            {
+              model: db.Route,
+              include: [
+                {
+                  model: db.Province,
+                  as: "current_province",
+                  attributes: ["name"],
+                },
+                { model: db.City, as: "current_city", attributes: ["name"] },
+                {
+                  model: db.Province,
+                  as: "direction_province",
+                  attributes: ["name"],
+                },
+                { model: db.City, as: "direction_city", attributes: ["name"] },
+              ],
+              attributes: [
+                "id",
+                "current_latitude",
+                "current_longitude",
+                "direction_latitude",
+                "direction_longitude",
+              ],
+            },
+            {
+              model: db.User,
+              as: "users",
+              attributes: ["id", "username", "image"],
+              through: {
+                attributes: ["is_leader", "is_allow", "createdAt"],
+              },
+            },
+          ],
+        },
+      ],
+    });
+    const resultEncrypted = encryptPayload({ decryptedData: myGroups });
+    return Promise.resolve({
+      ok: true,
+      message: "Retrieving my group successful",
+      result: resultEncrypted,
+    });
+  } catch (err) {
+    console.log([fileName, "get My Group", "ERROR"], {
+      info: `${err}`,
+    });
+    return Promise.reject(GeneralHelper.errorResponse(err));
+  }
+};
+
+/* GROUP END */
+
 const getRegion = async (provinceId) => {
   try {
     const provinceList = await db.Province.findAll({
@@ -649,10 +1059,10 @@ const getNearBy = async (id, radius = 50) => {
       include: [
         {
           model: db.User,
+          attributes: ["id", "username", "email", "image"],
           include: [
             { model: db.UserDetail, attributes: ["phone", "first_name"] },
           ],
-          attributes: ["id", "username", "email", "image"],
         },
         { model: db.Province, as: "current_province", attributes: ["name"] },
         { model: db.City, as: "current_city", attributes: ["name"] },
@@ -716,6 +1126,7 @@ const getNearBy = async (id, radius = 50) => {
         (remapData = [
           {
             id: near?.user?.id,
+            user_id: near?.user?.user_id,
             profile: {
               username: near?.user?.User?.username,
               firstName: near?.user?.User?.UserDetail?.first_name,
@@ -956,7 +1367,7 @@ const createPost = async (id, dataObject, image) => {
         province_id: isNaN(Number(province_id)) ? null : Number(province_id),
         city_id: isNaN(Number(city_id)) ? null : Number(city_id),
         caption,
-        location_name: location_name === "undefined" && "",
+        location_name: location_name === "undefined" ? "" : location_name,
       },
       { transaction }
     );
@@ -1002,7 +1413,7 @@ const updatePost = async (id, postId, dataObject) => {
         province_id: province_id ? Number(province_id) : null,
         city_id: city_id ? Number(city_id) : null,
         caption,
-        location_name,
+        location_name: location_name === "undefined" ? "" : location_name,
       },
       { where: { id: postId, user_id: id }, transaction }
     );
@@ -1065,6 +1476,37 @@ const deletePost = async (id, postId) => {
   }
 };
 
+const comment = async (id, postId, dataObject) => {
+  const transaction = await db.sequelize.transaction();
+  const { comment } = dataObject;
+  try {
+    const isPostExist = await db.Post.findOne({
+      where: { id: postId },
+    });
+
+    if (_.isEmpty(isPostExist)) {
+      return Promise.reject(Boom.notFound("Post not found"));
+    }
+
+    await db.Comment.create({
+      post_id: postId,
+      user_id: id,
+      comment,
+    });
+
+    return Promise.resolve({
+      ok: true,
+      message: "Comment successful",
+    });
+  } catch (err) {
+    await transaction.rollback();
+    console.log([fileName, "delete post", "ERROR"], {
+      info: `${err}`,
+    });
+    return Promise.reject(GeneralHelper.errorResponse(err));
+  }
+};
+
 const getCommentPost = async (postId) => {
   try {
     const comment = await db.Comment.findAll({
@@ -1076,6 +1518,7 @@ const getCommentPost = async (postId) => {
           attributes: ["username", "image"],
         },
       ],
+      order: [["id", "DESC"]],
     });
 
     if (_.isEmpty(comment)) {
@@ -1113,11 +1556,8 @@ const deleteCommentPost = async (id, commentId) => {
     });
 
     if (_.isEmpty(comment)) {
-      return Promise.resolve({
-        ok: true,
-        message: "Comment based on post not found",
-        result: comment,
-      });
+      await transaction.rollback();
+      return Promise.reject(Boom.notFound("Comment based on post not found"));
     }
 
     await db.Comment.destroy({ where: { id: commentId }, transaction });
@@ -1129,7 +1569,7 @@ const deleteCommentPost = async (id, commentId) => {
     });
   } catch (err) {
     await transaction.rollback();
-    console.log([fileName, "get Comment Post", "ERROR"], {
+    console.log([fileName, "delete Comment Post", "ERROR"], {
       info: `${err}`,
     });
     return Promise.reject(GeneralHelper.errorResponse(err));
@@ -1341,6 +1781,12 @@ module.exports = {
   getMyRoute,
   createGroup,
   deleteGroup,
+  leaveGroup,
+  // rejectGroupInvitation,
+  // approveGroupInvitation,
+  updateMemberGroup,
+  editGroup,
+  getMyGroup,
   getRegion,
   getNearBy,
   getPost,
@@ -1349,6 +1795,7 @@ module.exports = {
   createPost,
   updatePost,
   deletePost,
+  comment,
   getCommentPost,
   deleteCommentPost,
   getUserList,
