@@ -9,6 +9,8 @@ import { FormattedMessage } from 'react-intl';
 import GroupsIcon from '@mui/icons-material/Groups';
 
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import WhereToVoteIcon from '@mui/icons-material/WhereToVote';
+import PersonPinIcon from '@mui/icons-material/PersonPin';
 import PermIdentityOutlinedIcon from '@mui/icons-material/PermIdentityOutlined';
 import ExploreOutlinedIcon from '@mui/icons-material/ExploreOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
@@ -98,6 +100,24 @@ const DrawerLeft = ({ user }) => {
             <GroupsIcon />
             <span>
               <FormattedMessage id="group" />
+            </span>
+          </Link>
+
+          <Link to="/nearby" className={classes.nav} data-active={pathname === '/nearby'}>
+            <PersonPinIcon />
+            <span>
+              <FormattedMessage id="nearby" />
+            </span>
+          </Link>
+
+          <Link
+            to="/destination-recommendation"
+            className={classes.nav}
+            data-active={pathname === '/destination-recommendation'}
+          >
+            <WhereToVoteIcon />
+            <span>
+              <FormattedMessage id="nearby" />
             </span>
           </Link>
 

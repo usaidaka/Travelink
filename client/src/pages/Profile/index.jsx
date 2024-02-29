@@ -12,17 +12,19 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { getPost } from '@pages/Home/actions';
 import VerticalAlignTopIcon from '@mui/icons-material/VerticalAlignTop';
 import Loader from '@components/Loader';
-import toast from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
+import { doFollow } from '@pages/People/actions';
 
 import classes from './style.module.scss';
 import Header from './components/Header';
-import { doDeletePost, getConnectionData } from './actions';
-import { selectConnection } from './selectors';
+import { doDeleteFollower, doDeletePost, getConnectionData, getMyFollow } from './actions';
+import { selectConnection, selectMyFollow } from './selectors';
 
-const Profile = ({ post, profile, location, connection }) => {
+const Profile = ({ post, profile, location, connection, myFollow }) => {
   const [decryptedConnection, setDecryptedConnection] = useState({});
   const [decryptedProfile, setDecryptedProfile] = useState({});
   const [decryptedLocation, setDecryptedLocation] = useState([]);
+  const [decryptedMyFollow, setDecryptedMyFollow] = useState({});
   const [next, setNext] = useState(0);
   const [isMore, setIsMore] = useState(false);
 
@@ -33,12 +35,30 @@ const Profile = ({ post, profile, location, connection }) => {
 
   const dispatch = useDispatch();
 
-  console.log(post.myPost);
-
   useEffect(() => {
     dispatch(getUserRoute());
     dispatch(getConnectionData());
+    dispatch(getMyFollow());
   }, [dispatch]);
+
+  const handleFollow = (followTo) => {
+    dispatch(
+      doFollow(followTo, (message) => {
+        toast.success(message, { duration: 1000 });
+        dispatch(getMyFollow());
+      })
+    );
+  };
+
+  const handleDeleteFollower = (followId) => {
+    console.log(followId);
+    dispatch(
+      doDeleteFollower(followId, (message) => {
+        toast.success(message, { duration: 1000 });
+        dispatch(getMyFollow());
+      })
+    );
+  };
 
   useEffect(() => {
     if (!_.isEmpty(decryptedLocation)) {
@@ -104,7 +124,11 @@ const Profile = ({ post, profile, location, connection }) => {
     if (connection) {
       setDecryptedConnection(decryptPayload(connection));
     }
-  }, [connection, location, profile]);
+
+    if (myFollow) {
+      setDecryptedMyFollow(decryptPayload(myFollow));
+    }
+  }, [connection, location, myFollow, profile]);
 
   if (render) {
     return <Loader isLoading={render} />;
@@ -113,6 +137,9 @@ const Profile = ({ post, profile, location, connection }) => {
   return (
     <div className={classes.container}>
       <Header
+        handleDeleteFollower={handleDeleteFollower}
+        handleFollow={handleFollow}
+        follow={decryptedMyFollow}
         src={decryptedProfile.image}
         marker={marker}
         profile={decryptedProfile}
@@ -139,6 +166,7 @@ const Profile = ({ post, profile, location, connection }) => {
             </button>
           </a>
         )}
+      <Toaster position="top-center" reverseOrder={false} />
     </div>
   );
 };
@@ -148,6 +176,7 @@ Profile.propTypes = {
   profile: PropTypes.string,
   location: PropTypes.string,
   connection: PropTypes.string,
+  myFollow: PropTypes.string,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -155,6 +184,7 @@ const mapStateToProps = createStructuredSelector({
   profile: selectProfile,
   connection: selectConnection,
   location: selectUserRoute,
+  myFollow: selectMyFollow,
 });
 
 export default connect(mapStateToProps)(Profile);

@@ -1,8 +1,8 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
 import { showPopup, setLoading } from '@containers/App/actions';
-import { userConnection, userPost, userProfile } from '@domain/api';
-import { setUserConnection, setUserPost, setUserProfile } from './actions';
-import { GET_USER_CONNECTION, GET_USER_POST, GET_USER_PROFILE } from './constants';
+import { userConnection, userFollow, userPost, userProfile } from '@domain/api';
+import { setUserConnection, setUserFollow, setUserPost, setUserProfile } from './actions';
+import { GET_USER_CONNECTION, GET_USER_FOLLOW, GET_USER_POST, GET_USER_PROFILE } from './constants';
 
 function* getUserProfile({ userId }) {
   yield put(setLoading(true));
@@ -58,8 +58,23 @@ function* getUserConnection({ userId }) {
   yield put(setLoading(false));
 }
 
+function* doGetUserFollow({ userId }) {
+  try {
+    console.log(userId);
+    const response = yield call(userFollow, userId);
+    console.log(response);
+    yield put(setUserFollow(response.result));
+  } catch (error) {
+    console.log(error);
+    console.log(error.response);
+    yield put(showPopup('Error', error.response?.data?.message));
+  }
+  setLoading(false);
+}
+
 export default function* userProfileSaga() {
   yield takeLatest(GET_USER_PROFILE, getUserProfile);
   yield takeLatest(GET_USER_POST, getUserPost);
   yield takeLatest(GET_USER_CONNECTION, getUserConnection);
+  yield takeLatest(GET_USER_FOLLOW, doGetUserFollow);
 }

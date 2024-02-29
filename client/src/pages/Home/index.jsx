@@ -7,13 +7,13 @@ import PropTypes from 'prop-types';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import VerticalAlignTopIcon from '@mui/icons-material/VerticalAlignTop';
 import _ from 'lodash';
+import Loader from '@components/Loader';
 
 import classes from './style.module.scss';
 import { getPost, getNearby, getProfile, getProvince } from './actions';
 import Post from './components/Post';
 import { selectPost } from './selectors';
 import CardPost from './components/CardPost';
-import Loader from '@components/Loader';
 
 const Home = ({ post }) => {
   const dispatch = useDispatch();

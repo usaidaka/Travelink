@@ -223,6 +223,10 @@
     height: 100%;
     @include apply-at-xl-size {
       width: 53%;
+
+      &[data-active='true'] {
+        width: 100%;
+      }
     }
   }
 

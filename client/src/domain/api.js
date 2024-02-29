@@ -17,6 +17,7 @@ const urls = {
   addRoute: 'user/route',
   region: 'user/region',
   nearby: 'user/nearby',
+  nearbyDirection: 'user/nearby/direction',
 
   post: 'user/post',
   comment: 'user/comment',
@@ -38,6 +39,10 @@ const urls = {
 
   destination: 'admin/destination',
   dashboard: 'admin/dashboard',
+
+  myFollow: 'user/my-follow',
+
+  userFollow: 'user/user-follow',
 };
 
 const headersMultipart = {
@@ -153,3 +158,11 @@ export const editDestination = (destinationId, data) =>
 export const deleteDestination = (destinationId) => callAPI(`${urls.destination}/${destinationId}`, 'DELETE');
 
 export const dashboard = () => callAPI(urls.dashboard, 'GET');
+
+export const myFollow = () => callAPI(urls.myFollow, 'GET');
+
+export const userFollow = (userId) => callAPI(`${urls.userFollow}/${userId}`, 'GET');
+
+export const deleteFollower = (followId) => callAPI(`${urls.myFollow}/${followId}`, 'DELETE');
+
+export const nearbyDirection = () => callAPI(urls.nearbyDirection, 'GET');

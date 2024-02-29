@@ -106,4 +106,11 @@ export default {
   groupName: 'Group Name',
   inviteMember: 'Invite',
   startJourney: 'Start Your Journey With Friends',
+
+  nearbyCurrent: 'People Nearby Current Location',
+  nearbyDirection: 'People Nearby Direction Location',
+  nearby: 'Nearby',
+  destinationRecommendation: 'Destination Recommendation',
+  from: 'From',
+  to: 'To',
 };

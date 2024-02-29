@@ -18,7 +18,9 @@ import decryptPayload from '@utils/decryptionHelper';
 import logo from '@assets/logo.png';
 
 import GroupsIcon from '@mui/icons-material/Groups';
+import WhereToVoteIcon from '@mui/icons-material/WhereToVote';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import PersonPinIcon from '@mui/icons-material/PersonPin';
 import PermIdentityOutlinedIcon from '@mui/icons-material/PermIdentityOutlined';
 import ExploreOutlinedIcon from '@mui/icons-material/ExploreOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
@@ -55,8 +57,6 @@ const Navbar = ({ locale, theme, isLogin, profile, children, nearby }) => {
     if (!_.isEmpty(nearby)) {
       setDecryptedNearby(decryptPayload(nearby));
     }
-
-    console.log(decryptPayload(profile));
   }, [nearby, profile]);
 
   useEffect(() => {
@@ -226,6 +226,24 @@ const Navbar = ({ locale, theme, isLogin, profile, children, nearby }) => {
               </span>
             </Link>
 
+            <Link to="/nearby" className={classes.nav} data-active={pathname === '/nearby'}>
+              <PersonPinIcon />
+              <span>
+                <FormattedMessage id="nearby" />
+              </span>
+            </Link>
+
+            <Link
+              to="/destination-recommendation"
+              className={classes.nav}
+              data-active={pathname === '/destination-recommendation'}
+            >
+              <WhereToVoteIcon />
+              <span>
+                <FormattedMessage id="destinationRecommendation" />
+              </span>
+            </Link>
+
             <Link to="/setting" className={classes.nav} data-active={pathname === '/setting'}>
               <SettingsOutlinedIcon />
               <span>
@@ -234,17 +252,21 @@ const Navbar = ({ locale, theme, isLogin, profile, children, nearby }) => {
             </Link>
           </div>
         </div>
-        <div className={classes.children}>{children}</div>
-        <div className={classes['sidebar-right']}>
-          <div className={classes.maps}>
-            <Maps
-              center={decryptedNearby[0]?.current_position}
-              zoom={9}
-              marker={decryptedNearby}
-              element="SidebarRight"
-            />
-          </div>
+        <div className={classes.children} data-active={pathname.includes('nearby')}>
+          {children}
         </div>
+        {pathname.includes('nearby') || (
+          <div className={classes['sidebar-right']}>
+            <div className={classes.maps}>
+              <Maps
+                center={decryptedNearby[0]?.current_position}
+                zoom={9}
+                marker={decryptedNearby}
+                element="SidebarRight"
+              />
+            </div>
+          </div>
+        )}
       </div>
     </>
   );

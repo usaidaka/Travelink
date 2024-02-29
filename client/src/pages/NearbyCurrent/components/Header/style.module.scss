@@ -1,0 +1,14 @@
+@import '@styles/base';
+
+.header {
+  @include directionX;
+  justify-content: space-around;
+  .tab {
+    text-align: center;
+    height: fit-content;
+    &[data-active='true'] {
+      font-weight: 600;
+      color: $color-pink;
+    }
+  }
+}

@@ -6,3 +6,6 @@ export const SET_USER_POST = 'userProfile/SET_USER_POST';
 
 export const GET_USER_CONNECTION = 'userProfile/GET_USER_CONNECTION';
 export const SET_USER_CONNECTION = 'userProfile/SET_USER_CONNECTION';
+
+export const GET_USER_FOLLOW = 'userProfile/GET_USER_FOLLOW';
+export const SET_USER_FOLLOW = 'userProfile/SET_USER_FOLLOW';

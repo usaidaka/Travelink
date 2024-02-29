@@ -1,18 +1,29 @@
 import PropTypes from 'prop-types';
 import Maps from '@components/Maps';
 import _ from 'lodash';
-import { Chip } from '@mui/material';
-import { Link, useLocation } from 'react-router-dom';
+import { Chip, Modal } from '@mui/material';
+import { useLocation } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import PersonAddDisabledIcon from '@mui/icons-material/PersonAddDisabled';
+import { useState } from 'react';
 
 import classes from './style.module.scss';
+import CardFollowing from '../CardFollowing';
+import CardFollower from '../CardFollower';
 
-const Header = ({ src, marker, profile, followerCount, followingCount, totalPost, handleFollow }) => {
+const Header = ({ follow, src, marker, profile, totalPost, handleFollow, handleDeleteFollower }) => {
   const { pathname } = useLocation();
 
-  console.log(pathname);
+  const [openFollowing, setOpenFollowing] = useState(false);
+  const handleOpenFollowing = () => setOpenFollowing(true);
+  const handleCloseFollowing = () => setOpenFollowing(false);
+
+  const [openFollower, setOpenFollower] = useState(false);
+  const handleOpenFollower = () => setOpenFollower(true);
+  const handleCloseFollower = () => setOpenFollower(false);
+
+  console.log(follow);
   return (
     <div className={classes['header-container']}>
       <div className={classes.header}>
@@ -48,16 +59,52 @@ const Header = ({ src, marker, profile, followerCount, followingCount, totalPost
                     <p>{totalPost}</p>
                   </div>
                   <div>
-                    <Link to="/">
+                    <div className={classes.follow} onClick={handleOpenFollower}>
                       <FormattedMessage id="follower" />
-                      <p>{followerCount}</p>
-                    </Link>
+                      <p>{follow?.follower?.length}</p>
+                    </div>
+                    <Modal
+                      open={openFollower}
+                      onClose={handleCloseFollower}
+                      aria-labelledby="modal-modal-title"
+                      aria-describedby="modal-modal-description"
+                    >
+                      <div className={classes.modal}>
+                        <h1>
+                          <FormattedMessage id="follower" />
+                        </h1>
+                        <div>
+                          {!_.isEmpty(follow.follower) &&
+                            follow.follower.map((followTo, idx) => (
+                              <CardFollower handleDeleteFollower={handleDeleteFollower} key={idx} follow={followTo} />
+                            ))}
+                        </div>
+                      </div>
+                    </Modal>
                   </div>
                   <div>
-                    <Link to="/">
+                    <div className={classes.follow} onClick={handleOpenFollowing}>
                       <FormattedMessage id="following" />
-                      <p>{followingCount}</p>
-                    </Link>
+                      <p>{follow?.following?.length}</p>
+                    </div>
+                    <Modal
+                      open={openFollowing}
+                      onClose={handleCloseFollowing}
+                      aria-labelledby="modal-modal-title"
+                      aria-describedby="modal-modal-description"
+                    >
+                      <div className={classes.modal}>
+                        <h1>
+                          <FormattedMessage id="following" />
+                        </h1>
+                        <div>
+                          {!_.isEmpty(follow.following) &&
+                            follow.following.map((followTo, idx) => (
+                              <CardFollowing key={idx} follow={followTo} handleFollow={handleFollow} />
+                            ))}
+                        </div>
+                      </div>
+                    </Modal>
                   </div>
                 </div>
               </div>
@@ -88,10 +135,10 @@ Header.propTypes = {
   profile: PropTypes.object,
   src: PropTypes.string,
   marker: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
-  followerCount: PropTypes.number,
-  followingCount: PropTypes.number,
   totalPost: PropTypes.number,
+  handleDeleteFollower: PropTypes.func,
   handleFollow: PropTypes.func,
+  follow: PropTypes.object,
 };
 
 export default Header;

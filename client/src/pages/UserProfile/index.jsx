@@ -12,28 +12,30 @@ import Header from '@pages/Profile/components/Header';
 import { doFollow } from '@pages/People/actions';
 import toast from 'react-hot-toast';
 
-import { getUserConnection, getUserPost, getUserProfile } from './actions';
+import { getUserConnection, getUserFollow, getUserPost, getUserProfile } from './actions';
 import classes from './style.module.scss';
-import { selectUserConnection, selectUserPost, selectUserProfile } from './selectors';
+import { selectUserConnection, selectUserFollow, selectUserPost, selectUserProfile } from './selectors';
 
-const UserProfile = ({ userProfile, posts, userConnection }) => {
+const UserProfile = ({ userProfile, posts, userConnection, userFollow }) => {
   const { userId } = useParams();
   const dispatch = useDispatch();
   const [decryptedUserProfile, setDecryptedUserProfile] = useState({});
   const [decryptedUserConnection, setDecryptedUserConnection] = useState({});
+  const [decryptedUserFollow, setDecryptedUserFollow] = useState({});
 
   const [next, setNext] = useState(0);
   const [userProfilePost, setUserProfilePost] = useState([]);
   const [isMore, setIsMore] = useState(false);
   const [marker, setMarker] = useState([]);
 
-  console.log(decryptedUserConnection);
-  console.log(next);
+  console.log(decryptedUserFollow);
+  console.log(userFollow);
 
   useEffect(() => {
     dispatch(getUserProfile(userId));
     dispatch(getUserPost(userId, { next, limit: 6 }));
     dispatch(getUserConnection(userId));
+    dispatch(getUserFollow(userId));
   }, [dispatch, next, userId]);
 
   useEffect(() => {
@@ -43,7 +45,10 @@ const UserProfile = ({ userProfile, posts, userConnection }) => {
     if (!_.isEmpty(userConnection)) {
       setDecryptedUserConnection(decryptPayload(userConnection));
     }
-  }, [userConnection, userProfile]);
+    if (!_.isEmpty(userFollow)) {
+      setDecryptedUserFollow(decryptPayload(userFollow));
+    }
+  }, [userConnection, userFollow, userProfile]);
 
   useEffect(() => {
     if (!_.isEmpty(decryptedUserProfile)) {
@@ -102,6 +107,7 @@ const UserProfile = ({ userProfile, posts, userConnection }) => {
     <div className={classes.container}>
       <Header
         src={decryptedUserProfile.image}
+        follow={decryptedUserFollow}
         marker={marker}
         handleFollow={handleFollow}
         profile={decryptedUserProfile}
@@ -136,12 +142,14 @@ UserProfile.propTypes = {
   userProfile: PropTypes.string,
   posts: PropTypes.array,
   userConnection: PropTypes.string,
+  userFollow: PropTypes.string,
 };
 
 const mapStateToProps = createStructuredSelector({
   userProfile: selectUserProfile,
   posts: selectUserPost,
   userConnection: selectUserConnection,
+  userFollow: selectUserFollow,
 });
 
 export default connect(mapStateToProps)(UserProfile);

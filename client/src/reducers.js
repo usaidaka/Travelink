@@ -13,6 +13,7 @@ import userProfileReducer from '@pages/UserProfile/reducer';
 import groupReducer from '@pages/Group/reducer';
 import editDestinationReducer from '@pages/EditDestination/reducer';
 import dashboardReducer, { storedKey as storedDashboardState } from '@pages/AdminDashboard/reducer';
+import nearbyDirectionReducer, { storedKey as storedNearbyDirectionState } from '@pages/NearbyDirection/reducer';
 
 import languageReducer from '@containers/Language/reducer';
 
@@ -28,6 +29,7 @@ const storedReducers = {
   connection: { reducer: connectionReducer, whitelist: storedConnectionState },
   destination: { reducer: destinationReducer, whitelist: storedDestinationState },
   dashboard: { reducer: dashboardReducer, whitelist: storedDashboardState },
+  nearbyDirection: { reducer: nearbyDirectionReducer, whitelist: storedNearbyDirectionState },
 };
 
 const temporaryReducers = {

@@ -1,0 +1,59 @@
+@import '@styles/base';
+
+.container {
+  width: 100%;
+  border-radius: 8px;
+
+  .card-container {
+    display: flex;
+    align-items: center;
+
+    .image-container {
+      width: 60px;
+      height: 60px;
+      margin-right: 16px;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+      }
+    }
+
+    .information {
+      flex: 1;
+
+      .wrapper {
+        display: flex;
+        align-items: center;
+        .profile {
+          margin-bottom: 8px;
+
+          span {
+            display: block;
+            margin-bottom: 4px;
+          }
+
+          span:first-child {
+            font-weight: bold;
+            font-size: 1.2rem;
+          }
+        }
+      }
+
+      .trip {
+        padding: 4px;
+        gap: 10px;
+        display: flex;
+        justify-content: space-between;
+
+        .direction {
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+        }
+      }
+    }
+  }
+}

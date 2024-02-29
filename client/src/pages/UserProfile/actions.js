@@ -1,8 +1,10 @@
 import {
   GET_USER_CONNECTION,
+  GET_USER_FOLLOW,
   GET_USER_POST,
   GET_USER_PROFILE,
   SET_USER_CONNECTION,
+  SET_USER_FOLLOW,
   SET_USER_POST,
   SET_USER_PROFILE,
 } from './constants';
@@ -36,4 +38,14 @@ export const getUserConnection = (userId) => ({
 export const setUserConnection = (userConnection) => ({
   type: SET_USER_CONNECTION,
   userConnection,
+});
+
+export const getUserFollow = (userId) => ({
+  type: GET_USER_FOLLOW,
+  userId,
+});
+
+export const setUserFollow = (userFollow) => ({
+  type: SET_USER_FOLLOW,
+  userFollow,
 });

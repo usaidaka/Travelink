@@ -18,6 +18,10 @@ import Trip from '@pages/Trip';
 import UserProfile from '@pages/UserProfile';
 import Destination from '@pages/Destination';
 import EditDestination from '@pages/EditDestination';
+import Nearby from '@pages/NearbyCurrent';
+import DestinationRecommendation from '@pages/DestinationRecommendation';
+import NearbyCurrent from '@pages/NearbyCurrent';
+import NearbyDirection from '@pages/NearbyDirection';
 
 const routes = [
   {
@@ -124,6 +128,30 @@ const routes = [
     name: 'Group',
     protected: true,
     component: Group,
+    layout: MainLayout,
+    role: 'User',
+  },
+  {
+    path: '/nearby',
+    name: 'Nearby',
+    protected: true,
+    component: NearbyCurrent,
+    layout: MainLayout,
+    role: 'User',
+  },
+  {
+    path: '/nearby/direction',
+    name: 'Nearby',
+    protected: true,
+    component: NearbyDirection,
+    layout: MainLayout,
+    role: 'User',
+  },
+  {
+    path: '/destination-recommendation',
+    name: 'Destination Recommendation',
+    protected: true,
+    component: DestinationRecommendation,
     layout: MainLayout,
     role: 'User',
   },

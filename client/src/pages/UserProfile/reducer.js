@@ -1,10 +1,11 @@
 import { produce } from 'immer';
-import { SET_USER_CONNECTION, SET_USER_POST, SET_USER_PROFILE } from './constants';
+import { SET_USER_CONNECTION, SET_USER_FOLLOW, SET_USER_POST, SET_USER_PROFILE } from './constants';
 
 export const initialState = {
   userProfile: '',
   posts: [],
   userConnection: '',
+  userFollow: '',
 };
 
 export const storedKey = [''];
@@ -20,6 +21,9 @@ const userProfileReducer = (state = initialState, action) =>
         break;
       case SET_USER_CONNECTION:
         draft.userConnection = action.userConnection;
+        break;
+      case SET_USER_FOLLOW:
+        draft.userFollow = action.userFollow;
         break;
       default:
         break;

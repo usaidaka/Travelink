@@ -107,4 +107,11 @@ export default {
   groupName: 'Nama Kelompok',
   inviteMember: 'Ajak',
   startJourney: 'Mulai Petualanganmu Bersama Teman',
+
+  nearbyCurrent: 'Orang Terdekat Lokasi Saat Ini',
+  nearbyDirection: 'Orang Terdekat Lokasi Tujuan',
+  nearby: 'Terdekat',
+  destinationRecommendation: 'Rekomendasi Tujuan',
+  from: 'Dari',
+  to: 'Ke',
 };

@@ -10,6 +10,7 @@ import _ from 'lodash';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import Carousel from 'react-material-ui-carousel';
 import CardMarker from '@pages/AdminDashboard/components/CardMarker';
+import CardNearby from '@pages/NearbyCurrent/components/CardNearby';
 
 import CardDestination from '@pages/Destination/components/CardDestination';
 
@@ -106,6 +107,19 @@ const Maps = ({
         ));
       break;
 
+    case 'DestinationRecommendation':
+      console.log(marker);
+      renderedMarker =
+        !_.isEmpty(marker) &&
+        marker?.map((pin) => (
+          <Marker key={pin.id} position={[pin?.latitude, pin?.longitude]}>
+            <Popup>
+              <CardDestination pin={pin} />
+            </Popup>
+          </Marker>
+        ));
+      break;
+
     case 'EditDestination':
       console.log(marker);
       renderedMarker = !_.isEmpty(marker) && (
@@ -172,6 +186,19 @@ const Maps = ({
           <Marker key={idx} position={mark.location}>
             <Popup>
               <CardMarker mark={mark} />
+            </Popup>
+          </Marker>
+        ));
+      break;
+
+    case 'nearby':
+      console.log(marker);
+      renderedMarker =
+        !_.isEmpty(marker) &&
+        marker.map((mark, idx) => (
+          <Marker key={idx} position={mark.current_position}>
+            <Popup>
+              <CardNearby mark={mark} />
             </Popup>
           </Marker>
         ));

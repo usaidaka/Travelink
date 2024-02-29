@@ -16,6 +16,7 @@ import changePasswordSaga from '@pages/ChangePassword/saga';
 import destinationSaga from '@pages/Destination/saga';
 import editDestinationSaga from '@pages/EditDestination/saga';
 import dashboardSaga from '@pages/AdminDashboard/saga';
+import nearbyDirectionSaga from '@pages/NearbyDirection/saga';
 
 export default function* rootSaga() {
   yield all([
@@ -35,5 +36,6 @@ export default function* rootSaga() {
     destinationSaga(),
     editDestinationSaga(),
     dashboardSaga(),
+    nearbyDirectionSaga(),
   ]);
 }
