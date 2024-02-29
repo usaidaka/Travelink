@@ -8,7 +8,7 @@ function* getUserList({ query }) {
   setLoading(true);
   try {
     const response = yield call(userList, query);
-
+    console.log(response);
     yield put(setUserList(response.result));
   } catch (error) {
     console.log(error);

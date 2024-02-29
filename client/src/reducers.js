@@ -7,9 +7,12 @@ import routeReducer, { storedKey as storedRouteState } from '@pages/Trip/reducer
 import homeReducer, { storedKey as storedHomeState } from '@pages/Home/reducer';
 import peopleReducer, { storedKey as storedPeopleState } from '@pages/People/reducer';
 import connectionReducer, { storedKey as storedConnectionState } from '@pages/Profile/reducer';
+import destinationReducer, { storedKey as storedDestinationState } from '@pages/Destination/reducer';
 import editPostReducer from '@pages/EditPost/reducer';
 import userProfileReducer from '@pages/UserProfile/reducer';
 import groupReducer from '@pages/Group/reducer';
+import editDestinationReducer from '@pages/EditDestination/reducer';
+import dashboardReducer, { storedKey as storedDashboardState } from '@pages/AdminDashboard/reducer';
 
 import languageReducer from '@containers/Language/reducer';
 
@@ -23,6 +26,8 @@ const storedReducers = {
   home: { reducer: homeReducer, whitelist: storedHomeState },
   people: { reducer: peopleReducer, whitelist: storedPeopleState },
   connection: { reducer: connectionReducer, whitelist: storedConnectionState },
+  destination: { reducer: destinationReducer, whitelist: storedDestinationState },
+  dashboard: { reducer: dashboardReducer, whitelist: storedDashboardState },
 };
 
 const temporaryReducers = {
@@ -30,6 +35,7 @@ const temporaryReducers = {
   editPost: editPostReducer,
   userProfile: userProfileReducer,
   group: groupReducer,
+  editDestination: editDestinationReducer,
 };
 
 const createReducer = () => {

@@ -12,6 +12,10 @@ import editPostSaga from '@pages/EditPost/saga';
 import userProfileSaga from '@pages/UserProfile/saga';
 import groupSaga from '@pages/Group/saga';
 import settingSaga from '@pages/Setting/saga';
+import changePasswordSaga from '@pages/ChangePassword/saga';
+import destinationSaga from '@pages/Destination/saga';
+import editDestinationSaga from '@pages/EditDestination/saga';
+import dashboardSaga from '@pages/AdminDashboard/saga';
 
 export default function* rootSaga() {
   yield all([
@@ -27,5 +31,9 @@ export default function* rootSaga() {
     userProfileSaga(),
     groupSaga(),
     settingSaga(),
+    changePasswordSaga(),
+    destinationSaga(),
+    editDestinationSaga(),
+    dashboardSaga(),
   ]);
 }

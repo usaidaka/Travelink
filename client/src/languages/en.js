@@ -56,6 +56,11 @@ export default {
   setting: 'Setting',
   trip: 'Trip',
   group: 'Group',
+  destination: 'Destination',
+  detail: 'Detail',
+  description: 'Deskripsi',
+  registerDestination: 'Register Destination',
+  editDestination: 'Edit Destination',
 
   current_province: 'Current Province',
   current_city: 'Current City',
@@ -81,6 +86,7 @@ export default {
   deleteCommentConfirmation: 'Are you sure wanna delete this comment?',
   deletePostConfirmation: 'Are you sure wanna delete this post?',
   deleteGroupConfirmation: 'Are you sure wanna delete this group?',
+  deleteDestinationConfirmation: 'Are you sure wanna remove this destination?',
   deleteGroupMemberConfirmation: 'Are you sure wanna remove this member?',
   leaveGroupConfirmation: 'Are you sure wanna leave this group?',
   rejectGroupConfirmation: 'Are you sure wanna reject this group?',
@@ -88,6 +94,8 @@ export default {
   follow: 'Follow',
   unfollow: 'Unfollow',
   changePassword: 'Change Password',
+  user: 'User',
+  post: 'Post',
 
   following: 'Following',
   follower: 'Follower',

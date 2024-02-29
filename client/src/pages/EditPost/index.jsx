@@ -184,7 +184,7 @@ const EditPost = ({ province, city, postDetail }) => {
               <FormattedMessage id="location_name" />
             </label>
             <input
-              type="location_name"
+              type="text"
               className={classes.input}
               id="location_name"
               name="location_name"

@@ -1,6 +1,7 @@
 import MainLayout from '@layouts/MainLayout';
 import Dashboard from '@pages/AdminDashboard';
 import ChangePassword from '@pages/ChangePassword';
+import RegisterDestination from '@pages/RegisterDestination';
 import EditPost from '@pages/EditPost';
 import Explore from '@pages/Explore';
 import Group from '@pages/Group';
@@ -15,6 +16,8 @@ import ResetPassword from '@pages/ResetPassword';
 import Setting from '@pages/Setting';
 import Trip from '@pages/Trip';
 import UserProfile from '@pages/UserProfile';
+import Destination from '@pages/Destination';
+import EditDestination from '@pages/EditDestination';
 
 const routes = [
   {
@@ -129,6 +132,30 @@ const routes = [
     name: 'Dashboard',
     protected: true,
     component: Dashboard,
+    layout: MainLayout,
+    role: 'Admin',
+  },
+  {
+    path: '/admin/destination',
+    name: 'Destination',
+    protected: true,
+    component: Destination,
+    layout: MainLayout,
+    role: 'Admin',
+  },
+  {
+    path: '/admin/destination/register',
+    name: 'Register Destination',
+    protected: true,
+    component: RegisterDestination,
+    layout: MainLayout,
+    role: 'Admin',
+  },
+  {
+    path: '/admin/destination/:destinationId',
+    name: 'Register Destination',
+    protected: true,
+    component: EditDestination,
     layout: MainLayout,
     role: 'Admin',
   },

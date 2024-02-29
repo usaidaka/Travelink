@@ -4,12 +4,15 @@ import { Button } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { FormattedMessage } from 'react-intl';
-import { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import { useState } from 'react';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import encryptPayload from '@utils/encryptionHelper';
+import { logout } from '@utils/logout';
 
 import classes from './style.module.scss';
+import { doChangePassword } from './actions';
 
 const ChangePassword = () => {
   const dispatch = useDispatch();
@@ -26,11 +29,17 @@ const ChangePassword = () => {
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data);
+    const encryptedData = encryptPayload(data);
+    dispatch(
+      doChangePassword({ encryptedData }, (message) => {
+        toast.success(message, { duration: 1000 });
+        setLoading(true);
+        setTimeout(() => {
+          logout(dispatch, navigate);
+        }, 3000);
+      })
+    );
   };
-  console.log('tet');
-
-  console.log('object');
   return (
     <div className={classes.container}>
       <div className={classes.header}>

@@ -253,7 +253,7 @@ const CreateGroup = ({ location, myGroup }) => {
 
 CreateGroup.propTypes = {
   location: PropTypes.string,
-  myGroup: PropTypes.string,
+  myGroup: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
 };
 
 const mapStateToProps = createStructuredSelector({

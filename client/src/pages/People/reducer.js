@@ -2,7 +2,7 @@ import { produce } from 'immer';
 import { SET_USER_LIST } from './constants';
 
 export const initialState = {
-  userList: [],
+  userList: '',
 };
 
 export const storedKey = [''];

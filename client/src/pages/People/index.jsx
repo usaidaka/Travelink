@@ -12,6 +12,8 @@ import { Button } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import VerticalAlignTopIcon from '@mui/icons-material/VerticalAlignTop';
 import toast, { Toaster } from 'react-hot-toast';
+import decryptPayload from '@utils/decryptionHelper';
+import _ from 'lodash';
 
 import classes from './style.module.scss';
 import { selectUserList } from './selectors';
@@ -20,53 +22,53 @@ import CardPeople from './components/CardPeople';
 
 const People = ({ userList }) => {
   const dispatch = useDispatch();
+  console.log(userList);
 
   const [next, setNext] = useState(0);
 
   const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get('username');
 
+  const [decryptedUserList, setDecrytedUserList] = useState({});
   const [userListData, setUserListData] = useState([]);
   const [isMore, setIsMore] = useState(false);
   const [search, setSearch] = useState('');
 
-  const getUserListSearch = (query, nextLoad) => {
-    console.log(query);
+  const getUserListSearch = (query) => {
     if (query) {
       setSearchParams({ username: query });
     } else {
       setSearchParams({});
     }
-    dispatch(getUserList({ ...(query !== '' && { username: query, next: nextLoad, limit: 6 }) }));
+    dispatch(getUserList({ ...(query !== '' && { username: query, next, limit: 6 }) }));
   };
 
   const getUserListFromApi = () => {
     dispatch(getUserList());
   };
-  console.log(userList);
 
   const handleSearch = () => {
     setUserListData([]);
     getUserListSearch(search);
   };
 
-  console.log(userListData);
-
   const handleLoadMore = () => {
-    setNext((prev) => {
-      getUserListSearch(null, prev + 6);
-      return prev + 6;
-    });
+    setNext((prev) => prev + 6);
+    getUserListSearch();
   };
 
-  console.log(next);
-
   useEffect(() => {
-    if (userList) {
-      setUserListData((prev) => [...prev, ...userList]);
-      setIsMore(userList.length >= 6);
+    if (!_.isEmpty(userList)) {
+      setDecrytedUserList(decryptPayload(userList));
     }
   }, [userList]);
+
+  useEffect(() => {
+    if (!_.isEmpty(decryptedUserList)) {
+      setUserListData((prev) => [...prev, ...decryptedUserList]);
+      setIsMore(decryptedUserList.length >= 6);
+    }
+  }, [decryptedUserList]);
 
   useEffect(() => {
     getUserListSearch();
@@ -126,9 +128,8 @@ const People = ({ userList }) => {
         </div>
       </div>
       <div className={classes['card-container']}>
-        {userListData.map((data) => (
-          <CardPeople key={data.id} data={data} handleFollow={handleFollow} />
-        ))}
+        {!_.isEmpty(decryptedUserList) &&
+          userListData?.map((data) => <CardPeople key={data.id} data={data} handleFollow={handleFollow} />)}
       </div>
 
       {(isMore && (
@@ -138,7 +139,7 @@ const People = ({ userList }) => {
           </button>
         </div>
       )) ||
-        (userList.length === 0 && null) || (
+        (decryptedUserList.length === 0 && null) || (
           <a href="#top" className={classes.expand}>
             <button type="button">
               <VerticalAlignTopIcon />

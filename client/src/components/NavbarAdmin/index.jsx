@@ -22,6 +22,7 @@ import { FormattedMessage } from 'react-intl';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 // import LightModeIcon from '@mui/icons-material/LightMode';
 // import NightsStayIcon from '@mui/icons-material/NightsStay';
+import GpsFixedIcon from '@mui/icons-material/GpsFixed';
 import { logout } from '@utils/logout';
 import { createStructuredSelector } from 'reselect';
 import { selectUser } from '@containers/Client/selectors';
@@ -138,6 +139,19 @@ const NavbarAdmin = ({ locale, /*  theme */ children, user }) => {
         </Link>
       )}
 
+      <Link to="/admin/destination">
+        <List className={pathname === '/admin/destination' ? classes.active : ''}>
+          <ListItem disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                <GpsFixedIcon />
+              </ListItemIcon>
+              <FormattedMessage id="destination" />
+            </ListItemButton>
+          </ListItem>
+        </List>
+      </Link>
+
       <Divider />
       <List onClick={handleLogout} className={classes.logout}>
         <ListItem disablePadding>
@@ -215,22 +229,6 @@ const NavbarAdmin = ({ locale, /*  theme */ children, user }) => {
                   </div>
                 </div>
                 <Menu open={openDropdown} anchorEl={dropdownPosition} onClose={handleCloseDropdown}>
-                  <Link
-                    to="/admin/profile"
-                    onClick={() => {
-                      handleClose();
-                      handleCloseDropdown();
-                    }}
-                  >
-                    <MenuItem>
-                      <div className={classes.menu}>
-                        {/* <img src={profileIcon} alt="" className={classes.icon} /> */}
-                        <div className={classes.menuLang}>
-                          <FormattedMessage id="profile" />
-                        </div>
-                      </div>
-                    </MenuItem>
-                  </Link>
                   <MenuItem onClick={handleLogout}>
                     <div className={classes.menu}>
                       {/* <img src={logoutIcon} alt="" className={classes.icon} /> */}

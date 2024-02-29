@@ -57,6 +57,11 @@ export default {
   setting: 'Pengaturan',
   trip: 'Perjalanan',
   group: 'Kelompok',
+  destination: 'Tujuan',
+  detail: 'Detail',
+  description: 'Description',
+  registerDestination: 'Mendaftarkan Tujuan',
+  editDestination: 'Ubah Tujuan Perjalanan',
 
   current_province: 'Provinsi Saat Ini',
   current_city: 'Kota Saat Ini',
@@ -82,6 +87,7 @@ export default {
   deleteCommentConfirmation: 'Apakah anda yakin ingin menghapus komentar ini?',
   deletePostConfirmation: 'Apakah anda yakin ingin menghapus post ini?',
   deleteGroupConfirmation: 'Apakah anda yakin ingin menghapus group ini?',
+  deleteDestinationConfirmation: 'Apakah anda yakin ingin menghapus tujuan wisata ini?',
   deleteGroupMemberConfirmation: 'Apakah anda yakin ingin menghapus member ini?',
   leaveGroupConfirmation: 'Apakah anda yakin ingin keluar group ini?',
   rejectGroupConfirmation: 'Apakah anda yakin ingin menolak group ini?',
@@ -89,6 +95,8 @@ export default {
   follow: 'Ikuti',
   unfollow: 'Berhenti Mengikuti',
   changePassword: 'Ganti Kata Sandi',
+  user: 'Pengguna',
+  post: 'Kiriman',
 
   following: 'Mengikuti',
   follower: 'Pengikut',

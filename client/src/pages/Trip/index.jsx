@@ -95,17 +95,17 @@ const Trip = ({ location, province, currentCity, directionCity }) => {
   }, [selectedCurrentProvince]);
 
   useEffect(() => {
-    console.log(selectedDirectionProvince);
     if (selectedDirectionProvince) {
       handleDirectionCityList(selectedDirectionProvince);
     }
   }, [selectedDirectionProvince]);
 
   const onSubmit = (data) => {
+    console.log(searchResult);
     data.current_latitude = currentLatitude || myRoute.current_latitude;
     data.current_longitude = currentLongitude || myRoute.current_longitude;
-    data.direction_latitude = searchResult.y || myRoute.direction_latitude;
-    data.direction_longitude = searchResult.x || myRoute.direction_longitude;
+    data.direction_latitude = searchResult.lat || myRoute.direction_latitude;
+    data.direction_longitude = searchResult.lng || myRoute.direction_longitude;
 
     const encryptedData = encryptPayload(data);
 
@@ -113,13 +113,15 @@ const Trip = ({ location, province, currentCity, directionCity }) => {
       doRoute({ encryptedData }, (message) => {
         toast.success(message, { duration: 2000 });
         setLoading(true);
+        dispatch(getUserRoute());
         setTimeout(() => {
           setLoading(false);
-          dispatch(getUserRoute());
         }, 4000);
       })
     );
   };
+
+  console.log(marker);
   return (
     <div className={classes.container}>
       <h1>Trip</h1>

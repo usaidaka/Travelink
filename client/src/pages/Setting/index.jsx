@@ -59,6 +59,13 @@ const Setting = ({ profile }) => {
 
     const dataJSON = {
       username: data.username,
+      first_name: data.first_name,
+      last_name: data.last_name,
+      gender: data.gender,
+      mbti: data.mbti,
+      phone: data.phone,
+      phone_contact: data.phone_contact,
+      email_contact: data.email_contact,
     };
 
     const encryptedData = encryptPayload(dataJSON);

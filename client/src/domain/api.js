@@ -10,6 +10,7 @@ const urls = {
   forgotPassword: 'auth/forgot-password',
   resetPassword: 'auth/reset-password',
   updateProfile: 'auth/profile',
+  changePassword: 'auth/change-password',
 
   myProfile: 'user/profile',
   myRoute: 'user/my-route',
@@ -34,6 +35,9 @@ const urls = {
   removeGroup: 'user/group',
   updateGroup: 'user/group',
   deleteMember: 'user/group/update-member',
+
+  destination: 'admin/destination',
+  dashboard: 'admin/dashboard',
 };
 
 const headersMultipart = {
@@ -78,6 +82,8 @@ export const register = (data) => {
 export const login = (data) => callAPI(urls.login, 'POST', {}, {}, data);
 
 export const forgotPassword = (data) => callAPI(urls.forgotPassword, 'POST', {}, {}, data);
+
+export const changePassword = (data) => callAPI(urls.changePassword, 'PATCH', {}, {}, data);
 
 export const myProfile = () => callAPI(urls.myProfile, 'GET', {}, {}, {});
 
@@ -134,3 +140,16 @@ export const removeGroup = (groupId) => callAPI(`${urls.removeGroup}/${groupId}`
 export const updateGroup = (groupId, data) => callAPI(`${urls.updateGroup}/${groupId}`, 'PATCH', {}, {}, data);
 
 export const deleteMember = (userId, groupId) => callAPI(`${urls.deleteMember}/${userId}/${groupId}`, 'PATCH');
+
+export const createDestination = (data) => callAPI(urls.destination, 'POST', headersMultipart, {}, data);
+
+export const getDestination = () => callAPI(urls.destination, 'GET');
+
+export const getDestinationById = (destinationId) => callAPI(`${urls.destination}/${destinationId}`, 'GET');
+
+export const editDestination = (destinationId, data) =>
+  callAPI(`${urls.destination}/${destinationId}`, 'PATCH', headersMultipart, {}, data);
+
+export const deleteDestination = (destinationId) => callAPI(`${urls.destination}/${destinationId}`, 'DELETE');
+
+export const dashboard = () => callAPI(urls.dashboard, 'GET');
