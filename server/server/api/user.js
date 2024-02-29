@@ -419,6 +419,42 @@ const follow = async (request, reply) => {
   }
 };
 
+const myFollow = async (request, reply) => {
+  try {
+    const { id } = request.user;
+    const response = await UserHelper.myFollow(id);
+    return reply.send(response);
+  } catch (err) {
+    console.log([fileName, "my Follower", "ERROR"], { info: `${err}` });
+    return reply.send(GeneralHelper.errorResponse(err));
+  }
+};
+
+const userFollow = async (request, reply) => {
+  try {
+    const { userId } = request.params;
+    const response = await UserHelper.userFollow(userId);
+    return reply.send(response);
+  } catch (err) {
+    console.log([fileName, "my Follower", "ERROR"], { info: `${err}` });
+    return reply.send(GeneralHelper.errorResponse(err));
+  }
+};
+
+const deleteFollower = async (request, reply) => {
+  try {
+    const { followId } = request.params;
+    const { id } = request.user;
+
+    const response = await UserHelper.deleteFollower(id, followId);
+
+    return reply.send(response);
+  } catch (err) {
+    console.log([fileName, "delete Follower", "ERROR"], { info: `${err}` });
+    return reply.send(GeneralHelper.errorResponse(err));
+  }
+};
+
 const userProfile = async (request, reply) => {
   try {
     const { id } = request.user;
@@ -489,6 +525,15 @@ Router.get(
 
 Router.get("/my-group", Middleware.validateToken, Middleware.isUser, myGroup);
 
+Router.get("/my-follow", Middleware.validateToken, Middleware.isUser, myFollow);
+
+Router.get(
+  "/user-follow/:userId",
+  Middleware.validateToken,
+  Middleware.isUser,
+  userFollow
+);
+
 // POST
 Router.post(
   "/address",
@@ -543,6 +588,13 @@ Router.delete(
   Middleware.validateToken,
   Middleware.isUser,
   leaveGroup
+);
+
+Router.delete(
+  "/my-follow/:followId",
+  Middleware.validateToken,
+  Middleware.isUser,
+  deleteFollower
 );
 
 // Router.delete(

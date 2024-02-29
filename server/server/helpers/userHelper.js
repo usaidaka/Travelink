@@ -1857,6 +1857,115 @@ const createFollowTo = async (id, followTo) => {
   }
 };
 
+const myFollow = async (id) => {
+  try {
+    console.log(id);
+
+    const follower = await db.Follow.findAll({
+      where: { follow_to: id },
+      attributes: ["follow_by", "id"],
+      include: [
+        {
+          model: db.User,
+          as: "followBy",
+          attributes: ["username", "image", "id"],
+        },
+      ],
+    });
+
+    const following = await db.Follow.findAll({
+      where: { follow_by: id },
+      attributes: ["follow_to", "id"],
+      include: [
+        {
+          model: db.User,
+          as: "followTo",
+          attributes: ["username", "image", "id"],
+        },
+      ],
+    });
+
+    const result = { follower, following };
+
+    const resultEncrypted = encryptPayload({ decryptedData: result });
+
+    return Promise.resolve({ ok: true, result: resultEncrypted });
+  } catch (err) {
+    console.log([fileName, "follower", "ERROR"], {
+      info: `${err}`,
+    });
+    return Promise.reject(GeneralHelper.errorResponse(err));
+  }
+};
+
+const userFollow = async (userId) => {
+  try {
+    console.log(userId);
+
+    const follower = await db.Follow.findAll({
+      where: { follow_to: userId },
+      attributes: ["follow_by", "id"],
+      include: [
+        {
+          model: db.User,
+          as: "followBy",
+          attributes: ["username", "image", "id"],
+        },
+      ],
+    });
+
+    const following = await db.Follow.findAll({
+      where: { follow_by: userId },
+      attributes: ["follow_to", "id"],
+      include: [
+        {
+          model: db.User,
+          as: "followTo",
+          attributes: ["username", "image", "id"],
+        },
+      ],
+    });
+
+    const result = { follower, following };
+
+    const resultEncrypted = encryptPayload({ decryptedData: result });
+
+    return Promise.resolve({ ok: true, result: resultEncrypted });
+  } catch (err) {
+    console.log([fileName, "follower", "ERROR"], {
+      info: `${err}`,
+    });
+    return Promise.reject(GeneralHelper.errorResponse(err));
+  }
+};
+
+const deleteFollower = async (id, followId) => {
+  const transaction = await db.sequelize.transaction();
+
+  try {
+    const isExist = await db.Follow.findOne({
+      where: { id: followId, follow_to: id },
+    });
+
+    if (!isExist) {
+      return Promise.reject(Boom.notFound("Follow relationship not found"));
+    }
+
+    await db.Follow.destroy({ where: { id: followId }, transaction });
+    await transaction.commit();
+    return Promise.resolve({
+      ok: true,
+      message: "Delete Follower successful",
+    });
+  } catch (err) {
+    await transaction.rollback();
+    console.log([fileName, "delete Followe", "ERROR"], {
+      info: `${err}`,
+    });
+    return Promise.reject(GeneralHelper.errorResponse(err));
+  }
+};
+
 const getUserProfile = async (id, userId) => {
   try {
     console.log(id, userId);
@@ -1948,6 +2057,9 @@ module.exports = {
   deleteCommentPost,
   getUserList,
   createFollowTo,
+  myFollow,
+  userFollow,
+  deleteFollower,
   getUserProfile,
   getNearByInDirection,
 };
