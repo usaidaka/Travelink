@@ -88,8 +88,9 @@ const isSuper = (request, reply, next) => {
 const isAdmin = (request, reply, next) => {
   try {
     const { role } = request.user;
+    console.log(role);
 
-    if (role !== "Admin" || role !== "Super") {
+    if (role !== "Admin" && role !== "Super") {
       throw Boom.unauthorized();
     }
     next();

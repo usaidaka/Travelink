@@ -376,6 +376,8 @@ const createRoute = async (id, dataObject) => {
     const isTraveled = await db.Route.findOne({
       where: { user_id: id },
     });
+    console.log(direction_latitude < ">>><<<<");
+    console.log(direction_longitude, ">>><<<");
 
     if (isTraveled) {
       await db.Route.update(
@@ -1088,6 +1090,7 @@ const getNearBy = async (id, radius = 50) => {
       });
     }
 
+    // rumus haversine
     const distanceKm = (lat1, lon1, lat2, lon2) => {
       const r = 6371; // km
       const p = Math.PI / 180;
@@ -1111,6 +1114,151 @@ const getNearBy = async (id, radius = 50) => {
         allUserLocation[i].current_longitude,
         myCurrentLocation.current_latitude,
         myCurrentLocation.current_longitude
+      );
+
+      if (distance <= radius) {
+        nearbyUsers.push({
+          user: allUserLocation[i],
+          distance,
+        });
+      }
+    }
+    let remapData = [];
+    nearbyUsers.map(
+      (near) =>
+        (remapData = [
+          {
+            id: near?.user?.id,
+            user_id: near?.user?.user_id,
+            profile: {
+              username: near?.user?.User?.username,
+              firstName: near?.user?.User?.UserDetail?.first_name,
+              email: near?.user?.User?.email,
+              phone: near?.user?.User?.UserDetail?.phone,
+              image: near?.user?.User?.image,
+            },
+            current_position: [
+              near?.user?.current_latitude,
+              near?.user?.current_longitude,
+            ],
+            direction_position: [
+              near?.user?.direction_latitude,
+              near?.user?.direction_longitude,
+            ],
+            current_region: {
+              province: near?.user?.current_province?.name,
+              city: near?.user?.current_city?.name,
+            },
+            direction_region: {
+              province: near?.user?.direction_province?.name,
+              city: near?.user?.direction_city?.name,
+            },
+            distance: near.distance,
+          },
+        ])
+    );
+
+    resultEncrypted = encryptPayload({ decryptedData: remapData });
+
+    return Promise.resolve({
+      ok: true,
+      message: "get users nearby successful",
+      result: resultEncrypted,
+    });
+  } catch (err) {
+    console.log([fileName, "get nearby", "ERROR"], {
+      info: `${err}`,
+    });
+    return Promise.reject(GeneralHelper.errorResponse(err));
+  }
+};
+
+const getNearByInDirection = async (id, radius = 50) => {
+  let resultEncrypted = "";
+  try {
+    const myDirectionLocation = await db.Route.findOne({
+      where: { user_id: id },
+      include: [
+        { model: db.Province, as: "current_province", attributes: ["name"] },
+        { model: db.City, as: "current_city", attributes: ["name"] },
+        { model: db.Province, as: "direction_province", attributes: ["name"] },
+        { model: db.City, as: "direction_city", attributes: ["name"] },
+      ],
+      attributes: [
+        "id",
+        "current_latitude",
+        "current_longitude",
+        "direction_latitude",
+        "direction_longitude",
+      ],
+    });
+
+    if (_.isEmpty(myDirectionLocation)) {
+      resultEncrypted = encryptPayload({ decryptedData: [] });
+      return Promise.resolve({
+        ok: false,
+        message: "You don't any trip. Make some plan",
+        result: [],
+      });
+    }
+
+    const allUserLocation = await db.Route.findAll({
+      include: [
+        {
+          model: db.User,
+          attributes: ["id", "username", "email", "image"],
+          include: [
+            { model: db.UserDetail, attributes: ["phone", "first_name"] },
+          ],
+        },
+        { model: db.Province, as: "current_province", attributes: ["name"] },
+        { model: db.City, as: "current_city", attributes: ["name"] },
+        { model: db.Province, as: "direction_province", attributes: ["name"] },
+        { model: db.City, as: "direction_city", attributes: ["name"] },
+      ],
+      attributes: [
+        "id",
+        "user_id",
+        "current_latitude",
+        "current_longitude",
+        "direction_latitude",
+        "direction_longitude",
+      ],
+    });
+
+    if (_.isEmpty(allUserLocation)) {
+      resultEncrypted = encryptPayload({ decryptedData: [] });
+      return Promise.resolve({
+        ok: false,
+        message: "Another user don't have any trip yet",
+        result: resultEncrypted,
+      });
+    }
+
+    // rumus haversine
+    const distanceKm = (lat1, lon1, lat2, lon2) => {
+      const r = 6371; // km
+      const p = Math.PI / 180;
+
+      const a =
+        0.5 -
+        Math.cos((lat2 - lat1) * p) / 2 +
+        (Math.cos(lat1 * p) *
+          Math.cos(lat2 * p) *
+          (1 - Math.cos((lon2 - lon1) * p))) /
+          2;
+
+      return 2 * r * Math.asin(Math.sqrt(a));
+    };
+
+    const nearbyUsers = [];
+
+    for (let i = 0; i < allUserLocation.length; i++) {
+      const distance = distanceKm(
+        allUserLocation[i].current_latitude,
+        allUserLocation[i].current_longitude,
+        myDirectionLocation.direction_latitude,
+        myDirectionLocation.direction_longitude
       );
 
       if (distance <= radius) {
@@ -1642,7 +1790,7 @@ const getUserList = async (id, query) => {
     return Promise.resolve({
       ok: true,
       message: "Get user list successful",
-      result: userList,
+      result: resultEncrypted,
     });
   } catch (err) {
     console.log([fileName, "get Comment Post", "ERROR"], {
@@ -1801,4 +1949,5 @@ module.exports = {
   getUserList,
   createFollowTo,
   getUserProfile,
+  getNearByInDirection,
 };

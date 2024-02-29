@@ -353,7 +353,7 @@ const updateProfile = async (id, dataObject, image) => {
 
     if (isExist.username === username) {
       await transaction.rollback();
-      return Promise.reject(Boom.notFound("Username alreeady used"));
+      return Promise.reject(Boom.notFound("Username already used"));
     }
 
     if (isExist.UserDetail.phone === phone) {
@@ -371,7 +371,7 @@ const updateProfile = async (id, dataObject, image) => {
 
     console.log(id);
 
-    if (username) {
+    if (!_.isEmpty(username)) {
       await db.User.update(
         {
           username,

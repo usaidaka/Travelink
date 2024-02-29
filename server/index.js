@@ -9,6 +9,7 @@ const Port = process.env.NODEJS_PORT || 8080;
 // Import routes
 const Auth = require("./server/api/auth");
 const User = require("./server/api/user");
+const Admin = require("./server/api/admin");
 
 dotenv.config();
 app.use(cors());
@@ -75,6 +76,7 @@ app.use((req, res, next) => {
 // Route middlewares
 app.use("/api/auth", Auth);
 app.use("/api/user", User);
+app.use("/api/admin", Admin);
 
 // Sys ping api
 app.get("/sys/ping", (req, res) => {

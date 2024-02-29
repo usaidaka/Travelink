@@ -196,15 +196,27 @@ const updateProfileValidation = (data) => {
         .valid("image/jpeg", "image/png", "application/pdf")
         .optional(),
     }).optional(),
-    username: Joi.string().optional().description("User's username"),
-    email: Joi.string().optional().description("Active email"),
-    first_name: Joi.string().optional().description("User's first name"),
-    last_name: Joi.string().optional().description("User's last name"),
-    gender: Joi.string().optional().description("Male"),
-    email_contact: Joi.string().optional().description("User's parent email "),
-    phone: Joi.string().optional().description("User's phone "),
-    phone_contact: Joi.string().optional().description("User's parent phone "),
-    mbti: Joi.string().optional(),
+    username: Joi.string().allow("").optional().description("User's username"),
+    email: Joi.string().allow("").optional().description("Active email"),
+    first_name: Joi.string()
+      .allow("")
+      .optional()
+      .description("User's first name"),
+    last_name: Joi.string()
+      .allow("")
+      .optional()
+      .description("User's last name"),
+    gender: Joi.string().allow("").optional().description("Male"),
+    email_contact: Joi.string()
+      .allow("")
+      .optional()
+      .description("User's parent email "),
+    phone: Joi.string().allow("").optional().description("User's phone "),
+    phone_contact: Joi.string()
+      .allow("")
+      .optional()
+      .description("User's parent phone "),
+    mbti: Joi.string().allow("").optional(),
   });
 
   if (schema.validate(data).error) {
@@ -246,6 +258,62 @@ const comment = (data) => {
   }
 };
 
+const addDestination = (data) => {
+  const schema = Joi.object({
+    // current
+    file: Joi,
+    province_id: Joi.number().required().description("1"),
+    city_id: Joi.number().required().description("1"),
+    phone: Joi.string().required().description("User's phone "),
+    detail: Joi.string()
+      .required()
+      .description("Should be at least 8 characters"),
+    description: Joi.string()
+      .required()
+      .description("Should be at least 8 characters"),
+    longitude: Joi.string()
+      .required()
+      .description("Should be between 8-20 characters"),
+    latitude: Joi.string()
+      .required()
+      .description("Should be between 8-20 characters"),
+  });
+
+  if (schema.validate(data).error) {
+    throw Boom.badRequest(schema.validate(data).error);
+  }
+};
+
+const editDestination = (data) => {
+  const schema = Joi.object({
+    // current
+    file: Joi,
+    province_id: Joi.string().allow("").optional().description("1"),
+    city_id: Joi.string().allow("").optional().description("1"),
+    phone: Joi.string().allow("").optional().description("User's phone "),
+    detail: Joi.string()
+      .allow("")
+      .optional()
+      .description("Should be at least 8 characters"),
+    description: Joi.string()
+      .allow("")
+      .optional()
+      .description("Should be at least 8 characters"),
+    longitude: Joi.string()
+      .allow("")
+      .optional()
+      .description("Should be between 8-20 characters"),
+    latitude: Joi.string()
+      .allow("")
+      .optional()
+      .description("Should be between 8-20 characters"),
+  });
+
+  if (schema.validate(data).error) {
+    throw Boom.badRequest(schema.validate(data).error);
+  }
+};
+
 module.exports = {
   registerValidation,
   loginValidation,
@@ -260,4 +328,6 @@ module.exports = {
   updateProfileValidation,
   changePassword,
   comment,
+  addDestination,
+  editDestination,
 };

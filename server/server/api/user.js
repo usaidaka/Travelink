@@ -255,6 +255,17 @@ const nearBy = async (request, reply) => {
   }
 };
 
+const nearByInDirection = async (request, reply) => {
+  try {
+    const { id } = request.user;
+    const response = await UserHelper.getNearByInDirection(id);
+    return reply.send(response);
+  } catch (err) {
+    console.log([fileName, "nearBy", "ERROR"], { info: `${err}` });
+    return reply.send(GeneralHelper.errorResponse(err));
+  }
+};
+
 const post = async (request, reply) => {
   try {
     Validation.getPost(request.query);
@@ -435,6 +446,13 @@ Router.get(
 Router.get("/my-route", Middleware.validateToken, Middleware.isUser, myRoute);
 
 Router.get("/nearby", Middleware.validateToken, Middleware.isUser, nearBy);
+
+Router.get(
+  "/nearby/direction",
+  Middleware.validateToken,
+  Middleware.isUser,
+  nearByInDirection
+);
 
 Router.get("/region/:provinceId", region);
 
