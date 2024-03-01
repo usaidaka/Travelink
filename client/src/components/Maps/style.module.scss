@@ -10,6 +10,8 @@
 
   .sidebar-right {
     @include directionX;
+    position: relative;
+    z-index: 10;
     justify-content: center;
     align-items: center;
     height: fit-content;

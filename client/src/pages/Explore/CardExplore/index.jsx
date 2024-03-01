@@ -50,10 +50,6 @@ const CardExplore = ({ post, comment, user, handleDeletePost }) => {
     setDecryptedUser(decryptPayload(user));
   }, [user]);
 
-  useEffect(() => {
-    dispatch(getComment(post.id));
-  }, [dispatch, post.id]);
-
   const {
     register,
     reset,
@@ -66,7 +62,6 @@ const CardExplore = ({ post, comment, user, handleDeletePost }) => {
   };
 
   const handleDeleteComment = (commentId) => {
-    console.log(commentId);
     dispatch(
       deleteComment(commentId, (message) => {
         toast.success(message, { duration: 1000 });
@@ -78,7 +73,6 @@ const CardExplore = ({ post, comment, user, handleDeletePost }) => {
   };
 
   const onSubmit = (data) => {
-    console.log(data);
     setLoading(true);
     dispatch(
       doComment(post.id, data, (message) => {
@@ -147,7 +141,11 @@ const CardExplore = ({ post, comment, user, handleDeletePost }) => {
                           <FormattedMessage id="no" />
                         </Button>
                         <Button
-                          onClick={() => handleDeletePost(post.id)}
+                          onClick={() => {
+                            handleDeletePost(post.id);
+                            handleCloseDelete();
+                            handleCloseMenu();
+                          }}
                           size="small"
                           variant="contained"
                           color="primary"

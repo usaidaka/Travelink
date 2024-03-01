@@ -111,7 +111,7 @@ export default {
   nearbyCurrent: 'Orang Terdekat Lokasi Saat Ini',
   nearbyDirection: 'Orang Terdekat Lokasi Tujuan',
   nearby: 'Terdekat',
-  destinationRecommendation: 'Rekomendasi Tujuan',
+  destinationRecommendation: 'Rekomendasi',
   from: 'Dari',
   to: 'Ke',
 };

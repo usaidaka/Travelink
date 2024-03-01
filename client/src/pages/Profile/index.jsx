@@ -51,7 +51,6 @@ const Profile = ({ post, profile, location, connection, myFollow }) => {
   };
 
   const handleDeleteFollower = (followId) => {
-    console.log(followId);
     dispatch(
       doDeleteFollower(followId, (message) => {
         toast.success(message, { duration: 1000 });
@@ -89,8 +88,9 @@ const Profile = ({ post, profile, location, connection, myFollow }) => {
     dispatch(
       doDeletePost(postId, (message) => {
         toast.success(message, { duration: 1000 });
-        dispatch(getPost());
-        setMyPosts(myPosts.filter((postTest) => postTest.id !== postId));
+        setMyPosts((prev) => prev.filter((x) => x.id !== postId));
+        // setNext(0);
+        dispatch(getConnectionData());
       })
     );
   };
@@ -114,6 +114,10 @@ const Profile = ({ post, profile, location, connection, myFollow }) => {
   }, [post, post.myPost]);
 
   useEffect(() => {
+    setMyPosts([]);
+  }, [setMyPosts]);
+
+  useEffect(() => {
     if (!_.isEmpty(profile)) {
       setDecryptedProfile(decryptPayload(profile));
     }
@@ -129,6 +133,8 @@ const Profile = ({ post, profile, location, connection, myFollow }) => {
       setDecryptedMyFollow(decryptPayload(myFollow));
     }
   }, [connection, location, myFollow, profile]);
+
+  console.log(post.myPost.length);
 
   if (render) {
     return <Loader isLoading={render} />;

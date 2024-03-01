@@ -9,6 +9,11 @@ import classes from './style.module.scss';
 
 const CardPeople = ({ data, handleFollow }) => {
   const [marker, setMarker] = useState([]);
+  const [isFollow, setIsFollow] = useState(data.Follow);
+
+  useEffect(() => {
+    setIsFollow(data.Follow);
+  }, [data.Follow]);
 
   console.log(data);
 
@@ -51,15 +56,31 @@ const CardPeople = ({ data, handleFollow }) => {
       <div className={classes['info-container']}>
         <div className={classes.info}>
           <div className={classes['button-wrapper']}>
-            {data.Follow ? (
-              <button onClick={() => handleFollow(data.id)} type="button" className={classes.unfollow}>
-                <FormattedMessage id="unfollow" />
-              </button>
-            ) : (
-              <button onClick={() => handleFollow(data.id)} type="button" className={classes.follow}>
-                <FormattedMessage id="follow" />
-              </button>
-            )}
+            {
+              /* data.Follow */ !isFollow ? (
+                <button
+                  onClick={() => {
+                    handleFollow(data.id);
+                    setIsFollow(!isFollow);
+                  }}
+                  type="button"
+                  className={classes.unfollow}
+                >
+                  <FormattedMessage id="unfollow" />
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    handleFollow(data.id);
+                    setIsFollow(!isFollow);
+                  }}
+                  type="button"
+                  className={classes.follow}
+                >
+                  <FormattedMessage id="follow" />
+                </button>
+              )
+            }
           </div>
           <div className={classes.data}>
             <span className={classes.username}>@{data.username}</span>

@@ -226,7 +226,11 @@ const Navbar = ({ locale, theme, isLogin, profile, children, nearby }) => {
               </span>
             </Link>
 
-            <Link to="/nearby" className={classes.nav} data-active={pathname === '/nearby'}>
+            <Link
+              to="/nearby"
+              className={classes.nav}
+              data-active={pathname === '/nearby' || pathname === '/nearby/direction'}
+            >
               <PersonPinIcon />
               <span>
                 <FormattedMessage id="nearby" />

@@ -45,6 +45,7 @@ const Maps = ({
           : null;
       break;
     case 'SidebarRight':
+      console.log(marker);
       renderedMarker =
         !_.isEmpty(marker) &&
         marker.map((pin) => (
@@ -70,7 +71,7 @@ const Maps = ({
                   </span>
 
                   <span className={classes.profile}>
-                    <Link to="/">
+                    <Link to={`/profile/${pin?.user_id}`}>
                       <FormattedMessage id="goToProfile" />
                     </Link>
                   </span>

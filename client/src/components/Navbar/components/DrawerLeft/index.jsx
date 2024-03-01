@@ -117,7 +117,7 @@ const DrawerLeft = ({ user }) => {
           >
             <WhereToVoteIcon />
             <span>
-              <FormattedMessage id="nearby" />
+              <FormattedMessage id="destinationRecommendation" />
             </span>
           </Link>
 

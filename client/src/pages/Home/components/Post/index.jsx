@@ -152,6 +152,7 @@ const Post = ({ province, city, fetch, next }) => {
                 className={classes['input-image']}
                 ref={uploadRef}
                 aria-invalid={errors.image ? 'true' : 'false'}
+                disabled={loading}
               />
               <button
                 type="button"
@@ -162,7 +163,7 @@ const Post = ({ province, city, fetch, next }) => {
               >
                 <ImageIcon />
               </button>
-              <button onClick={handleOpen} type="button" className={classes.ref}>
+              <button disabled={loading} onClick={handleOpen} type="button" className={classes.ref}>
                 <PlaceIcon />
               </button>
 

@@ -22,25 +22,38 @@ import CardPeople from './components/CardPeople';
 
 const People = ({ userList }) => {
   const dispatch = useDispatch();
-  console.log(userList);
 
   const [next, setNext] = useState(0);
 
   const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get('username');
 
-  const [decryptedUserList, setDecrytedUserList] = useState({});
   const [userListData, setUserListData] = useState([]);
   const [isMore, setIsMore] = useState(false);
   const [search, setSearch] = useState('');
 
-  const getUserListSearch = (query) => {
+  /* CODE BARU */
+
+  useEffect(() => {
+    dispatch(getUserList());
+  }, [dispatch]);
+
+  console.log(userList);
+  useEffect(() => {
+    if (!_.isEmpty(userList)) {
+      const decryptedData = decryptPayload(userList);
+      setUserListData((prev) => [...prev, ...decryptedData]);
+      setIsMore(decryptedData.length >= 6);
+    }
+  }, [userList]);
+
+  const getUserListSearch = (query, nextLoad) => {
     if (query) {
       setSearchParams({ username: query });
     } else {
       setSearchParams({});
     }
-    dispatch(getUserList({ ...(query !== '' && { username: query, next, limit: 6 }) }));
+    dispatch(getUserList({ ...(query !== '' && { username: query, next: nextLoad, limit: 6 }) }));
   };
 
   const getUserListFromApi = () => {
@@ -53,31 +66,19 @@ const People = ({ userList }) => {
   };
 
   const handleLoadMore = () => {
-    setNext((prev) => prev + 6);
-    getUserListSearch();
+    setNext((prev) => {
+      getUserListSearch(null, prev + 6);
+      return prev + 6;
+    });
   };
 
   useEffect(() => {
-    if (!_.isEmpty(userList)) {
-      setDecrytedUserList(decryptPayload(userList));
-    }
-  }, [userList]);
-
-  useEffect(() => {
-    if (!_.isEmpty(decryptedUserList)) {
-      setUserListData((prev) => [...prev, ...decryptedUserList]);
-      setIsMore(decryptedUserList.length >= 6);
-    }
-  }, [decryptedUserList]);
-
-  useEffect(() => {
-    getUserListSearch();
+    setUserListData([]);
   }, []);
 
   useEffect(() => {
     if (searchQuery) {
       setSearch(searchQuery);
-      getUserListSearch(searchQuery);
     }
   }, []);
 
@@ -88,12 +89,13 @@ const People = ({ userList }) => {
         if (search) {
           handleSearch();
         } else {
-          getUserListFromApi();
-          setUserListData([]);
+          setNext(0);
         }
       })
     );
   };
+
+  // ===========================
 
   return (
     <div className={classes.container}>
@@ -128,7 +130,7 @@ const People = ({ userList }) => {
         </div>
       </div>
       <div className={classes['card-container']}>
-        {!_.isEmpty(decryptedUserList) &&
+        {!_.isEmpty(userListData) &&
           userListData?.map((data) => <CardPeople key={data.id} data={data} handleFollow={handleFollow} />)}
       </div>
 
@@ -139,7 +141,7 @@ const People = ({ userList }) => {
           </button>
         </div>
       )) ||
-        (decryptedUserList.length === 0 && null) || (
+        (userListData.length === 0 && null) || (
           <a href="#top" className={classes.expand}>
             <button type="button">
               <VerticalAlignTopIcon />

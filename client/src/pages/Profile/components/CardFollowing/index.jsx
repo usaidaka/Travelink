@@ -16,7 +16,7 @@ const CardFollowing = ({ follow, handleFollow }) => {
         <h6>{follow?.followTo?.username}</h6>
       </div>
       <div className={classes.action}>
-        {pathname === '/profil' && (
+        {pathname === '/profile' && (
           <Button
             onClick={() => handleFollow(follow?.followTo?.id)}
             variant="contained"

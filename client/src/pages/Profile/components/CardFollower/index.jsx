@@ -6,7 +6,6 @@ import { useLocation } from 'react-router-dom';
 import classes from './style.module.scss';
 
 const CardFollower = ({ follow, handleDeleteFollower }) => {
-  console.log(follow);
   const { pathname } = useLocation();
   return (
     <div className={classes.container}>

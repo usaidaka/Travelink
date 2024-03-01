@@ -32,8 +32,7 @@ const Explore = ({ post }) => {
     dispatch(
       doDeletePost(postId, (message) => {
         toast.success(message, { duration: 1000 });
-        dispatch(getPost({ next, limit: 6 }));
-        setAllPostData([]);
+        setAllPostData((prev) => prev.filter((x) => x.id !== postId));
       })
     );
   };
@@ -47,6 +46,10 @@ const Explore = ({ post }) => {
       setIsMore(false);
     }
   }, [post, post.allPost]);
+
+  useEffect(() => {
+    setAllPostData([]);
+  }, [setAllPostData]);
 
   return (
     <div className={classes.container}>

@@ -5,7 +5,7 @@ import Carousel from 'react-material-ui-carousel';
 import { FormattedMessage } from 'react-intl';
 import { Button, Modal } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import classes from './style.module.scss';
 
@@ -14,6 +14,8 @@ const CardDestination = ({ pin, handleDeleteDestination }) => {
   const [openDeleteDestination, setOpenDeleteDestination] = useState(false);
   const handleOpenDeleteDestination = () => setOpenDeleteDestination(true);
   const handleCloseDeleteDestination = () => setOpenDeleteDestination(false);
+
+  const { pathname } = useLocation();
 
   console.log(pin);
   return (
@@ -53,46 +55,48 @@ const CardDestination = ({ pin, handleDeleteDestination }) => {
             <span>{pin.description}</span>
           </div>
         </div>
-        <div className={classes.edit}>
-          <div>
-            <Button onClick={handleOpenDeleteDestination} variant="outlined" color="error" size="small">
-              <DeleteIcon className={classes.icon} />
-            </Button>
-            <Modal
-              open={openDeleteDestination}
-              onClose={handleCloseDeleteDestination}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-            >
-              <div className={classes['delete-modal']}>
-                <div className={classes.message}>
-                  <FormattedMessage id="deleteDestinationConfirmation" />
-                  <div className={classes.button}>
-                    <Button onClick={handleCloseDeleteDestination} size="small" variant="outlined" color="error">
-                      <FormattedMessage id="no" />
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        handleDeleteDestination(pin.id);
-                        handleCloseDeleteDestination();
-                      }}
-                      size="small"
-                      variant="contained"
-                      color="primary"
-                    >
-                      <FormattedMessage id="yes" />
-                    </Button>
+        {pathname !== '/admin/destination' || (
+          <div className={classes.edit}>
+            <div>
+              <Button onClick={handleOpenDeleteDestination} variant="outlined" color="error" size="small">
+                <DeleteIcon className={classes.icon} />
+              </Button>
+              <Modal
+                open={openDeleteDestination}
+                onClose={handleCloseDeleteDestination}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+              >
+                <div className={classes['delete-modal']}>
+                  <div className={classes.message}>
+                    <FormattedMessage id="deleteDestinationConfirmation" />
+                    <div className={classes.button}>
+                      <Button onClick={handleCloseDeleteDestination} size="small" variant="outlined" color="error">
+                        <FormattedMessage id="no" />
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          handleDeleteDestination(pin.id);
+                          handleCloseDeleteDestination();
+                        }}
+                        size="small"
+                        variant="contained"
+                        color="primary"
+                      >
+                        <FormattedMessage id="yes" />
+                      </Button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Modal>
+              </Modal>
+            </div>
+            <Link to={`${pin.id}`}>
+              <Button color="success" variant="contained" size="small">
+                <EditIcon className={classes.icon} />
+              </Button>
+            </Link>
           </div>
-          <Link to={`${pin.id}`}>
-            <Button color="success" variant="contained" size="small">
-              <EditIcon className={classes.icon} />
-            </Button>
-          </Link>
-        </div>
+        )}
       </div>
     </div>
   );

@@ -110,7 +110,7 @@ export default {
   nearbyCurrent: 'People Nearby Current Location',
   nearbyDirection: 'People Nearby Direction Location',
   nearby: 'Nearby',
-  destinationRecommendation: 'Destination Recommendation',
+  destinationRecommendation: 'Recommendation',
   from: 'From',
   to: 'To',
 };

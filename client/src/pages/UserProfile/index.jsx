@@ -93,7 +93,7 @@ const UserProfile = ({ userProfile, posts, userConnection, userFollow }) => {
         console.log(message);
         toast.success(message, { duration: 1000 });
         dispatch(getUserProfile(followTo));
-        setDecryptedUserProfile(decryptPayload(userProfile));
+        dispatch(getUserFollow(userId));
       })
     );
   };
