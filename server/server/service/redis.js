@@ -81,6 +81,8 @@ const getKey = async (dataObject) => {
 
 const setKey = async (dataObject) => {
   const { key, value, isSetExpired, second, isErrorOptional } = dataObject;
+  console.log(second);
+  console.log(isSetExpired);
   return new Promise((resolve, reject) => {
     __redis().set(key, value, (err, result) => {
       if (err) {
@@ -97,8 +99,12 @@ const setKey = async (dataObject) => {
       }
 
       if (isSetExpired) {
+        console.log(!_.isEmpty(second), "!isEmpty");
+        console.log(!Number.isNaN(Number(second)), "isNaN");
         let expiredSecond = 86400; // Default expiry one day
-        if (!_.isEmpty(second) && !Number.isNaN(Number(second))) {
+        if (second !== 0 && !Number.isNaN(Number(second))) {
+          console.log("test ini");
+          console.log(second, "<<<< SECOND");
           expiredSecond = Number(second);
         }
         __redis().expire(key, expiredSecond, (error) => {
