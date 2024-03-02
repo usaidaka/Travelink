@@ -1,0 +1,23 @@
+{
+  "followersData": [],
+  "followersCount": 0,
+  "followingsData": [
+    {
+      "id": 21,
+      "follow_by": 1,
+      "follow_to": 6,
+      "createdAt": "2024-02-29T09:22:06.000Z",
+      "followTo": {
+        "username": "Irene",
+        "createdAt": "2001-03-02T19:26:12.000Z",
+        "id": 6,
+        "email": "irer8@outlook.com",
+        "image": "https://images.unsplash.com/photo-1551847812-f815b31ae67c?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "UserDetail": null,
+        "Route": null
+      }
+    }
+  ],
+  "followingsCount": 0,
+  "totalPost": 13
+}

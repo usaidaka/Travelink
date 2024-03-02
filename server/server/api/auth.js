@@ -43,7 +43,6 @@ const login = async (request, reply) => {
 const forgotPassword = async (request, reply) => {
   try {
     const decryptedData = decryptPayload(request.body);
-    console.log(decryptedData);
 
     Validation.forgotPasswordValidation(decryptedData);
 
@@ -113,19 +112,6 @@ const hello = async (request, reply) => {
   return reply.send("HELLO");
 };
 
-const test = async (request, reply) => {
-  try {
-    const data = request.file;
-    console.log(request.file);
-    const response = await AuthHelper.test(data);
-
-    return reply.send(response);
-  } catch (err) {
-    console.log([fileName, "login", "ERROR"], { info: `${err}` });
-    return reply.send(GeneralHelper.errorResponse(err));
-  }
-};
-
 Router.post("/register", register);
 Router.post("/login", login);
 Router.post("/forgot-password", forgotPassword);
@@ -138,6 +124,5 @@ Router.patch(
 );
 Router.patch("/change-password", Middleware.validateToken, changePassword);
 Router.get("/hello", Middleware.validateToken, hello);
-Router.get("/test", handleUploadImage, test);
 
 module.exports = Router;

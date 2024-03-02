@@ -1,0 +1,59 @@
+[
+  {
+    "id": 1,
+    "user_id": 1,
+    "current_province_id": 9,
+    "current_city_id": 126,
+    "direction_province_id": 10,
+    "direction_city_id": 348,
+    "current_detail": "hgjqwe",
+    "current_longitude": "106.841769",
+    "current_latitude": "-6.2242114",
+    "direction_detail": "iuyiasdasdzxc",
+    "direction_longitude": "120.2839798",
+    "direction_latitude": "-8.7693197",
+    "deletedAt": null,
+    "createdAt": "2024-02-24T14:24:25.000Z",
+    "current_province": {
+      "name": "Jawa Barat"
+    },
+    "current_city": {
+      "name": "Kabupaten Garut"
+    },
+    "direction_province": {
+      "name": "Jawa Tengah"
+    },
+    "direction_city": {
+      "name": "Kabupaten Pekalongan"
+    }
+  },
+
+  {
+    "id": 2,
+    "user_id": 1,
+    "current_province_id": 9,
+    "current_city_id": 126,
+    "direction_province_id": 10,
+    "direction_city_id": 348,
+    "current_detail": "hgjqwe",
+    "current_longitude": "106.841769",
+    "current_latitude": "-6.2242114",
+    "direction_detail": "iuyiasdasdzxc",
+    "direction_longitude": "120.2839798",
+    "direction_latitude": "-8.7693197",
+    "deletedAt": null,
+    "createdAt": "2024-02-24T14:24:25.000Z",
+    "current_province": {
+      "name": "Jawa Barat"
+    },
+    "current_city": {
+      "name": "Kabupaten Garut"
+    },
+    "direction_province": {
+      "name": "Jawa Tengah"
+    },
+    "direction_city": {
+      "name": "Kabupaten Pekalongan"
+    }
+  }
+]

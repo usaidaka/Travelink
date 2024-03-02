@@ -1,6 +1,18 @@
 {
   "id": 1,
-  "name": "Jane Doe",
-  "email": "janedoe@acme.com",
-  "password": "$2a$10$mGf6u6WbJTdSBo6GCQN8/eLnRAiSsfLeslVsuifmm.wjEAqfYO27i"
+  "username": "jokoTanes",
+  "email": "janedoe@gmail.com",
+  "password": "$2a$10$GsXw97gpyj84Qpk/ct2yo.LLlMNUvkPHhUT8nQ.k48ADdhahMWhP2",
+  "role": "User",
+  "image": "https://jwt.io/",
+  "UserDetail": {
+    "user_id": 1,
+    "first_name": "joko",
+    "last_name": "tanes",
+    "gender": "Male",
+    "email_contact": "mama@gmail.com",
+    "phone": "089652433206",
+    "phone_contact": "08121312321",
+    "mbti": "ISTJ"
+  }
 }

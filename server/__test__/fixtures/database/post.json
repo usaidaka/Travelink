@@ -1,0 +1,22 @@
+{
+  "id": 49,
+  "user_id": 2,
+  "caption": "The past has no power over the present moment. You cannot save people, you can just love them.",
+  "location_name": "Lan",
+  "createdAt": "2013-05-24T07:20:09.000Z",
+  "ImagePosts": [
+    {
+      "image": "https://images.unsplash.com/photo-1477064601209-5ed2b9f3b1fc?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+    }
+  ],
+  "Province": {
+    "name": "Bangka Belitung"
+  },
+  "City": {
+    "name": "Kabupaten Bengkulu Tengah"
+  },
+  "User": {
+    "username": "Xiuying",
+    "image": "https://img.freepik.com/free-photo/close-up-smiley-man-taking-selfie_23-2149155156.jpg"
+  }
+}

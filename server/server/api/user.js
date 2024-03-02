@@ -39,7 +39,7 @@ const connectionById = async (request, reply) => {
   try {
     const { userId } = request.params;
 
-    const response = await UserHelper.getMyConnection(userId);
+    const response = await UserHelper.getConnectionById(userId);
 
     return reply.send(response);
   } catch (err) {
@@ -48,37 +48,37 @@ const connectionById = async (request, reply) => {
   }
 };
 
-const myAddress = async (request, reply) => {
-  try {
-    const { id } = request.user;
-    console.log(id);
+// const myAddress = async (request, reply) => {
+//   try {
+//     const { id } = request.user;
+//     console.log(id);
 
-    const response = await UserHelper.getMyAddress(id);
+//     const response = await UserHelper.getMyAddress(id);
 
-    return reply.send(response);
-  } catch (err) {
-    console.log([fileName, "my Address", "ERROR"], { info: `${err}` });
-    return reply.send(GeneralHelper.errorResponse(err));
-  }
-};
+//     return reply.send(response);
+//   } catch (err) {
+//     console.log([fileName, "my Address", "ERROR"], { info: `${err}` });
+//     return reply.send(GeneralHelper.errorResponse(err));
+//   }
+// };
 
-const addAddress = async (request, reply) => {
-  try {
-    console.log(request.body, "<<<<");
+// const addAddress = async (request, reply) => {
+//   try {
+//     console.log(request.body, "<<<<");
 
-    const decryptedData = decryptPayload(request.body);
-    const { id } = request.user;
+//     const decryptedData = decryptPayload(request.body);
+//     const { id } = request.user;
 
-    Validation.addAddressValidation(decryptedData);
+//     Validation.addAddressValidation(decryptedData);
 
-    const response = await UserHelper.createAddress(id, decryptedData);
+//     const response = await UserHelper.createAddress(id, decryptedData);
 
-    return reply.send(response);
-  } catch (err) {
-    console.log([fileName, "add Address", "ERROR"], { info: `${err}` });
-    return reply.send(GeneralHelper.errorResponse(err));
-  }
-};
+//     return reply.send(response);
+//   } catch (err) {
+//     console.log([fileName, "add Address", "ERROR"], { info: `${err}` });
+//     return reply.send(GeneralHelper.errorResponse(err));
+//   }
+// };
 
 const addRoute = async (request, reply) => {
   try {
@@ -396,6 +396,9 @@ const userList = async (request, reply) => {
   try {
     const { id } = request.user;
     const query = request.query;
+
+    Validation.userList(query);
+
     const response = await UserHelper.getUserList(id, query);
     return reply.send(response);
   } catch (err) {
@@ -472,12 +475,12 @@ const userProfile = async (request, reply) => {
 // GET
 Router.get("/profile", Middleware.validateToken, Middleware.isUser, myProfile);
 
-Router.get(
-  "/my-address",
-  Middleware.validateToken,
-  Middleware.isUser,
-  myAddress
-);
+// Router.get(
+//   "/my-address",
+//   Middleware.validateToken,
+//   Middleware.isUser,
+//   myAddress
+// );
 
 Router.get("/my-route", Middleware.validateToken, Middleware.isUser, myRoute);
 
@@ -535,12 +538,12 @@ Router.get(
 );
 
 // POST
-Router.post(
-  "/address",
-  Middleware.validateToken,
-  Middleware.isUser,
-  addAddress
-);
+// Router.post(
+//   "/address",
+//   Middleware.validateToken,
+//   Middleware.isUser,
+//   addAddress
+// );
 
 Router.post(
   "/post",

@@ -1,0 +1,356 @@
+{
+  "allPost": [
+    {
+      "id": 103,
+      "user_id": 1,
+      "caption": "",
+      "location_name": "",
+      "createdAt": "2024-03-01T17:03:58.000Z",
+      "ImagePosts": [
+        {
+          "image": "http://res.cloudinary.com/dgdxx2chz/image/upload/v1709312639/image/aeztefibb8ivdk7etpw5.png"
+        }
+      ],
+      "Province": null,
+      "City": null,
+      "User": {
+        "username": "aka",
+        "image": "https://jwt.io/"
+      }
+    },
+    {
+      "id": 102,
+      "user_id": 1,
+      "caption": "",
+      "location_name": "",
+      "createdAt": "2024-03-01T14:24:54.000Z",
+      "ImagePosts": [
+        {
+          "image": "http://res.cloudinary.com/dgdxx2chz/image/upload/v1709303098/image/uanha4h7jxrsmpctpux5.png"
+        }
+      ],
+      "Province": null,
+      "City": null,
+      "User": {
+        "username": "aka",
+        "image": "https://jwt.io/"
+      }
+    },
+    {
+      "id": 101,
+      "user_id": 1,
+      "caption": "",
+      "location_name": "",
+      "createdAt": "2024-03-01T11:36:28.000Z",
+      "ImagePosts": [
+        {
+          "image": "http://res.cloudinary.com/dgdxx2chz/image/upload/v1709292991/image/elpyoxctiwxuojluj08s.png"
+        }
+      ],
+      "Province": null,
+      "City": null,
+      "User": {
+        "username": "aka",
+        "image": "https://jwt.io/"
+      }
+    },
+    {
+      "id": 99,
+      "user_id": 1,
+      "caption": "",
+      "location_name": "",
+      "createdAt": "2024-03-01T11:30:10.000Z",
+      "ImagePosts": [
+        {
+          "image": "http://res.cloudinary.com/dgdxx2chz/image/upload/v1709292614/image/ozhs1zuyheizyn0tr4qb.png"
+        }
+      ],
+      "Province": null,
+      "City": null,
+      "User": {
+        "username": "aka",
+        "image": "https://jwt.io/"
+      }
+    },
+    {
+      "id": 98,
+      "user_id": 1,
+      "caption": "",
+      "location_name": "",
+      "createdAt": "2024-03-01T11:15:26.000Z",
+      "ImagePosts": [
+        {
+          "image": "http://res.cloudinary.com/dgdxx2chz/image/upload/v1709291729/image/ddmswcfj1apbg2bdpkup.png"
+        }
+      ],
+      "Province": null,
+      "City": null,
+      "User": {
+        "username": "aka",
+        "image": "https://jwt.io/"
+      }
+    },
+    {
+      "id": 97,
+      "user_id": 1,
+      "caption": "",
+      "location_name": "",
+      "createdAt": "2024-03-01T09:37:03.000Z",
+      "ImagePosts": [
+        {
+          "image": "http://res.cloudinary.com/dgdxx2chz/image/upload/v1709285826/image/wa62gwaxwgkozdphgst2.png"
+        }
+      ],
+      "Province": null,
+      "City": null,
+      "User": {
+        "username": "aka",
+        "image": "https://jwt.io/"
+      }
+    }
+  ],
+  "myPost": [
+    {
+      "id": 64,
+      "user_id": 2,
+      "caption": "Navicat provides a wide range advanced features, such as compelling code editing capabilities, smart",
+      "location_name": "Kenta",
+      "createdAt": "2007-08-05T19:39:23.000Z",
+      "ImagePosts": [
+        {
+          "image": "https://images.unsplash.com/photo-1708591807770-545b1bd6021e?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        }
+      ],
+      "Province": {
+        "name": "Papua Barat"
+      },
+      "City": {
+        "name": "Kota Makassar"
+      },
+      "User": {
+        "username": "Xiuying",
+        "image": "https://img.freepik.com/free-photo/close-up-smiley-man-taking-selfie_23-2149155156.jpg"
+      }
+    },
+    {
+      "id": 61,
+      "user_id": 2,
+      "caption": "A man’s best friends are his ten fingers. To successfully establish a new connection to local/remo",
+      "location_name": "家文",
+      "createdAt": "2000-01-13T22:22:43.000Z",
+      "ImagePosts": [],
+      "Province": {
+        "name": "Sulawesi Selatan"
+      },
+      "City": {
+        "name": "Kabupaten Pegunungan Bintang"
+      },
+      "User": {
+        "username": "Xiuying",
+        "image": "https://img.freepik.com/free-photo/close-up-smiley-man-taking-selfie_23-2149155156.jpg"
+      }
+    },
+    {
+      "id": 58,
+      "user_id": 2,
+      "caption": "The On Startup feature allows you to control what tabs appear when you launch Navicat. Navicat autho",
+      "location_name": "Lu",
+      "createdAt": "2004-07-22T15:32:34.000Z",
+      "ImagePosts": [],
+      "Province": {
+        "name": "Maluku Utara"
+      },
+      "City": {
+        "name": "Kota Kupang"
+      },
+      "User": {
+        "username": "Xiuying",
+        "image": "https://img.freepik.com/free-photo/close-up-smiley-man-taking-selfie_23-2149155156.jpg"
+      }
+    },
+    {
+      "id": 52,
+      "user_id": 2,
+      "caption": "Navicat 15 has added support for the system-wide dark mode. Anyone who has never made a mistake has ",
+      "location_name": "Hana",
+      "createdAt": "2020-11-18T01:48:32.000Z",
+      "ImagePosts": [
+        {
+          "image": "https://images.unsplash.com/photo-1477064601209-5ed2b9f3b1fc?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        }
+      ],
+      "Province": {
+        "name": "Nanggroe Aceh Darussalam (NAD)"
+      },
+      "City": {
+        "name": "Kabupaten Mamuju"
+      },
+      "User": {
+        "username": "Xiuying",
+        "image": "https://img.freepik.com/free-photo/close-up-smiley-man-taking-selfie_23-2149155156.jpg"
+      }
+    },
+    {
+      "id": 49,
+      "user_id": 2,
+      "caption": "The past has no power over the present moment. You cannot save people, you can just love them.",
+      "location_name": "Lan",
+      "createdAt": "2013-05-24T07:20:09.000Z",
+      "ImagePosts": [
+        {
+          "image": "https://images.unsplash.com/photo-1477064601209-5ed2b9f3b1fc?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        }
+      ],
+      "Province": {
+        "name": "Bangka Belitung"
+      },
+      "City": {
+        "name": "Kabupaten Bengkulu Tengah"
+      },
+      "User": {
+        "username": "Xiuying",
+        "image": "https://img.freepik.com/free-photo/close-up-smiley-man-taking-selfie_23-2149155156.jpg"
+      }
+    },
+    {
+      "id": 45,
+      "user_id": 2,
+      "caption": "SSH serves to prevent such vulnerabilities and allows you to access a remote server's shell without ",
+      "location_name": "秀英",
+      "createdAt": "2002-02-01T10:40:24.000Z",
+      "ImagePosts": [],
+      "Province": {
+        "name": "Kalimantan Tengah"
+      },
+      "City": {
+        "name": "Kabupaten Jembrana"
+      },
+      "User": {
+        "username": "Xiuying",
+        "image": "https://img.freepik.com/free-photo/close-up-smiley-man-taking-selfie_23-2149155156.jpg"
+      }
+    }
+  ],
+  "followingPost": [
+    {
+      "id": 64,
+      "user_id": 2,
+      "caption": "Navicat provides a wide range advanced features, such as compelling code editing capabilities, smart",
+      "location_name": "Kenta",
+      "createdAt": "2007-08-05T19:39:23.000Z",
+      "ImagePosts": [
+        {
+          "image": "https://images.unsplash.com/photo-1708591807770-545b1bd6021e?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        }
+      ],
+      "Province": {
+        "name": "Papua Barat"
+      },
+      "City": {
+        "name": "Kota Makassar"
+      },
+      "User": {
+        "username": "Xiuying",
+        "image": "https://img.freepik.com/free-photo/close-up-smiley-man-taking-selfie_23-2149155156.jpg"
+      }
+    },
+    {
+      "id": 61,
+      "user_id": 2,
+      "caption": "A man’s best friends are his ten fingers. To successfully establish a new connection to local/remo",
+      "location_name": "家文",
+      "createdAt": "2000-01-13T22:22:43.000Z",
+      "ImagePosts": [],
+      "Province": {
+        "name": "Sulawesi Selatan"
+      },
+      "City": {
+        "name": "Kabupaten Pegunungan Bintang"
+      },
+      "User": {
+        "username": "Xiuying",
+        "image": "https://img.freepik.com/free-photo/close-up-smiley-man-taking-selfie_23-2149155156.jpg"
+      }
+    },
+    {
+      "id": 58,
+      "user_id": 2,
+      "caption": "The On Startup feature allows you to control what tabs appear when you launch Navicat. Navicat autho",
+      "location_name": "Lu",
+      "createdAt": "2004-07-22T15:32:34.000Z",
+      "ImagePosts": [],
+      "Province": {
+        "name": "Maluku Utara"
+      },
+      "City": {
+        "name": "Kota Kupang"
+      },
+      "User": {
+        "username": "Xiuying",
+        "image": "https://img.freepik.com/free-photo/close-up-smiley-man-taking-selfie_23-2149155156.jpg"
+      }
+    },
+    {
+      "id": 52,
+      "user_id": 2,
+      "caption": "Navicat 15 has added support for the system-wide dark mode. Anyone who has never made a mistake has ",
+      "location_name": "Hana",
+      "createdAt": "2020-11-18T01:48:32.000Z",
+      "ImagePosts": [
+        {
+          "image": "https://images.unsplash.com/photo-1477064601209-5ed2b9f3b1fc?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        }
+      ],
+      "Province": {
+        "name": "Nanggroe Aceh Darussalam (NAD)"
+      },
+      "City": {
+        "name": "Kabupaten Mamuju"
+      },
+      "User": {
+        "username": "Xiuying",
+        "image": "https://img.freepik.com/free-photo/close-up-smiley-man-taking-selfie_23-2149155156.jpg"
+      }
+    },
+    {
+      "id": 49,
+      "user_id": 2,
+      "caption": "The past has no power over the present moment. You cannot save people, you can just love them.",
+      "location_name": "Lan",
+      "createdAt": "2013-05-24T07:20:09.000Z",
+      "ImagePosts": [
+        {
+          "image": "https://images.unsplash.com/photo-1477064601209-5ed2b9f3b1fc?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        }
+      ],
+      "Province": {
+        "name": "Bangka Belitung"
+      },
+      "City": {
+        "name": "Kabupaten Bengkulu Tengah"
+      },
+      "User": {
+        "username": "Xiuying",
+        "image": "https://img.freepik.com/free-photo/close-up-smiley-man-taking-selfie_23-2149155156.jpg"
+      }
+    },
+    {
+      "id": 45,
+      "user_id": 2,
+      "caption": "SSH serves to prevent such vulnerabilities and allows you to access a remote server's shell without ",
+      "location_name": "秀英",
+      "createdAt": "2002-02-01T10:40:24.000Z",
+      "ImagePosts": [],
+      "Province": {
+        "name": "Kalimantan Tengah"
+      },
+      "City": {
+        "name": "Kabupaten Jembrana"
+      },
+      "User": {
+        "username": "Xiuying",
+        "image": "https://img.freepik.com/free-photo/close-up-smiley-man-taking-selfie_23-2149155156.jpg"
+      }
+    }
+  ]
+}

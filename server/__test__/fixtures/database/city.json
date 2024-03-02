@@ -1,0 +1,14 @@
+[
+  {
+    "id": 17,
+    "province_id": 1,
+    "name": "Kabupaten Badung",
+    "postal_code": "80351"
+  },
+  {
+    "id": 27,
+    "province_id": 2,
+    "name": "Kabupaten Bangka",
+    "postal_code": "33212"
+  }
+]

@@ -149,6 +149,7 @@ const getMyConnection = async (id) => {
 };
 
 const getConnectionById = async (userId) => {
+  console.log(userId);
   try {
     const followersData = await db.Follow.findAll({
       where: { follow_to: userId },
@@ -262,100 +263,100 @@ const getConnectionById = async (userId) => {
   }
 };
 
-const getMyAddress = async (id) => {
-  try {
-    const myAddress = await db.Address.findAll({
-      where: { user_id: id },
-      attributes: {
-        exclude: ["deletedAt", "createdAt", "updatedAt", "id"],
-      },
-      include: [
-        {
-          model: db.Province,
-          attributes: ["name"],
-        },
-        {
-          model: db.City,
-          attributes: ["name"],
-        },
-      ],
-    });
+// const getMyAddress = async (id) => {
+//   try {
+//     const myAddress = await db.Address.findAll({
+//       where: { user_id: id },
+//       attributes: {
+//         exclude: ["deletedAt", "createdAt", "updatedAt", "id"],
+//       },
+//       include: [
+//         {
+//           model: db.Province,
+//           attributes: ["name"],
+//         },
+//         {
+//           model: db.City,
+//           attributes: ["name"],
+//         },
+//       ],
+//     });
 
-    if (_.isEmpty(myAddress)) {
-      return Promise.reject(
-        Boom.notFound("The user doesn't have an address yet")
-      );
-    }
+//     if (_.isEmpty(myAddress)) {
+//       return Promise.reject(
+//         Boom.notFound("The user doesn't have an address yet")
+//       );
+//     }
 
-    return Promise.resolve({
-      ok: true,
-      message: "Get my address successfully",
-      result: myAddress,
-    });
-  } catch (err) {
-    console.log([fileName, "get My Address", "ERROR"], { info: `${err}` });
-    return Promise.reject(GeneralHelper.errorResponse(err));
-  }
-};
+//     return Promise.resolve({
+//       ok: true,
+//       message: "Get my address successfully",
+//       result: myAddress,
+//     });
+//   } catch (err) {
+//     console.log([fileName, "get My Address", "ERROR"], { info: `${err}` });
+//     return Promise.reject(GeneralHelper.errorResponse(err));
+//   }
+// };
 
-const createAddress = async (id, dataObject) => {
-  const transaction = await db.sequelize.transaction();
+// const createAddress = async (id, dataObject) => {
+//   const transaction = await db.sequelize.transaction();
 
-  try {
-    const {
-      province_id,
-      city_id,
-      detail,
-      longitude,
-      latitude,
-      postal_code,
-      title,
-    } = dataObject;
+//   try {
+//     const {
+//       province_id,
+//       city_id,
+//       detail,
+//       longitude,
+//       latitude,
+//       postal_code,
+//       title,
+//     } = dataObject;
 
-    const isCityValid = await db.Province.findAll({
-      where: { id: province_id },
-      attributes: ["id", "name"],
-      include: [
-        {
-          model: db.City,
-          attributes: ["id", "name"],
-          where: { id: city_id },
-        },
-      ],
-    });
+//     const isCityValid = await db.Province.findAll({
+//       where: { id: province_id },
+//       attributes: ["id", "name"],
+//       include: [
+//         {
+//           model: db.City,
+//           attributes: ["id", "name"],
+//           where: { id: city_id },
+//         },
+//       ],
+//     });
 
-    if (_.isEmpty(isCityValid)) {
-      return Promise.reject(
-        Boom.badRequest("Your selected city is not part of selected province")
-      );
-    }
+//     if (_.isEmpty(isCityValid)) {
+//       return Promise.reject(
+//         Boom.badRequest("Your selected city is not part of selected province")
+//       );
+//     }
 
-    await db.Address.create(
-      {
-        user_id: id,
-        province_id,
-        city_id,
-        detail,
-        longitude: String(longitude),
-        latitude: String(latitude),
-        postal_code,
-        title,
-      },
-      { transaction }
-    );
+//     await db.Address.create(
+//       {
+//         user_id: id,
+//         province_id,
+//         city_id,
+//         detail,
+//         longitude: String(longitude),
+//         latitude: String(latitude),
+//         postal_code,
+//         title,
+//       },
+//       { transaction }
+//     );
 
-    await transaction.commit();
+//     await transaction.commit();
 
-    return Promise.resolve({
-      ok: true,
-      message: "register address successfully",
-    });
-  } catch (err) {
-    await transaction.rollback();
-    console.log([fileName, "create Address", "ERROR"], { info: `${err}` });
-    return Promise.reject(GeneralHelper.errorResponse(err));
-  }
-};
+//     return Promise.resolve({
+//       ok: true,
+//       message: "register address successfully",
+//     });
+//   } catch (err) {
+//     await transaction.rollback();
+//     console.log([fileName, "create Address", "ERROR"], { info: `${err}` });
+//     return Promise.reject(GeneralHelper.errorResponse(err));
+//   }
+// };
 
 const createRoute = async (id, dataObject) => {
   const transaction = await db.sequelize.transaction();
@@ -591,7 +592,7 @@ const deleteGroup = async (id, groupId) => {
 
     if (_.isEmpty(isGroupExist)) {
       await transaction.rollback();
-      return Promise.reject(Boom.badRequest("Group not found"));
+      return Promise.reject(Boom.notFound("Group not found"));
     }
 
     const isUserHaveGroup = await db.Group.findAll({
@@ -643,11 +644,15 @@ const deleteGroup = async (id, groupId) => {
 const leaveGroup = async (id, groupId) => {
   const transaction = await db.sequelize.transaction();
   try {
+    console.log(id, groupId);
+
     const isUserLeader = await db.GroupPivot.findOne({
       where: { user_id: id, group_id: groupId, is_leader: true },
     });
 
-    if (isUserLeader) {
+    console.log(isUserLeader);
+
+    if (isUserLeader?.is_leader) {
       await transaction.rollback();
       return Promise.reject(
         Boom.badRequest("You cannot leave the group. You are the leader")
@@ -824,7 +829,9 @@ const updateMemberGroup = async (id, userId, groupId) => {
       return Promise.reject(Boom.badRequest("User not found in group member"));
     }
 
-    if (!isUserLeader) {
+    console.log(id, userId, groupId, isUserLeader);
+
+    if (!isUserLeader?.is_leader) {
       await transaction.rollback();
       return Promise.reject(
         Boom.badRequest("Cannot update group. Must be a leader")
@@ -867,6 +874,8 @@ const editGroup = async (id, groupId, data) => {
         Boom.badRequest("Update group must do by the leader")
       );
     }
+
+    console.log(id, group_name, member);
 
     await db.Group.update(
       {
@@ -1047,7 +1056,7 @@ const getNearBy = async (id, radius = 50) => {
         "direction_longitude",
       ],
     });
-
+    console.log(_.isEmpty(myCurrentLocation));
     if (_.isEmpty(myCurrentLocation)) {
       resultEncrypted = encryptPayload({ decryptedData: [] });
       return Promise.resolve({
@@ -1080,6 +1089,8 @@ const getNearBy = async (id, radius = 50) => {
         "direction_longitude",
       ],
     });
+
+    console.log(allUserLocation);
 
     if (_.isEmpty(allUserLocation)) {
       resultEncrypted = encryptPayload({ decryptedData: [] });
@@ -1498,7 +1509,7 @@ const createPost = async (id, dataObject, image) => {
   const transaction = await db.sequelize.transaction();
   try {
     const { province_id, city_id, caption, location_name } = dataObject;
-
+    console.log(image);
     if (!image) {
       return Promise.reject(Boom.badRequest("Image cannot be empty"));
     }
@@ -1508,7 +1519,7 @@ const createPost = async (id, dataObject, image) => {
       imageResult = await cloudinary.uploadToCloudinary(image, "image");
       if (!imageResult) throw Boom.internal("Cloudinary image upload failed");
     }
-
+    console.log(imageResult);
     const post = await db.Post.create(
       {
         user_id: id,
@@ -1550,6 +1561,8 @@ const updatePost = async (id, postId, dataObject) => {
     const isPostExist = await db.Post.findOne({
       where: { id: postId, user_id: id },
     });
+
+    console.log(isPostExist);
 
     if (_.isEmpty(isPostExist)) {
       return Promise.reject(Boom.notFound("Post not found"));
@@ -1669,6 +1682,8 @@ const getCommentPost = async (postId) => {
       order: [["id", "DESC"]],
     });
 
+    console.log(comment);
+
     if (_.isEmpty(comment)) {
       return Promise.resolve({
         ok: true,
@@ -1692,6 +1707,7 @@ const getCommentPost = async (postId) => {
 const deleteCommentPost = async (id, commentId) => {
   const transaction = await db.sequelize.transaction();
   try {
+    console.log(id, commentId);
     const comment = await db.Comment.findAll({
       where: { id: commentId, user_id: id },
       attributes: { exclude: ["deletedAt", "updatedAt"] },
@@ -1702,6 +1718,8 @@ const deleteCommentPost = async (id, commentId) => {
         },
       ],
     });
+
+    console.log(comment);
 
     if (_.isEmpty(comment)) {
       await transaction.rollback();
@@ -1804,12 +1822,21 @@ const createFollowTo = async (id, followTo) => {
   const transaction = await db.sequelize.transaction();
   try {
     console.log(id, followTo);
+    if (Number(id) === Number(followTo)) {
+      await transaction.rollback();
+      return Promise.reject(
+        Boom.badRequest("You cannot follow or unfollow your self")
+      );
+    }
+
     const isFollowed = await db.Follow.findOne({
       where: { follow_by: id, follow_to: followTo },
       paranoid: false,
     });
 
-    if (!isFollowed) {
+    console.log(isFollowed);
+
+    if (_.isEmpty(isFollowed)) {
       await db.Follow.create(
         {
           follow_by: id,
@@ -1859,8 +1886,6 @@ const createFollowTo = async (id, followTo) => {
 
 const myFollow = async (id) => {
   try {
-    console.log(id);
-
     const follower = await db.Follow.findAll({
       where: { follow_to: id },
       attributes: ["follow_by", "id"],
@@ -1943,9 +1968,12 @@ const deleteFollower = async (id, followId) => {
   const transaction = await db.sequelize.transaction();
 
   try {
+    console.log(id, followId);
     const isExist = await db.Follow.findOne({
       where: { id: followId, follow_to: id },
     });
+
+    console.log(isExist);
 
     if (!isExist) {
       return Promise.reject(Boom.notFound("Follow relationship not found"));
@@ -2008,7 +2036,7 @@ const getUserProfile = async (id, userId) => {
         },
       ],
     });
-
+    console.log(user);
     if (!user) {
       return Promise.reject(Boom.notFound("User not found"));
     }
@@ -2032,8 +2060,8 @@ module.exports = {
   getMyProfile,
   getMyConnection,
   getConnectionById,
-  getMyAddress,
-  createAddress,
+  // getMyAddress,
+  // createAddress,
   createRoute,
   getMyRoute,
   createGroup,

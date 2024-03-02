@@ -72,7 +72,7 @@ const registerUser = async (dataObject) => {
       where: { username },
     });
 
-    if (isUsernameExist) {
+    if (!_.isEmpty(isUsernameExist)) {
       await transaction.rollback();
       return Promise.reject(Boom.badRequest("Username has been used"));
     }
@@ -147,43 +147,43 @@ const login = async (dataObject) => {
         },
       ],
     });
+
     if (_.isEmpty(user)) {
       return Promise.reject(Boom.notFound("User not found"));
     }
+    // const wrongPasswordKey = `wrong-password/${user.id}`;
+    // const isWrongPassword = await getKey({
+    //   key: wrongPasswordKey,
+    // });
 
-    const wrongPasswordKey = `wrong-password/${user.id}`;
-    const isWrongPassword = await getKey({
-      key: wrongPasswordKey,
-    });
-
-    const wrongPasswordData = JSON.parse(isWrongPassword) || { count: 0 };
-    console.log(wrongPasswordData);
-    if (wrongPasswordData.count >= 3) {
-      return Promise.reject(
-        Boom.badRequest(
-          `You have entered the wrong password 3 times. Please try again in 5 minutes`
-        )
-      );
-    }
+    // const wrongPasswordData = JSON.parse(isWrongPassword) || { count: 0 };
+    // console.log(wrongPasswordData);
+    // if (wrongPasswordData.count >= 3) {
+    //   return Promise.reject(
+    //     Boom.badRequest(
+    //       `You have entered the wrong password 3 times. Please try again in 5 minutes`
+    //     )
+    //   );
+    // }
 
     const isPassMatched = __comparePassword(password, user.password);
     if (!isPassMatched) {
-      wrongPasswordData.count += 1;
-      await setKey({
-        key: wrongPasswordKey,
-        value: JSON.stringify(wrongPasswordData),
-        isSetExpired: true,
-        second: 60,
-      });
+      // wrongPasswordData.count += 1;
+      // await setKey({
+      //   key: wrongPasswordKey,
+      //   value: JSON.stringify(wrongPasswordData),
+      //   isSetExpired: true,
+      //   second: 60,
+      // });
       return Promise.reject(Boom.badRequest("Wrong Password"));
     }
 
-    await setKey({
-      key: wrongPasswordKey,
-      value: JSON.stringify({ count: 0 }),
-      isSetExpired: true,
-      second: 0,
-    });
+    // await setKey({
+    //   key: wrongPasswordKey,
+    //   value: JSON.stringify({ count: 0 }),
+    //   isSetExpired: true,
+    //   second: 0,
+    // });
 
     const token = __generateToken({
       id: user.id,
@@ -222,7 +222,7 @@ const login = async (dataObject) => {
 const forgotPassword = async (dataObject) => {
   const { email } = dataObject;
   const transaction = await db.sequelize.transaction();
-
+  console.log(email);
   try {
     const user = await db.User.findOne({
       where: { email },
@@ -381,14 +381,16 @@ const updateProfile = async (id, dataObject, image) => {
       include: [{ model: db.UserDetail }],
     });
 
+    console.log(isExist);
+
     if (isExist.username === username) {
       await transaction.rollback();
-      return Promise.reject(Boom.notFound("Username already used"));
+      return Promise.reject(Boom.badRequest("Username already used"));
     }
 
     if (isExist.UserDetail.phone === phone) {
       await transaction.rollback();
-      return Promise.reject(Boom.notFound("Phone already used"));
+      return Promise.reject(Boom.badRequest("Phone already used"));
     }
 
     let imageResult = null;
@@ -495,25 +497,10 @@ const changePassword = async (id, dataObject) => {
   }
 };
 
-const test = async (data) => {
-  try {
-    let imageResult = null;
-    if (data) {
-      imageResult = await cloudinary.uploadToCloudinary(data, "image");
-      if (!imageResult) throw Boom.internal("Cloudinary image upload failed");
-    }
-    return Promise.resolve(imageResult.url);
-  } catch (err) {
-    console.log([fileName, "test", "ERROR"], { info: `${err}` });
-    return Promise.reject(GeneralHelper.errorResponse(err));
-  }
-};
-
 module.exports = {
   registerUser,
   login,
   updateProfile,
-  test,
   forgotPassword,
   resetPassword,
   changePassword,

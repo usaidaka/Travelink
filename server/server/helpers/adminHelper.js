@@ -1,23 +1,11 @@
 const Boom = require("boom");
 const { Op } = require("sequelize");
-const bcrypt = require("bcryptjs");
 const _ = require("lodash");
-const crypto = require("crypto-js");
-const moment = require("moment");
-const jwt = require("jsonwebtoken");
 
 const db = require("../../models");
 const GeneralHelper = require("./generalHelper");
-const Mailer = require("../service/mailer");
 const cloudinary = require("../service/cloudinary");
 const { encryptPayload } = require("../service/encryptionHelper");
-
-const jwtSecretTokenCredential =
-  process.env.JWT_SECRET_TOKEN_CREDENTIAL || "super_strong_key";
-const jwtSecretToken = process.env.JWT_SECRET_TOKEN || "super_strong_key";
-const jwtExpiresIn = process.env.JWT_EXPIRES_IN || "24h";
-const jwtExpiresCredentialIn = process.env.JWT_EXPIRES_CREDENTIAL_IN || "24h";
-const salt = bcrypt.genSaltSync(10);
 
 const fileName = "server/helpers/adminHelper.js";
 
@@ -32,6 +20,18 @@ const createDestination = async (image, dataObject) => {
     latitude,
     longitude,
   } = dataObject;
+
+  console.log(
+    province_id,
+    city_id,
+    phone,
+    detail,
+    description,
+    latitude,
+    longitude
+  );
+
+  console.log(image);
 
   try {
     if (!image) {
@@ -112,7 +112,7 @@ const editDestination = async (destinationId, dataObject, image) => {
 
     if (!isExist) {
       await transaction.rollback();
-      return Promise.reject(Boom.notFound("destination not found"));
+      return Promise.reject(Boom.notFound("Destination not found"));
     }
 
     let imageResult = null;
@@ -172,7 +172,7 @@ const deleteDestination = async (destinationId) => {
 
     if (!isExist) {
       await transaction.rollback();
-      return Promise.reject(Boom.notFound("destination not found"));
+      return Promise.reject(Boom.notFound("Destination not found"));
     }
 
     await db.Destination.destroy(
@@ -231,6 +231,7 @@ const getAllDestination = async () => {
 
 const getDestinationById = async (destinationId) => {
   try {
+    console.log(destinationId);
     const destinationById = await db.Destination.findOne({
       where: { id: destinationId },
       attributes: { exclude: ["createdAt", "updatedAt", "deletedAt", "image"] },
@@ -240,6 +241,8 @@ const getDestinationById = async (destinationId) => {
         { model: db.ImageDestination, attributes: ["image"] },
       ],
     });
+
+    console.log(destinationById);
 
     if (_.isEmpty(destinationById)) {
       return Promise.reject(Boom.badRequest("Destination not found"));

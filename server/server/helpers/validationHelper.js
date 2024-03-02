@@ -314,6 +314,19 @@ const editDestination = (data) => {
   }
 };
 
+const userList = (data) => {
+  const schema = Joi.object({
+    // current
+    next: Joi.number().allow("").optional().description("1"),
+    limit: Joi.number().allow("").optional().description("1"),
+    username: Joi.string().allow("").optional().description("1"),
+  });
+
+  if (schema.validate(data).error) {
+    throw Boom.badRequest(schema.validate(data).error);
+  }
+};
+
 module.exports = {
   registerValidation,
   loginValidation,
@@ -330,4 +343,5 @@ module.exports = {
   comment,
   addDestination,
   editDestination,
+  userList,
 };

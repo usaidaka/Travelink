@@ -1,0 +1,24 @@
+[
+  {
+    "id": 1,
+    "post_id": 64,
+    "user_id": 3,
+    "comment": "All the Navicat Cloud objects are located under different projects. You can share the project to other Navicat Cloud accounts for collaboration. Export Wizard allows you to export data from tables, co",
+    "createdAt": "2009-07-29T12:01:21.000Z",
+    "User": {
+      "username": "Lan",
+      "image": "https://img.freepik.com/free-photo/smiling-woman-shirt-making-selfie-studio_171337-17196.jpg"
+    }
+  },
+  {
+    "id": 2,
+    "post_id": 65,
+    "user_id": 3,
+    "comment": "All the Navicat Cloud objects are located under different projects. You can share the project to other Navicat Cloud accounts for collaboration. Export Wizard allows you to export data from tables, co",
+    "createdAt": "2009-07-29T12:01:21.000Z",
+    "User": {
+      "username": "Lan",
+      "image": "https://img.freepik.com/free-photo/smiling-woman-shirt-making-selfie-studio_171337-17196.jpg"
+    }
+  }
+]

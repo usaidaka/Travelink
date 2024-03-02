@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "username": "luhut",
+    "email": "luhut@gmail.com",
+    "password": "12345678",
+    "confirmPassword": "12345678",
+    "role": "User",
+    "first_name": "luhut",
+    "last_name": "sitorus",
+    "gender": "Male",
+    "email_contact": "mamaluhut@gmail.com",
+    "phone": "089652433206",
+    "phone_contact": "08121312321",
+    "mbti": "ISTJ"
+  },
+  {
+    "id": 2,
+    "username": "burhan",
+    "email": "burhan@gmail.com",
+    "password": "12345678",
+    "confirmPassword": "12345678",
+    "role": "User",
+    "first_name": "bruhan",
+    "last_name": "udin",
+    "gender": "Male",
+    "email_contact": "mamaburhan@gmail.com",
+    "phone": "089652433207",
+    "phone_contact": "08121312322",
+    "mbti": "ISTJ"
+  },
+  {
+    "id": 3,
+    "username": "jojo",
+    "email": "joko@gmail.com",
+    "password": "12345678",
+    "confirmPassword": "12345678",
+    "role": "User",
+    "first_name": "joko",
+    "last_name": "tingkir",
+    "gender": "Male",
+    "email_contact": "mamajoko@gmail.com",
+    "phone": "089652433208",
+    "phone_contact": "08121312328",
+    "mbti": "ISTJ"
+  },
+  {
+    "id": 4,
+    "username": "bambang",
+    "email": "bambang@gmail.com",
+    "password": "12345678",
+    "confirmPassword": "12345678",
+    "role": "User",
+    "first_name": "bambang",
+    "last_name": "sudipjo",
+    "gender": "Male",
+    "email_contact": "mamabambang@gmail.com",
+    "phone": "089652433201",
+    "phone_contact": "08121312322",
+    "mbti": "ISTJ"
+  }
+]
