@@ -31,7 +31,7 @@ const Dashboard = ({ dashboard, userList }) => {
   }, [dispatch, dashboard, userList]);
 
   return (
-    <div className={classes.container}>
+    <div data-testid="adminDashboard" className={classes.container}>
       <div className={classes.maps}>
         <Maps
           marker={decryptedDashboard.remapData}

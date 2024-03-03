@@ -48,7 +48,7 @@ const Register = ({ step }) => {
   };
 
   return (
-    <div className={classes.container}>
+    <div data-testid="register" className={classes.container}>
       <CardAuth src={registerDecoration}>
         <div>
           <StepIndicator />

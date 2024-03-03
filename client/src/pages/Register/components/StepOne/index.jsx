@@ -42,7 +42,7 @@ const StepOne = ({ step, onNextStep, dataUser }) => {
   };
 
   return (
-    <form action="" onSubmit={handleSubmit(onSubmit)}>
+    <form data-testid="stepOne" action="" onSubmit={handleSubmit(onSubmit)}>
       <div className={classes.container}>
         <h3>
           <FormattedMessage id="register" />

@@ -8,7 +8,7 @@ import classes from './style.module.scss';
 const StepIndicator = ({ step }) => {
   console.log(typeof step);
   return (
-    <div className={classes.container}>
+    <div data-testid="stepIndication" className={classes.container}>
       <div className={classes.indicator} data-active={step === 1}>
         1
       </div>

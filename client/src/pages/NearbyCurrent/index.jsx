@@ -28,7 +28,7 @@ const NearbyCurrent = ({ nearby }) => {
   }, [nearby]);
 
   return (
-    <div className={classes.container}>
+    <div data-testid="nearbyCurrent" className={classes.container}>
       <Header />
       <div className={classes.maps}>
         <Maps

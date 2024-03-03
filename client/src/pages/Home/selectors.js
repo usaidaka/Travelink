@@ -8,3 +8,4 @@ export const selectProvince = createSelector(selectHomeState, (state) => state.p
 export const selectNearby = createSelector(selectHomeState, (state) => state.nearby);
 export const selectPost = createSelector(selectHomeState, (state) => state.post);
 export const selectComment = createSelector(selectHomeState, (state) => state.comment);
+export const selectFollowingPost = createSelector(selectHomeState, (state) => state.followingPost);

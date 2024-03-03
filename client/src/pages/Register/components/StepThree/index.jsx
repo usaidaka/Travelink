@@ -70,7 +70,7 @@ const StepThree = ({ step, onBackStep, dataUser }) => {
   };
 
   return (
-    <form action="" onSubmit={handleSubmit(onSubmit)}>
+    <form data-testid="stepThree" action="" onSubmit={handleSubmit(onSubmit)}>
       <div className={classes.container}>
         <div className={classes.decoration}>
           <h3 className={classes.title}>Myers-Briggs Type Indicator</h3>

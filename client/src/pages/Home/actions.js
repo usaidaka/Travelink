@@ -12,6 +12,8 @@ import {
   SET_COMMENT,
   DO_COMMENT,
   DELETE_COMMENT,
+  GET_FOLLOWING_POST,
+  SET_FOLLOWING_POST,
 } from './constants';
 
 export const getProfile = (cbSuccess) => ({
@@ -84,4 +86,15 @@ export const deleteComment = (commentId, cbSuccess) => ({
   type: DELETE_COMMENT,
   commentId,
   cbSuccess,
+});
+
+export const getFollowingPost = (query, cbSuccess) => ({
+  type: GET_FOLLOWING_POST,
+  query,
+  cbSuccess,
+});
+
+export const setFollowingPost = (followingPost) => ({
+  type: SET_FOLLOWING_POST,
+  followingPost,
 });

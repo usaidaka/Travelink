@@ -106,7 +106,7 @@ const RegisterDestination = ({ province, currentCity }) => {
   }
 
   return (
-    <div className={classes.container}>
+    <div data-testid="registerDestination" className={classes.container}>
       <div className={classes.navigation}>
         <Link to={-1}>
           <ArrowBackIcon />

@@ -44,7 +44,7 @@ const Login = () => {
   };
 
   return (
-    <div className={classes.container}>
+    <div data-testid="login" className={classes.container}>
       <CardAuth src={loginDecoration}>
         <form action="" className={classes.form} onSubmit={handleSubmit(onSubmit)}>
           <div className={classes.wrapper}>

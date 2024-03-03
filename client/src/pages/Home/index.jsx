@@ -1,4 +1,3 @@
-// import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -10,87 +9,98 @@ import _ from 'lodash';
 import Loader from '@components/Loader';
 
 import classes from './style.module.scss';
-import { getPost, getNearby, getProfile, getProvince } from './actions';
+import { getNearby, getProfile, getProvince, getFollowingPost } from './actions';
 import Post from './components/Post';
-import { selectPost } from './selectors';
+import { selectFollowingPost } from './selectors';
 import CardPost from './components/CardPost';
 
-const Home = ({ post }) => {
+const Home = ({ followingPost, loadingTest = true }) => {
   const dispatch = useDispatch();
   const [next, setNext] = useState(0);
   const [followingData, setFollowingData] = useState([]);
   const [isMore, setIsMore] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      await Promise.all([
+        dispatch(
+          getProfile(() => {
+            setLoading(false);
+          })
+        ),
+        dispatch(
+          getProvince(() => {
+            setLoading(false);
+          })
+        ),
+        dispatch(
+          getNearby(() => {
+            setLoading(false);
+          })
+        ),
+        dispatch(
+          getUserRoute(() => {
+            setLoading(false);
+          })
+        ),
+      ]);
+    };
+
+    fetchData();
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(getFollowingPost({ next }));
+  }, [dispatch, next]);
+
+  useEffect(() => {
+    if (!_.isEmpty(followingPost)) {
+      setFollowingData((prev) => [...prev, ...followingPost]);
+      setIsMore(followingPost.length >= 6);
+    } else {
+      setIsMore(false);
+    }
+  }, [followingPost]);
+
   const handleLoadMore = () => {
     setNext((prev) => prev + 6);
   };
 
-  useEffect(() => {
-    if (!_.isEmpty(post) && !_.isEmpty(post.followingPost)) {
-      setFollowingData((prev) => [...prev, ...post.followingPost]);
-      setIsMore(post.followingPost?.length >= 6);
-    }
-    if (post?.followingPost?.length === 0) {
-      setIsMore(false);
-    }
-  }, [post, post.followingPost]);
-
-  console.log(post?.followingPost?.length === 0);
-
-  useEffect(() => {
-    dispatch(
-      getProfile(() => {
-        setLoading(false);
-      })
-    );
-    dispatch(
-      getProvince(() => {
-        setLoading(false);
-      })
-    );
-    dispatch(
-      getNearby(() => {
-        setLoading(false);
-      })
-    );
-    dispatch(getUserRoute());
-    dispatch(getPost({ next, limit: 6 }));
-  }, [dispatch, next]);
-
-  if (loading) {
+  if (loading && loadingTest) {
     return <Loader isLoading={loading} />;
   }
+
   return (
-    <div id="top" className={classes.container}>
+    <div data-testid="home" id="top" className={classes.container}>
       <Post fetch={setFollowingData} next={next} />
-      {followingData?.map((data, idx) => (
+      {followingData.map((data, idx) => (
         <CardPost key={idx} post={data} />
       ))}
-      {(isMore && (
+      {isMore ? (
         <div onClick={handleLoadMore} className={classes.expand}>
           <button type="button">
             <ExpandMoreIcon />
           </button>
         </div>
-      )) ||
-        (post?.followingPost?.length === 0 && null) || (
-          <a href="#top" className={classes.expand}>
-            <button type="button">
-              <VerticalAlignTopIcon />
-            </button>
-          </a>
-        )}
+      ) : (
+        <a href="#top" className={classes.expand}>
+          <button type="button">
+            <VerticalAlignTopIcon />
+          </button>
+        </a>
+      )}
     </div>
   );
 };
 
 Home.propTypes = {
-  post: PropTypes.object,
+  followingPost: PropTypes.array,
+  loadingTest: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
-  post: selectPost,
+  followingPost: selectFollowingPost,
 });
 
 export default connect(mapStateToProps)(Home);

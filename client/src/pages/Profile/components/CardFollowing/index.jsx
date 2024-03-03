@@ -8,7 +8,7 @@ import classes from './style.module.scss';
 const CardFollowing = ({ follow, handleFollow }) => {
   const { pathname } = useLocation();
   return (
-    <div className={classes.container}>
+    <div data-testid="cardFollowing" className={classes.container}>
       <div className={classes.wrapper}>
         <div className={classes['image-container']}>
           <img src={follow?.followTo?.image} alt="" />

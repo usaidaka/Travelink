@@ -87,7 +87,7 @@
   background-color: $color-white;
 
   border-radius: 6px;
-  overflow: hidden;
+  overflow: scroll;
   width: 90%;
   height: 60%;
   @include apply-at-xl-size {

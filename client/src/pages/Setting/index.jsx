@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { FormattedMessage } from 'react-intl';
@@ -44,7 +45,9 @@ const Setting = ({ profile }) => {
   const uploadRef = useRef();
 
   useEffect(() => {
-    setDecryptedProfile(decryptPayload(profile));
+    if (!_.isEmpty(profile)) {
+      setDecryptedProfile(decryptPayload(profile));
+    }
   }, [dispatch, profile]);
 
   const {
@@ -95,7 +98,7 @@ const Setting = ({ profile }) => {
   };
 
   return (
-    <form action="" onSubmit={handleSubmit(onSubmit)} className={classes.container}>
+    <form data-testid="setting" action="" onSubmit={handleSubmit(onSubmit)} className={classes.container}>
       <input type="file" name="" id="" className={classes.upload} ref={uploadRef} onChange={handleFile} />
       <div className={classes['main-wrapper']}>
         <div

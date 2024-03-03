@@ -6,7 +6,7 @@ import classes from './style.module.scss';
 const Header = () => {
   const { pathname } = useLocation();
   return (
-    <div className={classes.header}>
+    <div data-testid="header" className={classes.header}>
       <Link to="/nearby" className={classes.tab} data-active={pathname === '/nearby'}>
         <FormattedMessage id="nearbyCurrent" />
       </Link>

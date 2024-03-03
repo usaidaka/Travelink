@@ -123,7 +123,7 @@ const Trip = ({ location, province, currentCity, directionCity }) => {
 
   console.log(marker);
   return (
-    <div className={classes.container}>
+    <div data-testid="trip" className={classes.container}>
       <h1>Trip</h1>
       <div className={classes.maps}>
         <Maps

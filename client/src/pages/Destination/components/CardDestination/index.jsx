@@ -19,7 +19,7 @@ const CardDestination = ({ pin, handleDeleteDestination }) => {
 
   console.log(pin);
   return (
-    <div className={classes['container-destination']}>
+    <div data-testid="cardDestination" className={classes['container-destination']}>
       <div className={classes['image-container']}>
         <Carousel>
           {pin.ImageDestinations.map((src, idx) => (

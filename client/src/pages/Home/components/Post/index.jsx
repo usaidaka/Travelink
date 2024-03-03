@@ -14,8 +14,8 @@ import PlaceIcon from '@mui/icons-material/Place';
 import { selectCurrentCityList } from '@pages/Trip/selectors';
 
 import classes from './style.module.scss';
-import { doPost, getPost } from '../../actions';
-import { selectPost, selectProvince } from '../../selectors';
+import { doPost, getFollowingPost } from '../../actions';
+import { selectFollowingPost, selectPost, selectProvince } from '../../selectors';
 
 const style = {
   position: 'absolute',
@@ -46,10 +46,6 @@ const Post = ({ province, city, fetch, next }) => {
   const handleCurrentCityList = (provinceId) => {
     dispatch(getCurrentCityList(provinceId));
   };
-
-  useEffect(() => {
-    dispatch(getPost({ next, limit: 6 }));
-  }, [dispatch, next]);
 
   useEffect(() => {
     if (selectedProvince) {
@@ -87,7 +83,7 @@ const Post = ({ province, city, fetch, next }) => {
           setProvinceName('');
           setCityName('');
           setLoading(false);
-          dispatch(getPost());
+          dispatch(getFollowingPost({ next }));
           fetch([]);
         },
         () => {
@@ -105,7 +101,7 @@ const Post = ({ province, city, fetch, next }) => {
 
   return (
     <>
-      <div className={classes.header}>
+      <div data-testid="post" className={classes.header}>
         <form action="" className={classes['create-post']} onSubmit={handleSubmit(onSubmit)}>
           <textarea
             name=""
@@ -257,14 +253,23 @@ const Post = ({ province, city, fetch, next }) => {
                       </span>
                     )}
                   </div>
-                  <Button onClick={handleClose}>
-                    <FormattedMessage id="submit" />
-                  </Button>
+                  <div className={classes.button}>
+                    <Button size="small" variant="outlined" onClick={handleClose}>
+                      <FormattedMessage id="submit" />
+                    </Button>
+                  </div>
                 </Box>
               </Modal>
             </div>
 
-            <Button disabled={loading} size="small" variant="contained" type="submit" className={classes.submit}>
+            <Button
+              data-testid="submit"
+              disabled={loading}
+              size="small"
+              variant="contained"
+              type="submit"
+              className={classes.submit}
+            >
               <FormattedMessage id="send" />
             </Button>
           </div>
@@ -281,12 +286,14 @@ Post.propTypes = {
   fetch: PropTypes.func,
   post: PropTypes.object,
   next: PropTypes.number,
+  followingPost: PropTypes.array,
 };
 
 const mapStateToProps = createStructuredSelector({
   province: selectProvince,
   city: selectCurrentCityList,
   post: selectPost,
+  followingPost: selectFollowingPost,
 });
 
 export default connect(mapStateToProps)(Post);

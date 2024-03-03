@@ -19,8 +19,9 @@ import {
   GET_COMMENT,
   DO_COMMENT,
   DELETE_COMMENT,
+  GET_FOLLOWING_POST,
 } from './constants';
-import { setComment, setNearby, setPost, setProfile, setProvince } from './actions';
+import { setComment, setFollowingPost, setNearby, setPost, setProfile, setProvince } from './actions';
 
 function* doGetRegion({ cbSuccess }) {
   setLoading(true);
@@ -62,8 +63,10 @@ function* doGetPost({ query, cbSuccess }) {
   setLoading(true);
   try {
     const response = yield call(getPost, query);
-
+    console.log(response?.result?.followingPost);
     yield put(setPost(response.result));
+
+    yield put(setFollowingPost(response?.result?.followingPost));
 
     cbSuccess && cbSuccess();
   } catch (error) {
@@ -130,6 +133,7 @@ export default function* homeSaga() {
   yield takeLatest(GET_PROFILE, doGetProfile);
   yield takeLatest(GET_NEARBY, doGetNearby);
   yield takeLatest(GET_POST, doGetPost);
+  yield takeLatest(GET_FOLLOWING_POST, doGetPost);
   yield takeLatest(GET_COMMENT, doGetComment);
   yield takeLatest(DO_POST, doPost);
   yield takeLatest(DO_COMMENT, doComment);

@@ -52,7 +52,7 @@ const Explore = ({ post }) => {
   }, [setAllPostData]);
 
   return (
-    <div className={classes.container}>
+    <div data-testid="explore" className={classes.container}>
       <div className={classes['card-container']}>
         {allPostData?.map((data, idx) => (
           <CardExplore key={idx} post={data} handleDeletePost={handleDeletePost} />

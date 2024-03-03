@@ -4,7 +4,7 @@ import logo from '@assets/logo.png';
 import classes from './style.module.scss';
 
 const CardAuth = ({ children, src }) => (
-  <div className={classes.container}>
+  <div data-testid="cardAuth" className={classes.container}>
     <div className={classes.decoration}>
       <img src={src} alt="" className={classes.image} />
     </div>

@@ -104,6 +104,11 @@
   }
 }
 
+.button {
+  display: flex;
+  justify-content: end;
+}
+
 .input {
   @include inputTag;
 }

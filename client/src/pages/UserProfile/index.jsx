@@ -104,7 +104,7 @@ const UserProfile = ({ userProfile, posts, userConnection, userFollow }) => {
 
   console.log('object');
   return (
-    <div className={classes.container}>
+    <div data-testid="userProfile" className={classes.container}>
       <Header
         src={decryptedUserProfile.image}
         follow={decryptedUserFollow}

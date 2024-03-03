@@ -29,7 +29,7 @@ const NearbyDirection = ({ nearbyDirection }) => {
 
   useEffect(() => {}, []);
   return (
-    <div className={classes.container}>
+    <div data-testid="nearbyDirection" className={classes.container}>
       <Header />
       <div className={classes.maps}>
         <Maps

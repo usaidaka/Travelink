@@ -17,7 +17,7 @@ import classes from './style.module.scss';
 import { doEditPost, getPostDetail } from './actions';
 import { selectPostDetail } from './selectors';
 
-const EditPost = ({ province, city, postDetail }) => {
+const EditPost = ({ province, city, postDetail, loadingTest = true }) => {
   const [loading, setLoading] = useState(false);
   const [render, setRender] = useState(true);
   const { postId } = useParams();
@@ -71,13 +71,12 @@ const EditPost = ({ province, city, postDetail }) => {
       })
     );
   }, [dispatch, postId]);
-  console.log(postDetailData.location_name);
-  if (render) {
+  if (render && loadingTest) {
     return <Loader isLoading={render} />;
   }
 
   return (
-    <form action="" onSubmit={handleSubmit(onSubmit)} className={classes.container}>
+    <form data-testid="editPost" action="" onSubmit={handleSubmit(onSubmit)} className={classes.container}>
       <div className={classes['main-wrapper']}>
         <div className={classes['image-container']}>
           <div className={classes.carousel}>
@@ -210,7 +209,12 @@ const EditPost = ({ province, city, postDetail }) => {
   );
 };
 
-EditPost.propTypes = { city: PropTypes.array, postDetail: PropTypes.object, province: PropTypes.array };
+EditPost.propTypes = {
+  city: PropTypes.array,
+  postDetail: PropTypes.object,
+  province: PropTypes.array,
+  loadingTest: PropTypes.bool,
+};
 
 const mapStateToProps = createStructuredSelector({
   city: selectCurrentCityList,

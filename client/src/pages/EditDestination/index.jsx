@@ -121,7 +121,7 @@ const EditDestination = ({ province, currentCity, destinationById }) => {
   };
 
   return (
-    <div className={classes.container}>
+    <div data-testid="editDestination" className={classes.container}>
       <div className={classes.navigation}>
         <Link to={-1}>
           <ArrowBackIcon />

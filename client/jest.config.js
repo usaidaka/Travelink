@@ -15,6 +15,10 @@ export default {
     '@static/(.*)': '<rootDir>/src/static/$1',
     '@styles/(.*)': '<rootDir>/src/styles/$1',
     '@utils/(.*)': '<rootDir>/src/utils/$1',
+    'react-leaflet': '<rootDir>/__tests__/fixtures/mocks/reactLeafletMock.js',
+    'leaflet-geosearch': '<rootDir>/__tests__/fixtures/mocks/reactLeafletGeosearchMock.js',
+    'react-leaflet-cluster': '<rootDir>/__tests__/fixtures/mocks/reactLeafletClusterMock.js',
+    extensionsToTreatAsEsm: ['.jsx'],
   },
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
 };

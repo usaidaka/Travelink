@@ -42,7 +42,7 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className={classes.container}>
+    <div data-testid="resetPassword" className={classes.container}>
       <CardAuth src={resetDecoration}>
         <form action="" className={classes.form} onSubmit={handleSubmit(onSubmit)}>
           <div className={classes.wrapper}>

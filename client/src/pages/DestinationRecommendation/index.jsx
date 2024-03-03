@@ -25,8 +25,7 @@ const DestinationRecommendation = ({ destination }) => {
   }, [destination]);
 
   return (
-    <div className={classes.container}>
-      <div>test</div>
+    <div data-testid="destinationRecommendation" className={classes.container}>
       <div className={classes.maps}>
         <Maps
           element="DestinationRecommendation"

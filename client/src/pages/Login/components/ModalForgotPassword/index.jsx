@@ -62,7 +62,7 @@ const ModalForgotPassword = () => {
   };
 
   return (
-    <div>
+    <div data-testid="modalForgotPassword">
       <div onClick={handleOpen} className={classes.open}>
         <FormattedMessage id="forgotPassword" /> ?
       </div>

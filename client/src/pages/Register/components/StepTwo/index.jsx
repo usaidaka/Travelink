@@ -38,7 +38,7 @@ const StepTwo = ({ step, onBackStep, onNextStep, dataUser }) => {
   };
 
   return (
-    <form action="" onSubmit={handleSubmit(onSubmit)}>
+    <form data-testid="stepTwo" action="" onSubmit={handleSubmit(onSubmit)}>
       <div className={classes.container}>
         <div action="" className={classes.form}>
           <div className={classes.wrapper}>

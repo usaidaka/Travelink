@@ -36,7 +36,9 @@ const CardPost = ({ post, comment, user }) => {
   console.log(user);
 
   useEffect(() => {
-    setDecryptedUser(decryptPayload(user));
+    if (!_.isEmpty(user)) {
+      setDecryptedUser(decryptPayload(user));
+    }
   }, [user]);
 
   console.log(decryptedUser);
@@ -45,9 +47,9 @@ const CardPost = ({ post, comment, user }) => {
     dispatch(getComment(post.id));
   };
 
-  useEffect(() => {
-    dispatch(getComment(post.id));
-  }, [dispatch, post.id]);
+  // useEffect(() => {
+  //   dispatch(getComment(post.id));
+  // }, [dispatch, post.id]);
 
   const {
     register,
@@ -81,7 +83,7 @@ const CardPost = ({ post, comment, user }) => {
   };
 
   return (
-    <div className={classes.container}>
+    <div data-testid="cardPost" className={classes.container}>
       <div className={classes['image-profile']}>
         <div className={classes['image-wrapper']}>
           <img src={post?.User?.image} alt="" className={classes.image} />

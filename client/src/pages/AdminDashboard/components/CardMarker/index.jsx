@@ -6,7 +6,7 @@ import classes from './style.module.scss';
 const CardMarker = ({ mark }) => {
   console.log(mark);
   return (
-    <div className={classes.container}>
+    <div data-testid="cardMarker" className={classes.container}>
       <div className={classes.header}>
         <div className={classes['image-container']}>
           <img src={mark.image} alt="" />

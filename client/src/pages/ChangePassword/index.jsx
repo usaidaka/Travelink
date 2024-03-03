@@ -41,7 +41,7 @@ const ChangePassword = () => {
     );
   };
   return (
-    <div className={classes.container}>
+    <div data-testid="changePassword" className={classes.container}>
       <div className={classes.header}>
         <Link to={-1}>
           <ArrowBackIcon />

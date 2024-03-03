@@ -41,7 +41,7 @@ const Destination = ({ destination }) => {
     dispatch(getDestination());
   }, [dispatch]);
   return (
-    <div className={classes.container}>
+    <div data-testid="destination" className={classes.container}>
       <div className={classes.navigation}>
         <h2>
           <FormattedMessage id="destination" />

@@ -7,7 +7,7 @@ import classes from './style.module.scss';
 const CardNearby = ({ mark }) => {
   console.log(mark);
   return (
-    <div className={classes.container}>
+    <div data-testid="cardNearby" className={classes.container}>
       <div className={classes['card-container']}>
         <div className={classes.information}>
           <div className={classes.wrapper}>

@@ -38,7 +38,6 @@ const People = ({ userList }) => {
     dispatch(getUserList());
   }, [dispatch]);
 
-  console.log(userList);
   useEffect(() => {
     if (!_.isEmpty(userList)) {
       const decryptedData = decryptPayload(userList);
@@ -98,7 +97,7 @@ const People = ({ userList }) => {
   // ===========================
 
   return (
-    <div className={classes.container}>
+    <div data-testid="people" className={classes.container}>
       <h4 className={classes.title}>
         <FormattedMessage id="explore" />
       </h4>
@@ -154,7 +153,7 @@ const People = ({ userList }) => {
 };
 
 People.propTypes = {
-  userList: PropTypes.array,
+  userList: PropTypes.string,
 };
 
 const mapStateToProps = createStructuredSelector({

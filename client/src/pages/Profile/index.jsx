@@ -20,7 +20,7 @@ import Header from './components/Header';
 import { doDeleteFollower, doDeletePost, getConnectionData, getMyFollow } from './actions';
 import { selectConnection, selectMyFollow } from './selectors';
 
-const Profile = ({ post, profile, location, connection, myFollow }) => {
+const Profile = ({ post, profile, location, connection, myFollow, loadingTest = true }) => {
   const [decryptedConnection, setDecryptedConnection] = useState({});
   const [decryptedProfile, setDecryptedProfile] = useState({});
   const [decryptedLocation, setDecryptedLocation] = useState([]);
@@ -32,6 +32,11 @@ const Profile = ({ post, profile, location, connection, myFollow }) => {
   const [render, setRender] = useState(true);
 
   const [myPosts, setMyPosts] = useState([]);
+  console.log(post);
+  console.log(profile);
+  console.log(location);
+  console.log(connection);
+  console.log(myFollow);
 
   const dispatch = useDispatch();
 
@@ -134,14 +139,12 @@ const Profile = ({ post, profile, location, connection, myFollow }) => {
     }
   }, [connection, location, myFollow, profile]);
 
-  console.log(post.myPost.length);
-
-  if (render) {
+  if (render && loadingTest) {
     return <Loader isLoading={render} />;
   }
 
   return (
-    <div className={classes.container}>
+    <div data-testid="profile" className={classes.container}>
       <Header
         handleDeleteFollower={handleDeleteFollower}
         handleFollow={handleFollow}
@@ -183,6 +186,7 @@ Profile.propTypes = {
   location: PropTypes.string,
   connection: PropTypes.string,
   myFollow: PropTypes.string,
+  loadingTest: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({

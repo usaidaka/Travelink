@@ -18,3 +18,6 @@ export const SET_COMMENT = 'Home/SET_COMMENT';
 export const DO_COMMENT = 'Home/DO_COMMENT';
 
 export const DELETE_COMMENT = 'Home/DELETE_COMMENT';
+
+export const GET_FOLLOWING_POST = 'Home/GET_FOLLOWING_POST';
+export const SET_FOLLOWING_POST = 'Home/SET_FOLLOWING_POST';

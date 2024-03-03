@@ -17,6 +17,7 @@ import MenuItem from '@mui/material/MenuItem';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { Link } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
+import _ from 'lodash';
 
 import classes from './style.module.scss';
 
@@ -29,6 +30,8 @@ const CardExplore = ({ post, comment, user, handleDeletePost }) => {
   const handleCloseMenu = () => {
     setAnchorEl(null);
   };
+
+  console.log(post);
 
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
@@ -46,8 +49,12 @@ const CardExplore = ({ post, comment, user, handleDeletePost }) => {
 
   const [loading, setLoading] = useState(false);
 
+  console.log(user);
+
   useEffect(() => {
-    setDecryptedUser(decryptPayload(user));
+    if (!_.isEmpty(user)) {
+      setDecryptedUser(decryptPayload(user));
+    }
   }, [user]);
 
   const {
@@ -85,7 +92,7 @@ const CardExplore = ({ post, comment, user, handleDeletePost }) => {
   };
 
   return (
-    <div className={classes.card}>
+    <div data-testid="cardExplore" className={classes.card}>
       <div className={classes['image-container']}>
         <span
           onClick={() => {
