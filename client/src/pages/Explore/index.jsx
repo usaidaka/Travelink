@@ -21,11 +21,11 @@ const Explore = ({ post }) => {
   console.log(post);
 
   const handleLoadMore = () => {
-    setNext((prev) => prev + 6);
+    setNext((prev) => prev + 18);
   };
 
   useEffect(() => {
-    dispatch(getPost({ next, limit: 6 }));
+    dispatch(getPost({ next, limit: 18 }));
   }, [dispatch, next]);
 
   const handleDeletePost = (postId) => {

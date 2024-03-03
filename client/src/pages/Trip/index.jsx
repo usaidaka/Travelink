@@ -124,7 +124,6 @@ const Trip = ({ location, province, currentCity, directionCity }) => {
   console.log(marker);
   return (
     <div data-testid="trip" className={classes.container}>
-      <h1>Trip</h1>
       <div className={classes.maps}>
         <Maps
           element="Trip"
@@ -229,6 +228,10 @@ const Trip = ({ location, province, currentCity, directionCity }) => {
                   </span>
                 )}
               </div>
+              <span className={classes.note}>
+                <sup>*</sup>
+                <FormattedMessage id="noteCurrent" />
+              </span>
             </div>
           </div>
 
@@ -325,7 +328,10 @@ const Trip = ({ location, province, currentCity, directionCity }) => {
                   </span>
                 )}
               </div>
-              <span className={classes.note}>test</span>
+              <span className={classes.note}>
+                <sup>*</sup>
+                <FormattedMessage id="noteTrip" />
+              </span>
             </div>
           </div>
         </div>

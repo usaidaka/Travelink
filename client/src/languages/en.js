@@ -113,4 +113,6 @@ export default {
   destinationRecommendation: 'Recommendation',
   from: 'From',
   to: 'To',
+  noteTrip: 'Please do search in maps to set your direction',
+  noteCurrent: 'Give permission to access your location. Your location is automatically detected',
 };

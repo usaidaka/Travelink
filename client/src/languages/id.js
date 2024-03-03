@@ -114,4 +114,6 @@ export default {
   destinationRecommendation: 'Rekomendasi',
   from: 'Dari',
   to: 'Ke',
+  noteTrip: 'Silakan lakukan pencarian pada peta untuk mengatur tujuan anda',
+  noteCurrent: 'Beri izin untuk akses lokasi anda. Lokasi anda secara otomatis terdeteksi',
 };
