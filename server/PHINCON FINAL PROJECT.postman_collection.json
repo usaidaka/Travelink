@@ -1,0 +1,2420 @@
+{
+	"info": {
+		"_postman_id": "1f69bc50-7c59-4ef1-8c0c-fc228eaffcb3",
+		"name": "PHINCON FINAL PROJECT",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26453564",
+		"_collection_link": "https://lively-station-936193.postman.co/workspace/Team-Workspace~4ce2a0a9-c02c-4291-8b5c-6ae8fde1d36d/collection/26453564-1f69bc50-7c59-4ef1-8c0c-fc228eaffcb3?action=share&source=collection_link&creator=26453564"
+	},
+	"item": [
+		{
+			"name": "AUTH",
+			"item": [
+				{
+					"name": "[GET PROFILE] My Profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}/{{ROUTE_USER}}/profile",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"{{ROUTE_USER}}",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[GET PROFILE] My Connection",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"test\": \"agafa\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}/{{ROUTE_USER}}/my-connection",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"{{ROUTE_USER}}",
+								"my-connection"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[GET PROFILE] Connection By Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}/{{ROUTE_USER}}/connection/:userId",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"{{ROUTE_USER}}",
+								"connection",
+								":userId"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[POST AUTH] Login User",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const secret = pm.collectionVariables.get(\"encrypt_secret\");\r",
+									"const encryptData = (data) => CryptoJS.AES.encrypt(data, secret).toString();\r",
+									"\r",
+									"let body = {\r",
+									"    email: \"txiuying6@icloud.com\",\r",
+									"    password: \"aaa123\",\r",
+									"};\r",
+									"const bodyJSON = JSON.stringify(body);\r",
+									"pm.collectionVariables.set(\"body_login\", bodyJSON);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"[POST AUTH] Login User Business\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    const tokenData = jsonData?.data?.token;\r",
+									"\r",
+									"    pm.collectionVariables.set(\"login_token\", tokenData);\r",
+									"\r",
+									"    const tokenValue = pm.collectionVariables.get(\"login_token\");\r",
+									"    console.log(\"Set token to: \", tokenValue);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{body_login}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}/{{ROUTE_AUTH}}/login",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"{{ROUTE_AUTH}}",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[POST AUTH] Register User",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const secret = pm.collectionVariables.get(\"encrypt_secret\");\r",
+									"const encryptData = (data) => CryptoJS.AES.encrypt(data, secret).toString();\r",
+									"\r",
+									"let body = {\r",
+									"    username: \"user\",\r",
+									"    email: \"user_2@main.com\",\r",
+									"    password: \"aaa123\",\r",
+									"    confirmPassword: \"aaa123\",\r",
+									"    role: \"User\",\r",
+									"    first_name: \"user\",\r",
+									"    last_name: \"dua\",\r",
+									"    gender: \"Female\",\r",
+									"    email_contact: \"user_2_parent@gmail.com\",\r",
+									"    phone: \"089652433207\",\r",
+									"    phone_contact: \"089652433205\",\r",
+									"    mbti: \"INTJ\",\r",
+									"};\r",
+									"const bodyJSON = JSON.stringify(body);\r",
+									"\r",
+									"pm.variables.set(\"body_register\", bodyJSON);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{body_register}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}/{{ROUTE_AUTH}}/register",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"{{ROUTE_AUTH}}",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[POST AUTH] Forgot Password",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const secret = pm.collectionVariables.get(\"encrypt_secret\");\r",
+									"const encryptData = (data) => CryptoJS.AES.encrypt(data, secret).toString();\r",
+									"\r",
+									"let body = {\r",
+									"    email: \"ujedkemal@gmail.com\",\r",
+									"};\r",
+									"const bodyJSON = JSON.stringify(body);\r",
+									"pm.collectionVariables.set(\"encrypted_email\", bodyJSON);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{encrypted_email}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}/{{ROUTE_AUTH}}/forgot-password",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"{{ROUTE_AUTH}}",
+								"forgot-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[POST AUTH] Reset User Password",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const secret = pm.collectionVariables.get(\"encrypt_secret\");\r",
+									"const encryptData = (data) => CryptoJS.AES.encrypt(data, secret).toString();\r",
+									"\r",
+									"let body = {\r",
+									"    otp: encryptData(\"5df036\"),\r",
+									"    newPassword: encryptData(\"Phincon123!\"),\r",
+									"    confirmNewPassword: encryptData(\"Phincon123!\"),\r",
+									"   \r",
+									"};\r",
+									"\r",
+									"pm.variables.set(\"body_reset_password\", JSON.stringify(body));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{body_reset_password}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}/{{ROUTE_AUTH}}/reset-password",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"{{ROUTE_AUTH}}",
+								"reset-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[PATCH AUTH] Change User Password",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const secret = pm.collectionVariables.get(\"encrypt_secret\");\r",
+									"const encryptData = (data) => CryptoJS.AES.encrypt(data, secret).toString();\r",
+									"\r",
+									"let body = {\r",
+									"    password: \"aaa123\",\r",
+									"    newPassword: \"aaa1234\",\r",
+									"    confirmPassword: \"aaa1234\",\r",
+									"};\r",
+									"const bodyJSON = JSON.stringify(body);\r",
+									"pm.collectionVariables.set(\"body_temp\", bodyJSON);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{body_temp}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}/{{ROUTE_AUTH}}/change-password",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"{{ROUTE_AUTH}}",
+								"change-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[PATCH AUTH] Update User Profile Data",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "Testi",
+									"type": "text"
+								},
+								{
+									"key": "first_name",
+									"value": "nfh",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "last_name",
+									"value": "asasd",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "gender",
+									"value": "Male",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "email_contact",
+									"value": "usaid@gmail.com",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "phone",
+									"value": "123123",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "phone_contact",
+									"value": "123123",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "mbti",
+									"value": "INFJ",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/peter/Downloads/denise-jans-CelYLE6Zvro-unsplash.jpg",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{API_URL}}/{{ROUTE_AUTH}}/profile",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"{{ROUTE_AUTH}}",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[GET AUTH] HELLO",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlRha3V5YSIsImVtYWlsIjoia3Vkb3Q1QGljbG91ZC5jb20iLCJyb2xlIjoiU3VwZXIiLCJpYXQiOjE3MDgzNTU4MjgsImV4cCI6MTcwODQ0MjIyOH0.gg6k8NKtz7_nkebceKfSGNvtauxwpABkgdKIYFVngrM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": [],
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{API_URL}}/{{ROUTE_AUTH}}/hello",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"{{ROUTE_AUTH}}",
+								"hello"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Post",
+					"item": [
+						{
+							"name": "[GET POST] Get Post",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}/{{ROUTE_USER}}/post/?next=0&limit=6",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"{{ROUTE_USER}}",
+										"post",
+										""
+									],
+									"query": [
+										{
+											"key": "next",
+											"value": "0"
+										},
+										{
+											"key": "limit",
+											"value": "6"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "[GET POST] Get Post Detail",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}/{{ROUTE_USER}}/post-detail/:postId",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"{{ROUTE_USER}}",
+										"post-detail",
+										":postId"
+									],
+									"variable": [
+										{
+											"key": "postId",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "[GET POST] Get User Post",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}/{{ROUTE_USER}}/user-post/:userId?next=2&limit=1",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"{{ROUTE_USER}}",
+										"user-post",
+										":userId"
+									],
+									"query": [
+										{
+											"key": "next",
+											"value": "2"
+										},
+										{
+											"key": "limit",
+											"value": "1"
+										}
+									],
+									"variable": [
+										{
+											"key": "userId",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "[GET POST] Get User List",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}/{{ROUTE_USER}}/user-list/",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"{{ROUTE_USER}}",
+										"user-list",
+										""
+									],
+									"query": [
+										{
+											"key": "next",
+											"value": "18",
+											"disabled": true
+										},
+										{
+											"key": "limit",
+											"value": "6",
+											"disabled": true
+										},
+										{
+											"key": "username",
+											"value": "",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "[UPDATE POST] Edit Post",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"province_id\": \"1\",\r\n    \"city_id\":\"2\",\r\n    \"caption\": \"hello\",\r\n    \"location_name\":\"bandung\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API_URL}}/{{ROUTE_USER}}/post/:postId",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"{{ROUTE_USER}}",
+										"post",
+										":postId"
+									],
+									"variable": [
+										{
+											"key": "postId",
+											"value": "67"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "[POST POST] Create Post",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "province_id",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "city_id",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "caption",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "location_name",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/Users/peter/Downloads/fb2a1db9b11234df4633693112a915fb.png"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{API_URL}}/{{ROUTE_USER}}/post",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"{{ROUTE_USER}}",
+										"post"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "[DELETE POST] Delete Post",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}/{{ROUTE_USER}}/post/:postId",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"{{ROUTE_USER}}",
+										"post",
+										":postId"
+									],
+									"variable": [
+										{
+											"key": "postId",
+											"value": "67"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "[GET COMMENT] Get Comment By Post Id",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}/{{ROUTE_USER}}/comment/:postId",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"{{ROUTE_USER}}",
+										"comment",
+										":postId"
+									],
+									"variable": [
+										{
+											"key": "postId",
+											"value": "1000"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "[POST COMMENT] Create Comment",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"comment\": \"test\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API_URL}}/{{ROUTE_USER}}/comment/:postId",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"{{ROUTE_USER}}",
+										"comment",
+										":postId"
+									],
+									"variable": [
+										{
+											"key": "postId",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "[DELETE COMMENT] Delete Comment",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}/{{ROUTE_USER}}/comment/:commentId",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"{{ROUTE_USER}}",
+										"comment",
+										":commentId"
+									],
+									"variable": [
+										{
+											"key": "commentId",
+											"value": "51"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Route",
+					"item": [
+						{
+							"name": "[GET REGION] Region",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API_URL}}/{{ROUTE_USER}}/region/:provinceId",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"{{ROUTE_USER}}",
+										"region",
+										":provinceId"
+									],
+									"variable": [
+										{
+											"key": "provinceId",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "[POST ROUTE] Add Route",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const secret = pm.collectionVariables.get(\"encrypt_secret\");\r",
+											"const encryptData = (data) => CryptoJS.AES.encrypt(data, secret).toString();\r",
+											"\r",
+											"let body = {\r",
+											"    // current\r",
+											"    current_province_id: 1,\r",
+											"    current_city_id: 114,\r",
+											"    current_detail: \"Gg. Nari, Pasteur, Kec. Sukajadi, Kota Bandung, Jawa Barat 40161\",\r",
+											"    current_longitude: 107.61861,\r",
+											"    current_latitude: -6.90389,\r",
+											"    // direction\r",
+											"    direction_detail: \"Jl. Pesona Amerika I, Nagrak, Kec. Gn. Putri, Kabupaten Bogor, Jawa Barat 16967\",\r",
+											"    direction_province_id: 1,\r",
+											"    direction_city_id: 114,\r",
+											"    direction_longitude: -0.18928,\r",
+											"    direction_latitude: 51.50378,\r",
+											"};\r",
+											"const bodyJSON = JSON.stringify(body);\r",
+											"pm.collectionVariables.set(\"body_route\", bodyJSON);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{body_route}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API_URL}}/{{ROUTE_USER}}/route",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"{{ROUTE_USER}}",
+										"route"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "[GET ROUTE] My Route",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API_URL}}/{{ROUTE_USER}}/my-route",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"{{ROUTE_USER}}",
+										"my-route"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "[GET NEARBY] NearBy",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API_URL}}/{{ROUTE_USER}}/nearby",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"{{ROUTE_USER}}",
+										"nearby"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "[GET NEARBY] NearBy Direction",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API_URL}}/{{ROUTE_USER}}/nearby/direction",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"{{ROUTE_USER}}",
+										"nearby",
+										"direction"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Address",
+					"item": [
+						{
+							"name": "[POST ADDRESS] Add Address",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const secret = pm.collectionVariables.get(\"encrypt_secret\");\r",
+											"const encryptData = (data) => CryptoJS.AES.encrypt(data, secret).toString();\r",
+											"\r",
+											"let body = {\r",
+											"    province_id: 1,\r",
+											"    city_id: 114,\r",
+											"    detail: \"Jalan Nangka Raya, C Jl. TB Simatupang, Tj. Barat, Kec. Jagakarsa, Daerah Khusus Ibukota Jakarta 12530\",\r",
+											"    longitude: 107.61861,\r",
+											"    latitude: -6.90389,\r",
+											"    postal_code: \"11232\",\r",
+											"    title: \"myhome\"\r",
+											"\r",
+											"};\r",
+											"const bodyJSON = JSON.stringify(body);\r",
+											"pm.collectionVariables.set(\"body_address\", bodyJSON);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{body_address}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API_URL}}/{{ROUTE_USER}}/address",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"{{ROUTE_USER}}",
+										"address"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "[GET ADDRESS] My Address",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API_URL}}/{{ROUTE_USER}}/my-address",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"{{ROUTE_USER}}",
+										"my-address"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Group",
+					"item": [
+						{
+							"name": "[DELETE GROUP] REMOVE GROUP",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API_URL}}/{{ROUTE_USER}}/group/:groupId",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"{{ROUTE_USER}}",
+										"group",
+										":groupId"
+									],
+									"variable": [
+										{
+											"key": "groupId",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "[DELETE GROUP] LEAVE GROUP",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API_URL}}/{{ROUTE_USER}}/leave-group/:groupId",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"{{ROUTE_USER}}",
+										"leave-group",
+										":groupId"
+									],
+									"variable": [
+										{
+											"key": "groupId",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "[DELETE GROUP] Reject Invitation Group",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API_URL}}/{{ROUTE_USER}}/reject-group/:groupId",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"{{ROUTE_USER}}",
+										"reject-group",
+										":groupId"
+									],
+									"variable": [
+										{
+											"key": "groupId",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "[POST GROUP] Add Group",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const secret = pm.collectionVariables.get(\"encrypt_secret\");\r",
+											"const encryptData = (data) => CryptoJS.AES.encrypt(data, secret).toString();\r",
+											"\r",
+											"let body = {\r",
+											"    group_name:\"Test\",\r",
+											"    member: ['Lan','Francisco','Xiaoming']\r",
+											"};\r",
+											"const bodyJSON = JSON.stringify(body);\r",
+											"pm.collectionVariables.set(\"body_group\", bodyJSON);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{body_group}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API_URL}}/{{ROUTE_USER}}/group",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"{{ROUTE_USER}}",
+										"group"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "[PATCH GROUP] Approve Invitation Group",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}/{{ROUTE_USER}}/approve-group/:groupId",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"{{ROUTE_USER}}",
+										"approve-group",
+										":groupId"
+									],
+									"variable": [
+										{
+											"key": "groupId",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "[PATCH GROUP] Update Member",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}/{{ROUTE_USER}}/group/update-member/:userId/:groupId",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"{{ROUTE_USER}}",
+										"group",
+										"update-member",
+										":userId",
+										":groupId"
+									],
+									"variable": [
+										{
+											"key": "userId",
+											"value": "2"
+										},
+										{
+											"key": "groupId",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "[PATCH GROUP] Update Group Name",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"group_name\": \"uhuy\",\r\n    \"member\":[]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API_URL}}/{{ROUTE_USER}}/group/:groupId",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"{{ROUTE_USER}}",
+										"group",
+										":groupId"
+									],
+									"variable": [
+										{
+											"key": "groupId",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "[GET GROUP] Get My Group",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}/{{ROUTE_USER}}/my-group",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"{{ROUTE_USER}}",
+										"my-group"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "[POST] Follow",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}/{{ROUTE_USER}}/follow/:followTo",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"{{ROUTE_USER}}",
+								"follow",
+								":followTo"
+							],
+							"variable": [
+								{
+									"key": "followTo",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[POST] My Follow",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}/{{ROUTE_USER}}/my-follow",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"{{ROUTE_USER}}",
+								"my-follow"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[DELETE] Delete My Follow",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}/{{ROUTE_USER}}/my-follow/:followId",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"{{ROUTE_USER}}",
+								"my-follow",
+								":followId"
+							],
+							"variable": [
+								{
+									"key": "followId",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[GET] User Profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}/{{ROUTE_USER}}/user-profile/:userId",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"{{ROUTE_USER}}",
+								"user-profile",
+								":userId"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[POST] User Follow",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}/{{ROUTE_USER}}/user-follow/:userId",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"{{ROUTE_USER}}",
+								"user-follow",
+								":userId"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "[POST DESTIONATION] Create Destionation",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "province_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "city_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "detail",
+									"value": "asd",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "s",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "s",
+									"type": "text"
+								},
+								{
+									"key": "latitude",
+									"value": "a",
+									"type": "text"
+								},
+								{
+									"key": "longitude",
+									"value": "1221",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/peter/Downloads/denise-jans-CelYLE6Zvro-unsplash.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{API_URL}}/{{ROUTE_ADMIN}}/destination",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"{{ROUTE_ADMIN}}",
+								"destination"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[PATCH DESTIONATION] Edit Destination",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "province_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "city_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "detail",
+									"value": "asd",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "s",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "s",
+									"type": "text"
+								},
+								{
+									"key": "latitude",
+									"value": "a",
+									"type": "text"
+								},
+								{
+									"key": "longitude",
+									"value": "1221",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "{{API_URL}}/{{ROUTE_ADMIN}}/destination/:destinationId",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"{{ROUTE_ADMIN}}",
+								"destination",
+								":destinationId"
+							],
+							"variable": [
+								{
+									"key": "destinationId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[DELETE DESTIONATION] Delete Destination",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}/{{ROUTE_ADMIN}}/destination/:destinationId",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"{{ROUTE_ADMIN}}",
+								"destination",
+								":destinationId"
+							],
+							"variable": [
+								{
+									"key": "destinationId",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[GET DESTINATION] Get All Destination",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}/{{ROUTE_ADMIN}}/destination",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"{{ROUTE_ADMIN}}",
+								"destination"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[GET DESTINATION] Get Dashboard",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}/{{ROUTE_ADMIN}}/dashboard",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"{{ROUTE_ADMIN}}",
+								"dashboard"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[GET DESTINATION] Get Destination By Id",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}/{{ROUTE_ADMIN}}/destination/:destinationId",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"{{ROUTE_ADMIN}}",
+								"destination",
+								":destinationId"
+							],
+							"variable": [
+								{
+									"key": "destinationId",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{login_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "API_URL",
+			"value": "http://localhost:8080/api",
+			"type": "string"
+		},
+		{
+			"key": "ROUTE_ORDERIN_AJA",
+			"value": "orderin-aja",
+			"type": "string"
+		},
+		{
+			"key": "ROUTE_AUTH",
+			"value": "auth",
+			"type": "string"
+		},
+		{
+			"key": "ROUTE_USER",
+			"value": "user",
+			"type": "string"
+		},
+		{
+			"key": "ROUTE_ADMIN",
+			"value": "admin",
+			"type": "string"
+		},
+		{
+			"key": "body_login",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "body_register",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "encrypt_secret",
+			"value": "secret",
+			"type": "string"
+		},
+		{
+			"key": "login_token",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzYWlkYWthIiwiZW1haWwiOiJ1c2FpZGFrYUBnbWFpbC5jb20iLCJyb2xlIjoiVXNlciIsImlhdCI6MTcwODQ4NTQyMiwiZXhwIjoxNzA4NTcxODIyfQ.xS6XcHX1RwRPq-Ol9GkPY_eDqkqIFg7no1oHUqmptng"
+		},
+		{
+			"key": "body_temp",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "encrypted_email",
+			"value": ""
+		},
+		{
+			"key": "body_address",
+			"value": ""
+		},
+		{
+			"key": "TOKEN",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidXNlcm5hbWUiOiJYaXV5aW5nIiwiZW1haWwiOiJ0eGl1eWluZzZAaWNsb3VkLmNvbSIsInJvbGUiOiJVc2VyIiwiaWF0IjoxNzA5MzgyMjA1LCJleHAiOjE3NDA5MTgyMDV9.d0D7DxSUA4b0_o9nXmYwvbuN0hjXr8Gt01tlr4NAVOw",
+			"type": "string"
+		},
+		{
+			"key": "body_route",
+			"value": ""
+		},
+		{
+			"key": "body_group",
+			"value": ""
+		}
+	]
+}

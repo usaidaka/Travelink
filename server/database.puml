@@ -41,20 +41,7 @@ entity "User" {
   -role (ENUM, [User, Admin, Super])
 }
 
-entity "Address" {
-    /' V '/    
-  + id [PK]
-  --
-  + province_id [FK]
-  + city_id [FK]
-  + user_id [FK]
-  --
-  -detail (string)
-  -longitude (string)
-  -latitude (string)
-  -postal_conde (string)
-  -title (string)
-}
+
 
 entity "Route"{
     /' V '/    
@@ -151,7 +138,7 @@ entity "Order" {
   --
   + user_id [FK]
   + product_id [FK]
-  + address_id [FK]
+
   --
   -order_status (ENUM, ["Pending Payment", 
   "Awaiting Payment Confirmation", "Complete",
@@ -222,7 +209,7 @@ entity "Image_Destination" {
 ' user
 User ||--|| User_Detail
 User ||--|| Credential
-User }|--|| Address
+
 User ||--|| Route
 User ||--|{ Product_Pivot 
 Product_Pivot }|--|| Product
@@ -233,7 +220,7 @@ Province }|--|| City
 Product }|--|| Image_Product
 Route }|--|| City
 Route }|--|| Province
-Address }|--|| City
+
 User }|--|| Order
 Order }|--|| Product
 Post ||--|| Province
@@ -243,7 +230,7 @@ Post }|--||Image_Post
 Post }|--||Comment
 User }|--|| Comment
 Destination }|--||Image_Destination
-Order ||--|{ Address
+
 
 
 
