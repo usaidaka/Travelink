@@ -6,6 +6,7 @@ const db = require("../../models");
 const GeneralHelper = require("../../server/helpers/generalHelper");
 const AuthPlugin = require("../../server/api/auth");
 const cloudinary = require("../../server/service/cloudinary");
+const redis = require("../../server/service/redis");
 
 const MockUser = require("../fixtures/database/user.json");
 const MockCredential = require("../fixtures/database/credential.json");
@@ -41,6 +42,9 @@ let jwtVerify;
 let mockJsonWebTokenData;
 
 let uploadCloudinary;
+
+let redisSetFunction;
+let redisGetFunction;
 
 const tokenUserImmortal = {
   authorization:
@@ -170,10 +174,20 @@ describe("Auth", () => {
 
       mockUser = _.cloneDeep(MockUser);
       getUser = jest.spyOn(db.User, "findOne");
+
+      redisGetFunction = jest.spyOn(redis, "getKey");
+      redisSetFunction = jest.spyOn(redis, "setKey");
     });
 
     test("Should Return 200: Login Success", async () => {
+      redisGetFunction.mockResolvedValue(null);
       getUser.mockResolvedValue(mockUser);
+      redisSetFunction({
+        key: `wrong-password/1`,
+        value: JSON.stringify({ count: 0 }),
+        isSetExpired: true,
+        second: 0,
+      });
 
       await Request(server)
         .post(apiUrl)
@@ -198,6 +212,19 @@ describe("Auth", () => {
     });
 
     test("Should Return 400: Wrong Password", async () => {
+      payload.password = "wrong_password";
+      getUser.mockResolvedValue(mockUser);
+
+      await Request(server).post(apiUrl).send(payload).expect(400);
+    });
+
+    test("Should Return 400: You have entered the wrong password 3 times. Please try again in 5 minutes", async () => {
+      redisSetFunction.mockResolvedValue({
+        key: `wrong-password/1`,
+        value: JSON.stringify({ count: 4 }),
+        isSetExpired: true,
+        second: 60,
+      });
       payload.password = "wrong_password";
       getUser.mockResolvedValue(mockUser);
 
