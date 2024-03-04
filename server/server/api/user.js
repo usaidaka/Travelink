@@ -473,7 +473,7 @@ const userProfile = async (request, reply) => {
 };
 
 // GET
-Router.get("/profile", Middleware.validateToken, Middleware.isUser, myProfile);
+Router.get("/profile", Middleware.validateToken, myProfile);
 
 // Router.get(
 //   "/my-address",

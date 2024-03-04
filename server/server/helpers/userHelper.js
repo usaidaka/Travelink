@@ -1037,7 +1037,7 @@ const getRegion = async (provinceId) => {
   }
 };
 
-const getNearBy = async (id, radius = 50) => {
+const getNearBy = async (id, radius = 100) => {
   let resultEncrypted = "";
   try {
     const myCurrentLocation = await db.Route.findOne({
@@ -1134,40 +1134,33 @@ const getNearBy = async (id, radius = 50) => {
         });
       }
     }
-    let remapData = [];
-    nearbyUsers.map(
-      (near) =>
-        (remapData = [
-          {
-            id: near?.user?.id,
-            user_id: near?.user?.user_id,
-            profile: {
-              username: near?.user?.User?.username,
-              firstName: near?.user?.User?.UserDetail?.first_name,
-              email: near?.user?.User?.email,
-              phone: near?.user?.User?.UserDetail?.phone,
-              image: near?.user?.User?.image,
-            },
-            current_position: [
-              near?.user?.current_latitude,
-              near?.user?.current_longitude,
-            ],
-            direction_position: [
-              near?.user?.direction_latitude,
-              near?.user?.direction_longitude,
-            ],
-            current_region: {
-              province: near?.user?.current_province?.name,
-              city: near?.user?.current_city?.name,
-            },
-            direction_region: {
-              province: near?.user?.direction_province?.name,
-              city: near?.user?.direction_city?.name,
-            },
-            distance: near.distance,
-          },
-        ])
-    );
+    const remapData = nearbyUsers.map((near) => ({
+      id: near?.user?.user_id,
+      profile: {
+        username: near?.user?.User?.username,
+        firstName: near?.user?.User?.UserDetail?.first_name,
+        email: near?.user?.User?.email,
+        phone: near?.user?.User?.UserDetail?.phone,
+        image: near?.user?.User?.image,
+      },
+      current_position: [
+        near?.user?.current_latitude,
+        near?.user?.current_longitude,
+      ],
+      direction_position: [
+        near?.user?.direction_latitude,
+        near?.user?.direction_longitude,
+      ],
+      current_region: {
+        province: near?.user?.current_province?.name,
+        city: near?.user?.current_city?.name,
+      },
+      direction_region: {
+        province: near?.user?.direction_province?.name,
+        city: near?.user?.direction_city?.name,
+      },
+      distance: near?.distance,
+    }));
 
     resultEncrypted = encryptPayload({ decryptedData: remapData });
 
@@ -1279,40 +1272,33 @@ const getNearByInDirection = async (id, radius = 50) => {
         });
       }
     }
-    let remapData = [];
-    nearbyUsers.map(
-      (near) =>
-        (remapData = [
-          {
-            id: near?.user?.id,
-            user_id: near?.user?.user_id,
-            profile: {
-              username: near?.user?.User?.username,
-              firstName: near?.user?.User?.UserDetail?.first_name,
-              email: near?.user?.User?.email,
-              phone: near?.user?.User?.UserDetail?.phone,
-              image: near?.user?.User?.image,
-            },
-            current_position: [
-              near?.user?.current_latitude,
-              near?.user?.current_longitude,
-            ],
-            direction_position: [
-              near?.user?.direction_latitude,
-              near?.user?.direction_longitude,
-            ],
-            current_region: {
-              province: near?.user?.current_province?.name,
-              city: near?.user?.current_city?.name,
-            },
-            direction_region: {
-              province: near?.user?.direction_province?.name,
-              city: near?.user?.direction_city?.name,
-            },
-            distance: near.distance,
-          },
-        ])
-    );
+    const remapData = nearbyUsers.map((near) => ({
+      id: near?.user?.user_id,
+      profile: {
+        username: near?.user?.User?.username,
+        firstName: near?.user?.User?.UserDetail?.first_name,
+        email: near?.user?.User?.email,
+        phone: near?.user?.User?.UserDetail?.phone,
+        image: near?.user?.User?.image,
+      },
+      current_position: [
+        near?.user?.current_latitude,
+        near?.user?.current_longitude,
+      ],
+      direction_position: [
+        near?.user?.direction_latitude,
+        near?.user?.direction_longitude,
+      ],
+      current_region: {
+        province: near?.user?.current_province?.name,
+        city: near?.user?.current_city?.name,
+      },
+      direction_region: {
+        province: near?.user?.direction_province?.name,
+        city: near?.user?.direction_city?.name,
+      },
+      distance: near?.distance,
+    }));
 
     resultEncrypted = encryptPayload({ decryptedData: remapData });
 
