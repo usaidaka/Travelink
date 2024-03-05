@@ -133,6 +133,23 @@ const Maps = ({
           : null;
       break;
 
+    case 'Group':
+      renderedMarker =
+        !_.isEmpty(marker) && !_.isEmpty(marker[0]?.position[0])
+          ? marker.map((pin) => {
+              const isDecryptedProfile = pin.id === 1;
+              const icon = isDecryptedProfile ? customMarkerIcon : defaultMarkerIcon;
+              return (
+                <Marker icon={icon} key={pin.id} position={pin.position}>
+                  <Popup>
+                    <span>{pin.province}</span>, <span>{pin.city}</span>
+                  </Popup>
+                </Marker>
+              );
+            })
+          : null;
+      break;
+
     case 'Destination':
       renderedMarker =
         !_.isEmpty(marker) &&

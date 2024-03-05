@@ -83,7 +83,7 @@ const CardGroup = ({ data }) => {
   return (
     <div className={classes.container}>
       <div className={classes.maps}>
-        <Maps isSearch={false} element="People" marker={marker} zoom={4} center={marker[0]?.position} />
+        <Maps isSearch={false} element="Group" marker={marker} zoom={4} center={marker[0]?.position} />
       </div>
       <div className={classes['group-name']}>
         <h1>{data?.groups?.group_name}</h1>
