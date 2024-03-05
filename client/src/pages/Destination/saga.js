@@ -11,7 +11,6 @@ function* doCreateDestination({ data, cbSuccess, cbFailed }) {
 
     cbSuccess && cbSuccess(response.message);
   } catch (error) {
-    console.log(error);
     cbFailed && cbFailed();
     yield put(showPopup('Error', error.response?.data?.message));
   }
@@ -22,7 +21,7 @@ function* doGetDestination() {
   setLoading(true);
   try {
     const response = yield call(getDestination);
-    console.log(response);
+
     yield put(setDestination(response.result));
   } catch (error) {
     console.log(error);
@@ -35,13 +34,10 @@ function* doGetDestination() {
 function* doDeleteDestination({ destinationId, cbSuccess }) {
   setLoading(true);
   try {
-    console.log(destinationId);
     const response = yield call(deleteDestination, destinationId);
-    console.log(response);
+
     cbSuccess && cbSuccess(response.message);
   } catch (error) {
-    console.log(error);
-
     yield put(showPopup('Error', error.response?.data?.message));
   }
   setLoading(false);

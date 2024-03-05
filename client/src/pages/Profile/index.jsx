@@ -32,11 +32,6 @@ const Profile = ({ post, profile, location, connection, myFollow, loadingTest = 
   const [render, setRender] = useState(true);
 
   const [myPosts, setMyPosts] = useState([]);
-  console.log(post);
-  console.log(profile);
-  console.log(location);
-  console.log(connection);
-  console.log(myFollow);
 
   const dispatch = useDispatch();
 
@@ -94,7 +89,7 @@ const Profile = ({ post, profile, location, connection, myFollow, loadingTest = 
       doDeletePost(postId, (message) => {
         toast.success(message, { duration: 1000 });
         setMyPosts((prev) => prev.filter((x) => x.id !== postId));
-        // setNext(0);
+
         dispatch(getConnectionData());
       })
     );

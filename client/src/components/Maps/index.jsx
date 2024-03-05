@@ -45,7 +45,6 @@ const Maps = ({
           : null;
       break;
     case 'SidebarRight':
-      console.log(marker);
       renderedMarker =
         !_.isEmpty(marker) &&
         marker.map((pin) => (
@@ -96,7 +95,6 @@ const Maps = ({
       break;
 
     case 'Destination':
-      console.log(marker);
       renderedMarker =
         !_.isEmpty(marker) &&
         marker?.map((pin) => (
@@ -109,7 +107,6 @@ const Maps = ({
       break;
 
     case 'DestinationRecommendation':
-      console.log(marker);
       renderedMarker =
         !_.isEmpty(marker) &&
         marker?.map((pin) => (
@@ -122,7 +119,6 @@ const Maps = ({
       break;
 
     case 'EditDestination':
-      console.log(marker);
       renderedMarker = !_.isEmpty(marker) && (
         <Marker position={[marker?.latitude, marker?.longitude]}>
           <Popup>
@@ -160,8 +156,6 @@ const Maps = ({
       break;
 
     case 'RegisterDestination':
-      console.log(marker);
-      console.log(valueSearch);
       renderedMarker = !_.isEmpty(marker) && (
         <Marker position={[marker?.lat, marker?.lng]}>
           <Popup>
@@ -180,7 +174,6 @@ const Maps = ({
       break;
 
     case 'Dashboard':
-      console.log(marker);
       renderedMarker =
         !_.isEmpty(marker) &&
         marker.map((mark, idx) => (
@@ -193,7 +186,6 @@ const Maps = ({
       break;
 
     case 'nearby':
-      console.log(marker);
       renderedMarker =
         !_.isEmpty(marker) &&
         marker.map((mark, idx) => (

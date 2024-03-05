@@ -70,10 +70,7 @@ export const getComment = (postId, cbSuccess) => ({
   cbSuccess,
 });
 
-export const setComment = (comment) => {
-  console.log(comment);
-  return { type: SET_COMMENT, comment };
-};
+export const setComment = (comment) => ({ type: SET_COMMENT, comment });
 
 export const doComment = (postId, data, cbSuccess) => ({
   type: DO_COMMENT,

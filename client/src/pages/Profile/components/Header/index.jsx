@@ -23,7 +23,6 @@ const Header = ({ follow, src, marker, profile, totalPost, handleFollow, handleD
   const handleOpenFollower = () => setOpenFollower(true);
   const handleCloseFollower = () => setOpenFollower(false);
 
-  console.log(follow);
   return (
     <div className={classes['header-container']}>
       <div className={classes.header}>

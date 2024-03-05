@@ -18,7 +18,6 @@ const Explore = ({ post }) => {
   const [next, setNext] = useState(0);
   const [allPostData, setAllPostData] = useState([]);
   const [isMore, setIsMore] = useState(false);
-  console.log(post);
 
   const handleLoadMore = () => {
     setNext((prev) => prev + 18);

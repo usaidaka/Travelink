@@ -27,7 +27,7 @@ const Cards = ({ course, id, onClick }) => {
           </div>
         )}
 
-        <button data-testid="button-submit" onClick={onClick}>
+        <button type="submit" data-testid="button-submit" onClick={onClick}>
           Submit
         </button>
         <Button data-testid="button-mui" onClick={onClick}>

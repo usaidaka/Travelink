@@ -18,7 +18,6 @@ import Trip from '@pages/Trip';
 import UserProfile from '@pages/UserProfile';
 import Destination from '@pages/Destination';
 import EditDestination from '@pages/EditDestination';
-import Nearby from '@pages/NearbyCurrent';
 import DestinationRecommendation from '@pages/DestinationRecommendation';
 import NearbyCurrent from '@pages/NearbyCurrent';
 import NearbyDirection from '@pages/NearbyDirection';

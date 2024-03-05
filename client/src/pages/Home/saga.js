@@ -63,7 +63,7 @@ function* doGetPost({ query, cbSuccess }) {
   setLoading(true);
   try {
     const response = yield call(getPost, query);
-    console.log(response?.result?.followingPost);
+
     yield put(setPost(response.result));
 
     yield put(setFollowingPost(response?.result?.followingPost));
@@ -120,7 +120,7 @@ function* deleteComment({ commentId, cbSuccess }) {
   setLoading(true);
   try {
     const response = yield call(deleteCommentPost, commentId);
-    console.log(response);
+
     cbSuccess && cbSuccess(response.message);
   } catch (error) {
     yield put(showPopup('Error', error.response?.data?.message));

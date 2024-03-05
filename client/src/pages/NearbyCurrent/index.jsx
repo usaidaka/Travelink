@@ -15,8 +15,6 @@ const NearbyCurrent = ({ nearby }) => {
   const [decryptedCurrentNearby, setDecryptedCurrentNearby] = useState([]);
   const dispatch = useDispatch();
 
-  console.log(decryptedCurrentNearby);
-
   useEffect(() => {
     dispatch(getNearby());
   }, [dispatch]);

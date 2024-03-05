@@ -10,13 +10,9 @@ const PopupMessage = ({ open, title, message, onClose }) => {
   return (
     <Dialog open={open} onClose={onClose} PaperProps={{ className: classes.dialogWrapper }}>
       <div className={classes.title}>
-        {/* <FormattedMessage id={title || 'app_popup_error_title'} /> */}
         <p>{title}</p>
       </div>
-      <div className={classes.message}>
-        {/* <FormattedMessage id={message || 'app_popup_error_message'} /> */}
-        {message}
-      </div>
+      <div className={classes.message}>{message}</div>
       <button type="button" onClick={onClose} className={classes.button}>
         <FormattedMessage id="app_popup_close_button_label" />
       </button>

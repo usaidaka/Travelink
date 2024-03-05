@@ -15,8 +15,6 @@ const CardPeople = ({ data, handleFollow }) => {
     setIsFollow(data.Follow);
   }, [data.Follow]);
 
-  console.log(data);
-
   useEffect(() => {
     setMarker([
       {
@@ -45,7 +43,6 @@ const CardPeople = ({ data, handleFollow }) => {
     data?.Route?.direction_province?.name,
   ]);
 
-  console.log(data.Route);
   return (
     <div className={classes['card-people']}>
       <div className={classes['header-wrapper']}>

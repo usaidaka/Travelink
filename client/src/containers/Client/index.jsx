@@ -20,10 +20,12 @@ const Client = ({ login, children, user }) => {
 
   const navigate = useNavigate();
   useEffect(() => {
-    if (isUser) {
+    if (!login) {
       navigate(-1);
+    } else if (decryptPayload(user).role !== 'User') {
+      navigate('/admin/dashboard');
     }
-  }, [isUser, login, navigate]);
+  }, [isUser, login, navigate, user]);
 
   return children;
 };

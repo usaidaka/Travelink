@@ -28,9 +28,6 @@ const UserProfile = ({ userProfile, posts, userConnection, userFollow }) => {
   const [isMore, setIsMore] = useState(false);
   const [marker, setMarker] = useState([]);
 
-  console.log(decryptedUserFollow);
-  console.log(userFollow);
-
   useEffect(() => {
     dispatch(getUserProfile(userId));
     dispatch(getUserPost(userId, { next, limit: 6 }));
@@ -85,24 +82,16 @@ const UserProfile = ({ userProfile, posts, userConnection, userFollow }) => {
     }
   }, [posts]);
 
-  console.log(decryptedUserProfile.Follow);
-
   const handleFollow = (followTo) => {
     dispatch(
       doFollow(followTo, (message) => {
-        console.log(message);
         toast.success(message, { duration: 1000 });
         dispatch(getUserProfile(followTo));
         dispatch(getUserFollow(userId));
       })
     );
   };
-  console.log(marker);
 
-  console.log(userId);
-  console.log('tet');
-
-  console.log('object');
   return (
     <div data-testid="userProfile" className={classes.container}>
       <Header

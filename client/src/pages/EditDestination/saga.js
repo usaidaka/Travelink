@@ -9,7 +9,7 @@ function* deGetDestinationById({ destinationId, cbSuccess, cbFailed }) {
   setLoading(true);
   try {
     const response = yield call(getDestinationById, destinationId);
-    console.log(response.result);
+
     cbSuccess && cbSuccess();
 
     yield put(setDestinationById(response?.result));
@@ -24,7 +24,7 @@ function* doEditDestination({ destinationId, data, cbSuccess, cbFailed }) {
   setLoading(true);
   try {
     const response = yield call(editDestination, destinationId, data);
-    console.log(response.result);
+
     cbSuccess && cbSuccess(response.message);
 
     yield put(setDestinationById(response?.result));

@@ -8,10 +8,9 @@ function* doGetNearbyDirection() {
   setLoading(true);
   try {
     const response = yield call(nearbyDirection);
-    console.log(response);
+
     yield put(setNearbyDirection(response.result));
   } catch (error) {
-    console.log(error);
     yield put(showPopup('Error', error.response?.data?.message));
   }
   setLoading(false);

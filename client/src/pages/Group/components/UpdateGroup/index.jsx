@@ -12,14 +12,12 @@ import _ from 'lodash';
 import classes from './style.module.scss';
 import MultipleSelect from '../CreateGroup/MultipleSelect';
 
-const UpdateGroup = ({ myRoute, group }) => {
+const UpdateGroup = ({ group }) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [personName, setPersonName] = useState([]);
 
-  console.log(myRoute);
-  console.log(group);
   const dispatch = useDispatch();
 
   const {
@@ -30,15 +28,13 @@ const UpdateGroup = ({ myRoute, group }) => {
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data);
-    console.log(personName);
     if (personName) {
       data.member = personName;
     }
     if (_.isEmpty(data.group_name)) {
       data.group_name = group?.groups?.group_name;
     }
-    console.log(data);
+
     dispatch(
       updateGroup(group?.groups?.id, data, (message) => {
         toast.success(message, { duration: 1000 });
@@ -107,7 +103,6 @@ const UpdateGroup = ({ myRoute, group }) => {
 
 UpdateGroup.propTypes = {
   group: PropTypes.array,
-  myRoute: PropTypes.object,
 };
 
 export default UpdateGroup;

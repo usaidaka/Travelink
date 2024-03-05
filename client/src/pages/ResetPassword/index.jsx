@@ -18,8 +18,6 @@ const ResetPassword = () => {
   const [loading, setLoading] = useState(false);
   const { resetToken } = useParams();
 
-  console.log(resetToken);
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -31,6 +29,7 @@ const ResetPassword = () => {
   } = useForm();
 
   const onSubmit = (data) => {
+    data.token = resetToken;
     const encryptedData = encryptPayload(data);
 
     dispatch(

@@ -20,8 +20,7 @@ import Toolbar from '@mui/material/Toolbar';
 import { Avatar, Menu, MenuItem } from '@mui/material';
 import { FormattedMessage } from 'react-intl';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-// import LightModeIcon from '@mui/icons-material/LightMode';
-// import NightsStayIcon from '@mui/icons-material/NightsStay';
+
 import GpsFixedIcon from '@mui/icons-material/GpsFixed';
 import { logout } from '@utils/logout';
 import { createStructuredSelector } from 'reselect';
@@ -34,12 +33,11 @@ import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import decryptPayload from '@utils/decryptionHelper';
 
-// import logoBook from '../../assets/logoBook.png';
 import classes from './style.module.scss';
 
 const drawerWidth = 240;
 
-const NavbarAdmin = ({ locale, /*  theme */ children, user }) => {
+const NavbarAdmin = ({ locale, children, user }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -96,10 +94,6 @@ const NavbarAdmin = ({ locale, /*  theme */ children, user }) => {
     }
     handleClose();
   };
-
-  // const handleTheme = () => {
-  //   dispatch(setTheme(theme === 'light' ? 'dark' : 'light'));
-  // };
 
   const handleLogout = () => {
     logout(dispatch, navigate);
@@ -192,9 +186,6 @@ const NavbarAdmin = ({ locale, /*  theme */ children, user }) => {
             </Link>
             <div className={classes.contentWrapper}>
               <div className={classes.toolbar}>
-                {/* <div className={classes.theme} onClick={handleTheme} data-testid="toggleTheme">
-                  {theme === 'light' ? <NightsStayIcon /> : <LightModeIcon />}
-                </div> */}
                 <div className={classes.toggle} onClick={handleClick}>
                   <Avatar className={classes.avatar} src={locale === 'id' ? '/id.png' : '/en.png'} />
                   <div className={classes.lang}>{locale}</div>
@@ -219,7 +210,7 @@ const NavbarAdmin = ({ locale, /*  theme */ children, user }) => {
                   </div>
                 </MenuItem>
               </Menu>
-              {/* profile */}
+
               <div>
                 <div className={classes.toolbar}>
                   <div className={classes.toggle} onClick={handleClickDropdown}>
@@ -231,7 +222,6 @@ const NavbarAdmin = ({ locale, /*  theme */ children, user }) => {
                 <Menu open={openDropdown} anchorEl={dropdownPosition} onClose={handleCloseDropdown}>
                   <MenuItem onClick={handleLogout}>
                     <div className={classes.menu}>
-                      {/* <img src={logoutIcon} alt="" className={classes.icon} /> */}
                       <div className={classes.menuLang}>
                         <FormattedMessage id="logout" />
                       </div>
@@ -244,14 +234,13 @@ const NavbarAdmin = ({ locale, /*  theme */ children, user }) => {
         </Toolbar>
       </AppBar>
       <Box component="nav" sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }} aria-label="mailbox folders">
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Drawer
           variant="temporary"
           open={mobileOpen}
           onTransitionEnd={handleDrawerTransitionEnd}
           onClose={handleDrawerClose}
           ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
+            keepMounted: true,
           }}
           sx={{
             display: { xs: 'block', sm: 'none' },
@@ -281,7 +270,7 @@ const NavbarAdmin = ({ locale, /*  theme */ children, user }) => {
 
 NavbarAdmin.propTypes = {
   locale: PropTypes.string.isRequired,
-  // theme: PropTypes.string,
+
   children: PropTypes.element.isRequired,
   user: PropTypes.string,
 };

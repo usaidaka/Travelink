@@ -5,22 +5,19 @@ import { selectStepPage } from '@pages/Register/selectors';
 
 import classes from './style.module.scss';
 
-const StepIndicator = ({ step }) => {
-  console.log(typeof step);
-  return (
-    <div data-testid="stepIndication" className={classes.container}>
-      <div className={classes.indicator} data-active={step === 1}>
-        1
-      </div>
-      <div className={classes.indicator} data-active={step === 2}>
-        2
-      </div>
-      <div className={classes.indicator} data-active={step === 3}>
-        3
-      </div>
+const StepIndicator = ({ step }) => (
+  <div data-testid="stepIndication" className={classes.container}>
+    <div className={classes.indicator} data-active={step === 1}>
+      1
     </div>
-  );
-};
+    <div className={classes.indicator} data-active={step === 2}>
+      2
+    </div>
+    <div className={classes.indicator} data-active={step === 3}>
+      3
+    </div>
+  </div>
+);
 
 StepIndicator.propTypes = {
   step: PropTypes.number,
