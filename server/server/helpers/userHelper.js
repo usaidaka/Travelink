@@ -263,101 +263,6 @@ const getConnectionById = async (userId) => {
   }
 };
 
-// const getMyAddress = async (id) => {
-//   try {
-//     const myAddress = await db.Address.findAll({
-//       where: { user_id: id },
-//       attributes: {
-//         exclude: ["deletedAt", "createdAt", "updatedAt", "id"],
-//       },
-//       include: [
-//         {
-//           model: db.Province,
-//           attributes: ["name"],
-//         },
-//         {
-//           model: db.City,
-//           attributes: ["name"],
-//         },
-//       ],
-//     });
-
-//     if (_.isEmpty(myAddress)) {
-//       return Promise.reject(
-//         Boom.notFound("The user doesn't have an address yet")
-//       );
-//     }
-
-//     return Promise.resolve({
-//       ok: true,
-//       message: "Get my address successfully",
-//       result: myAddress,
-//     });
-//   } catch (err) {
-//     console.log([fileName, "get My Address", "ERROR"], { info: `${err}` });
-//     return Promise.reject(GeneralHelper.errorResponse(err));
-//   }
-// };
-
-// const createAddress = async (id, dataObject) => {
-//   const transaction = await db.sequelize.transaction();
-
-//   try {
-//     const {
-//       province_id,
-//       city_id,
-//       detail,
-//       longitude,
-//       latitude,
-//       postal_code,
-//       title,
-//     } = dataObject;
-
-//     const isCityValid = await db.Province.findAll({
-//       where: { id: province_id },
-//       attributes: ["id", "name"],
-//       include: [
-//         {
-//           model: db.City,
-//           attributes: ["id", "name"],
-//           where: { id: city_id },
-//         },
-//       ],
-//     });
-
-//     if (_.isEmpty(isCityValid)) {
-//       return Promise.reject(
-//         Boom.badRequest("Your selected city is not part of selected province")
-//       );
-//     }
-
-//     await db.Address.create(
-//       {
-//         user_id: id,
-//         province_id,
-//         city_id,
-//         detail,
-//         longitude: String(longitude),
-//         latitude: String(latitude),
-//         postal_code,
-//         title,
-//       },
-//       { transaction }
-//     );
-
-//     await transaction.commit();
-
-//     return Promise.resolve({
-//       ok: true,
-//       message: "register address successfully",
-//     });
-//   } catch (err) {
-//     await transaction.rollback();
-//     console.log([fileName, "create Address", "ERROR"], { info: `${err}` });
-//     return Promise.reject(GeneralHelper.errorResponse(err));
-//   }
-// };
-
 const createRoute = async (id, dataObject) => {
   const transaction = await db.sequelize.transaction();
   try {
@@ -691,119 +596,6 @@ const leaveGroup = async (id, groupId) => {
     return Promise.reject(GeneralHelper.errorResponse(err));
   }
 };
-
-// const rejectGroupInvitation = async (id, groupId) => {
-//   const transaction = await db.sequelize.transaction();
-//   try {
-//     const isUserLeader = await db.GroupPivot.findOne({
-//       where: { user_id: id, group_id: groupId, is_leader: true },
-//     });
-
-//     if (isUserLeader) {
-//       await transaction.rollback();
-//       return Promise.reject(
-//         Boom.badRequest("You cannot leave the group. You are the leader")
-//       );
-//     }
-
-//     const isUserInGroup = await db.GroupPivot.findOne({
-//       where: { user_id: id, group_id: groupId },
-//     });
-
-//     if (!isUserInGroup) {
-//       await transaction.rollback();
-//       return Promise.reject(
-//         Boom.badRequest("You are not joining any group yet")
-//       );
-//     }
-
-//     const isInvited = await db.GroupPivot.findOne({
-//       where: { user_id: id, group_id: groupId, is_allow: true },
-//     });
-
-//     if (isInvited) {
-//       await transaction.rollback();
-//       return Promise.reject(Boom.badRequest("You already joined the group"));
-//     }
-
-//     await db.GroupPivot.destroy(
-//       {
-//         where: { user_id: id, group_id: groupId },
-//       },
-//       transaction
-//     );
-
-//     await transaction.commit();
-//     return Promise.resolve({
-//       ok: true,
-//       message: "Group invitation rejected",
-//     });
-//   } catch (err) {
-//     await transaction.rollback();
-//     console.log([fileName, "reject Group Invitation", "ERROR"], {
-//       info: `${err}`,
-//     });
-//     return Promise.reject(GeneralHelper.errorResponse(err));
-//   }
-// };
-
-// const approveGroupInvitation = async (id, groupId) => {
-//   const transaction = await db.sequelize.transaction();
-//   try {
-//     const isUserLeader = await db.GroupPivot.findOne({
-//       where: { user_id: id, group_id: groupId, is_leader: true },
-//     });
-
-//     if (isUserLeader) {
-//       await transaction.rollback();
-//       return Promise.reject(
-//         Boom.badRequest("You are the leader, you already in the group")
-//       );
-//     }
-
-//     const isUserInGroup = await db.GroupPivot.findOne({
-//       where: { user_id: id, group_id: groupId },
-//     });
-
-//     if (!isUserInGroup) {
-//       await transaction.rollback();
-//       return Promise.reject(
-//         Boom.badRequest("You are not joining any group yet")
-//       );
-//     }
-
-//     const isInvited = await db.GroupPivot.findOne({
-//       where: { user_id: id, group_id: groupId, is_allow: true },
-//     });
-
-//     if (isInvited) {
-//       await transaction.rollback();
-//       return Promise.reject(Boom.badRequest("You already joined the group"));
-//     }
-
-//     await db.GroupPivot.update(
-//       {
-//         is_allow: true,
-//       },
-//       {
-//         where: { user_id: id, group_id: groupId, is_allow: false },
-//         transaction,
-//       }
-//     );
-
-//     await transaction.commit();
-//     return Promise.resolve({
-//       ok: true,
-//       message: "Group invitation approved",
-//     });
-//   } catch (err) {
-//     await transaction.rollback();
-//     console.log([fileName, "approve Group Invitation", "ERROR"], {
-//       info: `${err}`,
-//     });
-//     return Promise.reject(GeneralHelper.errorResponse(err));
-//   }
-// };
 
 const updateMemberGroup = async (id, userId, groupId) => {
   const transaction = await db.sequelize.transaction();
@@ -2046,15 +1838,13 @@ module.exports = {
   getMyProfile,
   getMyConnection,
   getConnectionById,
-  // getMyAddress,
-  // createAddress,
+
   createRoute,
   getMyRoute,
   createGroup,
   deleteGroup,
   leaveGroup,
-  // rejectGroupInvitation,
-  // approveGroupInvitation,
+
   updateMemberGroup,
   editGroup,
   getMyGroup,

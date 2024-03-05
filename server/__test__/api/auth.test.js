@@ -51,6 +51,11 @@ const tokenUserImmortal = {
     "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ0ZXRpIiwiZW1haWwiOiJrdWRvdDVAaWNsb3VkLmNvbSIsInJvbGUiOiJVc2VyIiwiaWF0IjoxNzA5MzU1NDA3LCJleHAiOjE3NDA4OTE0MDd9.obuyBYvVABujaU2LKa6pdyAQw85z_Ks_HE_Ehh5jygI",
 };
 
+const tokenResetImmortal = {
+  authorization:
+    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzYWlkYWthIiwiZW1haWwiOiJ1amVka2VtYWxAZ21haWwuY29tIiwidHlwZSI6InJlc2V0LXBhc3N3b3JkIiwiaWF0IjoxNzA5NTI2OTExLCJleHAiOjE3NDEwNjI5MTF9.DY347UB2MqdUa5mXAQctPAlS8jGmsWjz7eyZySsaJBo",
+};
+
 const tokenAdminImmortal = {
   authorization:
     "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwidXNlcm5hbWUiOiJGcmFuY2lzY28iLCJlbWFpbCI6InJ1c3NlbGw2QG91dGxvb2suY29tIiwicm9sZSI6IkFkbWluIiwiaWF0IjoxNzA5MzU1MzM0LCJleHAiOjE3NDA4OTEzMzR9.9trXx2UmBMcg8OJjxrFrXRAOXyUySnZlTQmMIGcAvDM",
@@ -293,6 +298,7 @@ describe("Auth", () => {
         otp: "67778a",
         newPassword: "aaa12345",
         confirmNewPassword: "aaa12345",
+        token: tokenResetImmortal.authorization.split(" ")[1],
       };
       mockUser = _.cloneDeep(MockUser);
       getUser = jest.spyOn(db.User, "findOne");
@@ -306,9 +312,11 @@ describe("Auth", () => {
 
     test("Should Return 200: Reset Password Success", async () => {
       getCredential.mockResolvedValue(mockCredential);
+      console.log(payload, "payload");
 
       await Request(server)
         .post(apiUrl)
+        .set(tokenResetImmortal)
         .send(payload)
         .expect(200)
         .then((res) => {
@@ -321,21 +329,51 @@ describe("Auth", () => {
       payload.confirmNewPassword = "123123";
       getCredential.mockResolvedValue(mockCredential);
 
-      await Request(server).post(apiUrl).send(payload).expect(400);
+      await Request(server)
+        .post(apiUrl)
+        .set(tokenResetImmortal)
+        .send(payload)
+        .expect(400);
+    });
+
+    test("Should Return 400: New Password and Confirm New Password must be match", async () => {
+      const credentialParanoid = {
+        user_id: 1,
+        otp: "67778a",
+        token:
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9_eyJ1c2VybmFtZSI6Impva29UYW5lcyIsImVtYWlsIjoiamFuZWRvZUBnbWFpbC5jb20iLCJ0eXBlIjoicmVzZXQtcGFzc3dvcmQiLCJpYXQiOjE3MDkzNTE4NDEsImV4cCI6MTcwOTM1MjQ0MX0_2YzNVRkweam7Yny0EAdiQZujG9IwT3dey1p8Z-4gNME",
+        deletedAt: "Deleted",
+      };
+
+      getCredential.mockResolvedValue(credentialParanoid);
+
+      await Request(server)
+        .post(apiUrl)
+        .set(tokenResetImmortal)
+        .send(payload)
+        .expect(400);
     });
 
     test("Should Return 400: Wrong OTP", async () => {
       payload.otp = null;
       getCredential.mockResolvedValue(mockCredential);
 
-      await Request(server).post(apiUrl).send(payload).expect(400);
+      await Request(server)
+        .post(apiUrl)
+        .set(tokenResetImmortal)
+        .send(payload)
+        .expect(400);
     });
 
     test("Should Return 404: Invalid OTP", async () => {
       payload.otp = "asdasd";
       getCredential.mockResolvedValue(mockCredential);
 
-      await Request(server).post(apiUrl).send(payload).expect(404);
+      await Request(server)
+        .post(apiUrl)
+        .set(tokenResetImmortal)
+        .send(payload)
+        .expect(404);
     });
 
     test("Should Return 200: Password successfully reset", async () => {
@@ -346,6 +384,7 @@ describe("Auth", () => {
       await Request(server)
         .post(apiUrl)
         .send(payload)
+        .set(tokenResetImmortal)
         .expect(200)
         .then((res) => {
           expect(res.body.ok).toBeTruthy();
@@ -355,7 +394,11 @@ describe("Auth", () => {
     test("Should Return 500: Server internal error", async () => {
       getCredential.mockRejectedValue("Something Went Wrong");
 
-      await Request(server).post(apiUrl).send(payload).expect(500);
+      await Request(server)
+        .post(apiUrl)
+        .set(tokenResetImmortal)
+        .send(payload)
+        .expect(500);
     });
   });
 
