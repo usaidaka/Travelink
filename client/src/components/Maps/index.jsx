@@ -11,13 +11,17 @@ import MarkerClusterGroup from 'react-leaflet-cluster';
 import Carousel from 'react-material-ui-carousel';
 import CardMarker from '@pages/AdminDashboard/components/CardMarker';
 import CardNearby from '@pages/NearbyCurrent/components/CardNearby';
-
 import CardDestination from '@pages/Destination/components/CardDestination';
+import L from 'leaflet';
+import { selectProfile } from '@pages/Home/selectors';
+import { useEffect, useState } from 'react';
+import decryptPayload from '@utils/decryptionHelper';
 
 import SearchField from './components/SearchField';
 import classes from './style.module.scss';
 
 const Maps = ({
+  profile,
   handleDeleteDestination = () => {},
   isSearch = true,
   element,
@@ -29,56 +33,91 @@ const Maps = ({
   setValueSearch,
   zoom = 50,
 }) => {
+  const [decryptedProfile, setDecryptedProfile] = useState({});
+
+  useEffect(() => {
+    if (!_.isEmpty(profile)) {
+      const decrypted = decryptPayload(profile);
+      setDecryptedProfile(decrypted);
+    }
+  }, [profile]);
+
+  const customMarkerIcon = new L.Icon({
+    iconUrl: '../../../assets/myLoc.png',
+    iconSize: [32, 32],
+  });
+
+  const defaultMarkerIcon = new L.Icon({
+    iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    tooltipAnchor: [16, -28],
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+    shadowSize: [41, 41],
+  });
+
   let renderedMarker;
 
   switch (element) {
     case 'Trip':
+      console.log(marker);
       renderedMarker =
         !_.isEmpty(marker) && !_.isEmpty(marker[0]?.position[0])
-          ? marker.map((pin) => (
-              <Marker key={pin.id} position={pin.position}>
-                <Popup>
-                  <span>{pin.province}</span>, <span>{pin.city}</span>
-                </Popup>
-              </Marker>
-            ))
+          ? marker.map((pin) => {
+              const isDecryptedProfile = pin.id === 1;
+              const icon = isDecryptedProfile ? customMarkerIcon : defaultMarkerIcon;
+
+              return (
+                <Marker icon={icon} key={pin.id} position={pin.position}>
+                  <Popup>
+                    <span>{pin.province}</span>, <span>{pin.city}</span>
+                  </Popup>
+                </Marker>
+              );
+            })
           : null;
       break;
     case 'SidebarRight':
       renderedMarker =
         !_.isEmpty(marker) &&
-        marker.map((pin) => (
-          <Marker key={pin.id} position={pin.current_position}>
-            <Popup>
-              <div className={classes['sidebar-right']}>
-                <div className={classes['image-wrapper']}>
-                  <img src={pin?.profile?.image} alt="" className={classes.image} />
+        marker.map((pin) => {
+          const isDecryptedProfile = pin.id === decryptedProfile.id;
+          const icon = isDecryptedProfile ? customMarkerIcon : defaultMarkerIcon;
+          return (
+            <Marker icon={icon} key={pin.id} position={pin.current_position}>
+              <Popup>
+                <div className={classes['sidebar-right']}>
+                  <div className={classes['image-wrapper']}>
+                    <img src={pin?.profile?.image} alt="" className={classes.image} />
+                  </div>
+                  <div className={classes.info}>
+                    <span>@{pin?.profile?.username}</span>
+                    <span>
+                      <a href={`mailto: ${pin?.profile?.email}`}>{pin?.profile?.email}</a>
+                    </span>
+                    <span className={classes.wa}>
+                      <a
+                        target="_blank"
+                        href={`https://api.whatsapp.com/send/?phone=${pin.profile?.phone}&text=Hi!%20${pin?.profile?.firstName},%20I%20got%20your%20phone%20number%20from%20Travelink.&type=phone_number&app_absent=0`}
+                        rel="noreferrer"
+                      >
+                        {pin?.profile?.phone}
+                      </a>
+                    </span>
+                    {isDecryptedProfile || (
+                      <span className={classes.profile}>
+                        <Link to={`/profile/${pin?.user_id}`}>
+                          <FormattedMessage id="goToProfile" />
+                        </Link>
+                      </span>
+                    )}
+                  </div>
                 </div>
-                <div className={classes.info}>
-                  <span>@{pin?.profile?.username}</span>
-                  <span>
-                    <a href={`mailto: ${pin?.profile?.email}`}>{pin?.profile?.email}</a>
-                  </span>
-                  <span className={classes.wa}>
-                    <a
-                      target="_blank"
-                      href={`https://api.whatsapp.com/send/?phone=${pin.profile?.phone}&text=Hi!%20${pin?.profile?.firstName},%20I%20got%20your%20phone%20number%20from%20Travelink.&type=phone_number&app_absent=0`}
-                      rel="noreferrer"
-                    >
-                      {pin?.profile?.phone}
-                    </a>
-                  </span>
-
-                  <span className={classes.profile}>
-                    <Link to={`/profile/${pin?.user_id}`}>
-                      <FormattedMessage id="goToProfile" />
-                    </Link>
-                  </span>
-                </div>
-              </div>
-            </Popup>
-          </Marker>
-        ));
+              </Popup>
+            </Marker>
+          );
+        });
 
       break;
     case 'People':
@@ -188,13 +227,17 @@ const Maps = ({
     case 'nearby':
       renderedMarker =
         !_.isEmpty(marker) &&
-        marker.map((mark, idx) => (
-          <Marker key={idx} position={mark.current_position}>
-            <Popup>
-              <CardNearby mark={mark} />
-            </Popup>
-          </Marker>
-        ));
+        marker.map((mark, idx) => {
+          const isDecryptedProfile = mark.id === decryptedProfile.id;
+          const icon = isDecryptedProfile ? customMarkerIcon : defaultMarkerIcon;
+          return (
+            <Marker icon={icon} key={idx} position={mark.current_position}>
+              <Popup>
+                <CardNearby mark={mark} />
+              </Popup>
+            </Marker>
+          );
+        });
       break;
 
     default:
@@ -230,6 +273,7 @@ const Maps = ({
 };
 
 Maps.propTypes = {
+  profile: PropTypes.string,
   handleDeleteDestination: PropTypes.func,
   valueSearch: PropTypes.object,
   setValueSearch: PropTypes.func,
@@ -244,6 +288,7 @@ Maps.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   location: selectUserRoute,
+  profile: selectProfile,
 });
 
 export default connect(mapStateToProps)(Maps);
