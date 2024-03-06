@@ -41,21 +41,6 @@ entity "User" {
   -role (ENUM, [User, Admin, Super])
 }
 
-entity "Address" {
-    /' V '/    
-  + id [PK]
-  --
-  + province_id [FK]
-  + city_id [FK]
-  + user_id [FK]
-  --
-  -detail (string)
-  -longitude (string)
-  -latitude (string)
-  -postal_conde (string)
-  -title (string)
-}
-
 entity "Route"{
     /' V '/    
   + id [PK]
@@ -189,12 +174,10 @@ User ||--|{ Group_Pivot
 Group ||--|{ Group_Pivot
 User ||--|| User_Detail
 User ||--|| Credential
-User }|--|| Address
 User ||--|| Route
 Province }|--|| City
 Route }|--|| City
 Route }|--|| Province
-Address }|--|| City
 Post ||--|| Province
 Post ||--|| City
 User }|--||Post
