@@ -12,6 +12,8 @@ Install my-project with npm
   cd -this-project
 ```
 
+lakukan konfigurasi pada .env, untuk variable ENV apa saja yang dibutuhkan pada project kali ini dapat dilihat pada file .env.exp.
+
 Install package in front end
 
 ```bash
@@ -58,6 +60,23 @@ pada repository ini telah tersedia seeder untuk menginitialize data akan tetapi 
 | Joi Validation | Validation BackEnd                                                        |
 | MySQL          | Database                                                                  |
 
+`Node JS` : pada website ini Node JS digunakan sebagai runtime environtment tempat dimana code back end ditulis dan dijalankan
+
+`Express JS` : penggunaan Express JS sebagai framework ditujukan agar memudahkan dan mempercepat proses development back end
+
+`Sequelize JS` : penerapan ORM sequelize ditujukan untuk beberapa keperluan. Pertama, agar proses development lebih mudah dikarenakan query yang dimiliki oleh ORM relatif lebih mudah untuk di implement terutama untuk beberapa fungsi JOIN table. selain itu juga ORM dapat dimanfaatkan agar terhindar dari mySQL injection
+
+`Cloudinary` : Memanfaatkan Cloudinary sebagai tempat penyimpanan file sehingga tidak perlu menyimpan file di local dan dapat dg mudah diakses
+
+`Redis` : Implementasi Redis pada website ini digunakan untuk keperluan wrong password 3x. sehingga user tidak dapat melakukan wrong password lenih dari 3x. akan diberikan temporary suspend selama 5 menit
+
+`Node Mailer` : Pengiriman email menggunakan SMTP Node Mailer digunakan dalam proses reset password. ketika user forgot password maka akan menerima email untuk akses reset password beserta dengan OTP (One Time Password)
+
+`Multer` : Middleware untuk menghandle form data sehingga dapat digunakan untuk memasukkan file upload
+`Joi Validation` : penerapan validation back end terutama pada request.body perlu dilakukan untuk menghindari adanya invalid payload
+
+`MySQL` : merupakan database yang digunakan pada website ini
+
 ### Front End
 
 ![App Screenshot](https://res.cloudinary.com/dgdxx2chz/image/upload/v1709713979/tnfylbscvezgqpmhwd6m.png)
@@ -72,6 +91,22 @@ pada repository ini telah tersedia seeder untuk menginitialize data akan tetapi 
 | Sass            | CSS preproccesor                                                  |
 | Material UI     | Styling                                                           |
 | React Leaflet   | Library maps                                                      |
+
+`ReactJS`: Library JavaScript untuk membangun antarmuka pengguna yang interaktif.
+
+`Redux`: Library untuk mengelola state aplikasi di React.
+
+`Redux Saga`: Middleware Redux untuk mengelola side effects (misalnya, pemanggilan API) secara asinkron.
+
+`Axios`: Library untuk melakukan pemanggilan HTTP di browser dan Node.js.
+
+`React Hook Form`: Library untuk mengelola formulir di React menggunakan hooks.
+
+`Sass`: Bahasa preprocessor CSS yang memperluas fitur CSS dengan menambahkan variabel, nested rules, mixins, dan lainnya.
+
+`Material UI`: Kumpulan komponen React yang mengimplementasikan desain Material Design.
+
+`React Leaflet`: Pustaka untuk menampilkan peta interaktif di aplikasi React menggunakan Leaflet, sebuah pustaka JavaScript untuk membuat peta interaktif.
 
 # Features
 
