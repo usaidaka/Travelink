@@ -80,7 +80,7 @@ const EditDestination = ({ province, currentCity, destinationById }) => {
   const onSubmit = (data) => {
     setLoading(true);
     const formData = new FormData();
-    console.log(data);
+
     formData.append('file', image);
     const dataJSON = {
       province_id: data.province_id,

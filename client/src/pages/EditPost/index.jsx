@@ -22,15 +22,11 @@ const EditPost = ({ province, city, postDetail, loadingTest = true }) => {
   const [render, setRender] = useState(true);
   const { postId } = useParams();
   const [selectedProvince, setSelectedProvince] = useState('');
-  const [cityName, setCityName] = useState('');
-  const [provinceName, setProvinceName] = useState('');
+
   const [postDetailData, setPostDetailData] = useState({});
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  console.log(cityName);
-  console.log(provinceName);
 
   const {
     register,
@@ -125,7 +121,6 @@ const EditPost = ({ province, city, postDetail, loadingTest = true }) => {
                   optional: 'Select province is optional',
                 })}
                 onChange={(e) => {
-                  setProvinceName(e.target.options[e.target.selectedIndex].text);
                   setSelectedProvince(e.target.value);
                   setPostDetailData((prev) => ({
                     ...prev,
@@ -162,7 +157,6 @@ const EditPost = ({ province, city, postDetail, loadingTest = true }) => {
                     ...prev,
                     City: { ...prev.City, id: e.target.value },
                   }));
-                  setCityName(e.target.options[e.target.selectedIndex].text);
                 }}
                 value={postDetailData.Province?.id}
               >

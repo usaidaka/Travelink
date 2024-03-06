@@ -16,7 +16,6 @@ import { selectDashboard } from './selectors';
 const Dashboard = ({ dashboard, userList }) => {
   const [decryptedDashboard, setDecryptedDashboard] = useState({});
 
-  console.log(decryptedDashboard.remapData);
   const dispatch = useDispatch();
 
   useEffect(() => {

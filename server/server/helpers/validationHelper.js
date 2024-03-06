@@ -59,6 +59,7 @@ const forgotPasswordValidation = (data) => {
 const resetPasswordValidation = (data) => {
   const schema = Joi.object({
     otp: Joi.string().required().description("one time password"),
+    token: Joi.string().required().description("one time password"),
     newPassword: Joi.string()
       .min(6)
       .max(20)

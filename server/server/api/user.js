@@ -48,38 +48,6 @@ const connectionById = async (request, reply) => {
   }
 };
 
-// const myAddress = async (request, reply) => {
-//   try {
-//     const { id } = request.user;
-//     console.log(id);
-
-//     const response = await UserHelper.getMyAddress(id);
-
-//     return reply.send(response);
-//   } catch (err) {
-//     console.log([fileName, "my Address", "ERROR"], { info: `${err}` });
-//     return reply.send(GeneralHelper.errorResponse(err));
-//   }
-// };
-
-// const addAddress = async (request, reply) => {
-//   try {
-//     console.log(request.body, "<<<<");
-
-//     const decryptedData = decryptPayload(request.body);
-//     const { id } = request.user;
-
-//     Validation.addAddressValidation(decryptedData);
-
-//     const response = await UserHelper.createAddress(id, decryptedData);
-
-//     return reply.send(response);
-//   } catch (err) {
-//     console.log([fileName, "add Address", "ERROR"], { info: `${err}` });
-//     return reply.send(GeneralHelper.errorResponse(err));
-//   }
-// };
-
 const addRoute = async (request, reply) => {
   try {
     const decryptedData = decryptPayload(request.body);
@@ -152,38 +120,6 @@ const leaveGroup = async (request, reply) => {
     return reply.send(GeneralHelper.errorResponse(err));
   }
 };
-
-// const rejectGroupInvitation = async (request, reply) => {
-//   try {
-//     const { id } = request.user;
-//     const { groupId } = request.params;
-
-//     const response = await UserHelper.rejectGroupInvitation(id, groupId);
-
-//     return reply.send(response);
-//   } catch (err) {
-//     console.log([fileName, "reject Group Invitation", "ERROR"], {
-//       info: `${err}`,
-//     });
-//     return reply.send(GeneralHelper.errorResponse(err));
-//   }
-// };
-
-// const approveGroupInvitation = async (request, reply) => {
-//   try {
-//     const { id } = request.user;
-//     const { groupId } = request.params;
-
-//     const response = await UserHelper.approveGroupInvitation(id, groupId);
-
-//     return reply.send(response);
-//   } catch (err) {
-//     console.log([fileName, "approve Group Invitation", "ERROR"], {
-//       info: `${err}`,
-//     });
-//     return reply.send(GeneralHelper.errorResponse(err));
-//   }
-// };
 
 const updateMemberGroup = async (request, reply) => {
   try {
@@ -475,13 +411,6 @@ const userProfile = async (request, reply) => {
 // GET
 Router.get("/profile", Middleware.validateToken, myProfile);
 
-// Router.get(
-//   "/my-address",
-//   Middleware.validateToken,
-//   Middleware.isUser,
-//   myAddress
-// );
-
 Router.get("/my-route", Middleware.validateToken, Middleware.isUser, myRoute);
 
 Router.get("/nearby", Middleware.validateToken, Middleware.isUser, nearBy);
@@ -538,12 +467,6 @@ Router.get(
 );
 
 // POST
-// Router.post(
-//   "/address",
-//   Middleware.validateToken,
-//   Middleware.isUser,
-//   addAddress
-// );
 
 Router.post(
   "/post",
@@ -600,13 +523,6 @@ Router.delete(
   deleteFollower
 );
 
-// Router.delete(
-//   "/reject-group/:groupId",
-//   Middleware.validateToken,
-//   Middleware.isUser,
-//   rejectGroupInvitation
-// );
-
 /* UPDATE */
 Router.patch(
   "/post/:postId",
@@ -621,13 +537,6 @@ Router.patch(
   Middleware.isUser,
   follow
 );
-
-// Router.patch(
-//   "/approve-group/:groupId",
-//   Middleware.validateToken,
-//   Middleware.isUser,
-//   approveGroupInvitation
-// );
 
 Router.patch(
   "/group/update-member/:userId/:groupId",

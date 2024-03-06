@@ -27,10 +27,8 @@ const Destination = ({ destination }) => {
   }, [destination]);
 
   const handleDeleteDestination = (destinationId) => {
-    console.log(destinationId);
     dispatch(
       doDeleteDestination(destinationId, (message) => {
-        console.log(message);
         toast.success(message, { duration: 1000 });
         dispatch(getDestination());
       })

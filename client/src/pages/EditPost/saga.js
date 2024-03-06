@@ -9,7 +9,6 @@ function* doGetPostDetail({ postId, cbSuccess }) {
   setLoading(true);
   try {
     const response = yield call(getPostDetail, postId);
-    console.log(response);
 
     yield put(setPostDetail(response.result));
     cbSuccess && cbSuccess();
@@ -23,11 +22,9 @@ function* doEditPostDetail({ postId, data, cbSuccess }) {
   setLoading(true);
   try {
     const response = yield call(updatePost, postId, data);
-    console.log(response);
+
     cbSuccess && cbSuccess(response.message);
   } catch (error) {
-    console.log(error);
-    console.log(error.response);
     yield put(showPopup('Error', error.response?.data?.message));
   }
   setLoading(false);

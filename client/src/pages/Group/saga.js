@@ -10,7 +10,6 @@ function* doGetMyGroup() {
   try {
     const response = yield call(myGroup);
 
-    console.log(response);
     yield put(setMyGroup(response?.result));
   } catch (error) {
     yield put(showPopup('Error', error.response?.data?.message));
@@ -23,7 +22,6 @@ function* doLeaveGroup({ groupId, cbSuccess }) {
   try {
     const response = yield call(leaveGroup, groupId);
 
-    console.log(response);
     cbSuccess && cbSuccess(response.message);
   } catch (error) {
     yield put(showPopup('Error', error.response?.data?.message));
@@ -36,7 +34,6 @@ function* doRemoveGroup({ groupId, cbSuccess }) {
   try {
     const response = yield call(removeGroup, groupId);
 
-    console.log(response);
     cbSuccess && cbSuccess(response.message);
   } catch (error) {
     yield put(showPopup('Error', error.response?.data?.message));
@@ -49,7 +46,6 @@ function* doUpdateGroup({ groupId, data, cbSuccess }) {
   try {
     const response = yield call(updateGroup, groupId, data);
 
-    console.log(response);
     cbSuccess && cbSuccess(response.message);
   } catch (error) {
     yield put(showPopup('Error', error.response?.data?.message));
@@ -62,7 +58,6 @@ function* doDeleteMember({ userId, groupId, cbSuccess }) {
   try {
     const response = yield call(deleteMember, userId, groupId);
 
-    console.log(response);
     cbSuccess && cbSuccess(response.message);
   } catch (error) {
     yield put(showPopup('Error', error.response?.data?.message));
@@ -75,7 +70,6 @@ function* doCreateGroup({ data, cbSuccess }) {
   try {
     const response = yield call(addGroup, data);
 
-    console.log(response);
     cbSuccess && cbSuccess(response.message);
   } catch (error) {
     yield put(showPopup('Error', error.response?.data?.message));

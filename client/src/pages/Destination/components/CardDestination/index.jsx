@@ -17,7 +17,6 @@ const CardDestination = ({ pin, handleDeleteDestination }) => {
 
   const { pathname } = useLocation();
 
-  console.log(pin);
   return (
     <div data-testid="cardDestination" className={classes['container-destination']}>
       <div className={classes['image-container']}>

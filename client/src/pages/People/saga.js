@@ -8,7 +8,7 @@ function* getUserList({ query }) {
   setLoading(true);
   try {
     const response = yield call(userList, query);
-    console.log(response);
+
     yield put(setUserList(response.result));
   } catch (error) {
     console.log(error);
@@ -20,10 +20,9 @@ function* getUserList({ query }) {
 function* doFollow({ followTo, cbSuccess }) {
   try {
     const response = yield call(follow, followTo);
-    console.log(response);
+
     cbSuccess && cbSuccess(response.message);
   } catch (error) {
-    console.log(error);
     yield put(showPopup('Error', error.response?.data?.message));
   }
 }

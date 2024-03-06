@@ -31,8 +31,6 @@ const CardExplore = ({ post, comment, user, handleDeletePost }) => {
     setAnchorEl(null);
   };
 
-  console.log(post);
-
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -48,8 +46,6 @@ const CardExplore = ({ post, comment, user, handleDeletePost }) => {
   const handleCloseDeleteComment = () => setOpenDeleteComment(false);
 
   const [loading, setLoading] = useState(false);
-
-  console.log(user);
 
   useEffect(() => {
     if (!_.isEmpty(user)) {

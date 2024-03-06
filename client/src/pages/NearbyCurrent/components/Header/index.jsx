@@ -10,7 +10,7 @@ const Header = () => {
       <Link to="/nearby" className={classes.tab} data-active={pathname === '/nearby'}>
         <FormattedMessage id="nearbyCurrent" />
       </Link>
-      <Link to="direction" className={classes.tab} data-active={pathname === '/nearby/direction'}>
+      <Link to="/nearby/direction" className={classes.tab} data-active={pathname === '/nearby/direction'}>
         <FormattedMessage id="nearbyDirection" />
       </Link>
     </div>

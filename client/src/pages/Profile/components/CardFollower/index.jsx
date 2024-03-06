@@ -7,7 +7,7 @@ import classes from './style.module.scss';
 
 const CardFollower = ({ follow, handleDeleteFollower }) => {
   const { pathname } = useLocation();
-  console.log(follow);
+
   return (
     <div data-testid="cardFollower" className={classes.container}>
       <div className={classes.wrapper}>

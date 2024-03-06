@@ -115,7 +115,7 @@ const hello = async (request, reply) => {
 Router.post("/register", register);
 Router.post("/login", login);
 Router.post("/forgot-password", forgotPassword);
-Router.post("/reset-password", resetPassword);
+Router.post("/reset-password", Middleware.validateTokenReset, resetPassword);
 Router.patch(
   "/profile",
   Middleware.validateToken,

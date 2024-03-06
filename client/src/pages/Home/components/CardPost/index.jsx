@@ -31,9 +31,6 @@ const CardPost = ({ post, comment, user }) => {
   const handleCloseDelete = () => setOpenDelete(false);
 
   const dispatch = useDispatch();
-  console.log(comment);
-  console.log(post);
-  console.log(user);
 
   useEffect(() => {
     if (!_.isEmpty(user)) {
@@ -41,15 +38,9 @@ const CardPost = ({ post, comment, user }) => {
     }
   }, [user]);
 
-  console.log(decryptedUser);
-
   const getCommentPost = () => {
     dispatch(getComment(post.id));
   };
-
-  // useEffect(() => {
-  //   dispatch(getComment(post.id));
-  // }, [dispatch, post.id]);
 
   const {
     register,
@@ -59,7 +50,6 @@ const CardPost = ({ post, comment, user }) => {
   } = useForm();
 
   const handleDeleteComment = (commentId) => {
-    console.log(commentId);
     dispatch(
       deleteComment(commentId, (message) => {
         toast.success(message, { duration: 1000 });

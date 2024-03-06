@@ -15,8 +15,6 @@ const NearbyDirection = ({ nearbyDirection }) => {
   const [decryptedNearbyDirection, setDecryptedNearbyDirection] = useState([]);
   const dispatch = useDispatch();
 
-  console.log(decryptedNearbyDirection);
-
   useEffect(() => {
     dispatch(getNearbyDirection());
   }, [dispatch]);

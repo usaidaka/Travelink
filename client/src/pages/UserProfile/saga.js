@@ -13,8 +13,6 @@ function* getUserProfile({ userId }) {
       yield put(showPopup('Ups!', response.message));
     }
 
-    console.log(response);
-
     yield put(setUserProfile(response?.result));
   } catch (error) {
     yield put(showPopup('Error', error.response?.data?.message));
@@ -30,8 +28,6 @@ function* getUserPost({ userId }) {
     if (!response.ok) {
       yield put(showPopup('Ups!', response.message));
     }
-
-    console.log(response);
 
     yield put(setUserPost(response?.result));
   } catch (error) {
@@ -49,8 +45,6 @@ function* getUserConnection({ userId }) {
       yield put(showPopup('Ups!', response.message));
     }
 
-    console.log(response);
-
     yield put(setUserConnection(response?.result));
   } catch (error) {
     yield put(showPopup('Error', error.response?.data?.message));
@@ -60,13 +54,10 @@ function* getUserConnection({ userId }) {
 
 function* doGetUserFollow({ userId }) {
   try {
-    console.log(userId);
     const response = yield call(userFollow, userId);
-    console.log(response);
+
     yield put(setUserFollow(response.result));
   } catch (error) {
-    console.log(error);
-    console.log(error.response);
     yield put(showPopup('Error', error.response?.data?.message));
   }
   setLoading(false);

@@ -79,10 +79,7 @@ export const example = (data) => {
   return callAPI(urls.ditto, 'GET', header, {}, data);
 };
 
-export const register = (data) => {
-  console.log(data, '<<< DATA USER API');
-  return callAPI(urls.register, 'POST', {}, {}, data);
-};
+export const register = (data) => callAPI(urls.register, 'POST', {}, {}, data);
 
 export const login = (data) => callAPI(urls.login, 'POST', {}, {}, data);
 

@@ -40,8 +40,6 @@ const CreateGroup = ({ location, myGroup }) => {
 
   const dispatch = useDispatch();
 
-  console.log(myGroup);
-
   useEffect(() => {
     if (myGroup.decryptedData === null) {
       setDecryptedMyGroup([]);
@@ -92,7 +90,7 @@ const CreateGroup = ({ location, myGroup }) => {
       })
     );
   };
-  console.log(decryptedMyGroup);
+
   const handleDeleteGroup = () => {
     dispatch(
       removeGroup(decryptedMyGroup?.groups?.id, (message) => {
@@ -143,8 +141,6 @@ const CreateGroup = ({ location, myGroup }) => {
 
     return actionButton;
   };
-
-  console.log(myGroup);
 
   return (
     <div className={classes.container}>

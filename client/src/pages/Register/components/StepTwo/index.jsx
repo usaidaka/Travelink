@@ -22,7 +22,6 @@ const StepTwo = ({ step, onBackStep, onNextStep, dataUser }) => {
       setDecryptedData(decryptPayload(dataUser.encryptedData));
     }
   }, [dataUser]);
-  console.log(decryptedData);
 
   const {
     register,

@@ -121,7 +121,6 @@ const Trip = ({ location, province, currentCity, directionCity }) => {
     );
   };
 
-  console.log(marker);
   return (
     <div data-testid="trip" className={classes.container}>
       <div className={classes.maps}>
@@ -158,6 +157,7 @@ const Trip = ({ location, province, currentCity, directionCity }) => {
                       required: 'Select province is a must',
                     })}
                     onChange={(e) => {
+                      e.preventDefault();
                       setSelectedCurrentProvince(e.target.value);
                       setMyRoute((prev) => ({ ...prev, current_province_id: e.target.value }));
                     }}
@@ -253,14 +253,15 @@ const Trip = ({ location, province, currentCity, directionCity }) => {
                   <select
                     name="direction_province_id"
                     id="direction_province_id"
-                    onClick={(e) => {
-                      setSelectedDirectionProvince(e.target.value);
-                      setMyRoute((prev) => ({ ...prev, direction_province_id: e.target.value }));
-                    }}
                     className={classes.input}
                     {...register('direction_province_id', {
                       required: 'Select province is a must',
                     })}
+                    onChange={(e) => {
+                      e.preventDefault();
+                      setSelectedDirectionProvince(e.target.value);
+                      setMyRoute((prev) => ({ ...prev, direction_province_id: e.target.value }));
+                    }}
                     aria-invalid={errors.direction_province_id ? 'true' : 'false'}
                   >
                     <option value="" disabled>

@@ -20,8 +20,6 @@ import toast, { Toaster } from 'react-hot-toast';
 
 import classes from './style.module.scss';
 
-// koading select province masih eerror
-
 const RegisterDestination = ({ province, currentCity }) => {
   const [searchResult, setSearchResult] = useState(null);
   const [valueSearch, setValueSearch] = useState(null);
@@ -33,8 +31,6 @@ const RegisterDestination = ({ province, currentCity }) => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  console.log(searchResult);
 
   const {
     register,

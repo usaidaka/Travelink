@@ -8,9 +8,6 @@ import { DO_RESET_PASSWORD } from './constants';
 function* doResetPassword({ data, token, cbSuccess }) {
   setLoading(true);
   try {
-    console.log(data);
-    console.log(token);
-
     const verifiedToken = token.replace(/_/g, '.');
 
     yield put(setToken(verifiedToken));

@@ -19,7 +19,6 @@ const CardGroup = ({ data }) => {
   const [userId, setUserId] = useState(0);
   const [selectedUsername, setSelectedUsername] = useState('');
 
-  console.log(data);
   const [openDelete, setOpenDelete] = useState(false);
   const handleOpenDelete = () => setOpenDelete(true);
   const handleCloseDelete = () => setOpenDelete(false);
@@ -37,7 +36,7 @@ const CardGroup = ({ data }) => {
     setSelectedUsername('');
     setAnchorEl(null);
   };
-  console.log(data);
+
   const handleRemove = () => {
     dispatch(
       deleteMember(userId, data?.groups?.id, (message) => {
@@ -84,7 +83,7 @@ const CardGroup = ({ data }) => {
   return (
     <div className={classes.container}>
       <div className={classes.maps}>
-        <Maps isSearch={false} element="People" marker={marker} zoom={4} center={marker[0]?.position} />
+        <Maps isSearch={false} element="Group" marker={marker} zoom={4} center={marker[0]?.position} />
       </div>
       <div className={classes['group-name']}>
         <h1>{data?.groups?.group_name}</h1>

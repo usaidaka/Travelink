@@ -4,10 +4,7 @@ export const getDashboardData = () => ({
   type: GET_DASHBOARD_DATA,
 });
 
-export const setDashboardData = (dashboard) => {
-  console.log(dashboard);
-  return {
-    type: SET_DASHBOARD_DATA,
-    dashboard,
-  };
-};
+export const setDashboardData = (dashboard) => ({
+  type: SET_DASHBOARD_DATA,
+  dashboard,
+});

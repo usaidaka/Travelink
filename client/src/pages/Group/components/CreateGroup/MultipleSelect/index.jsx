@@ -42,8 +42,6 @@ const MultipleSelect = ({ setPersonName, personName, nearby, profile }) => {
 
   const names = decryptedNearby.map((data) => data?.profile?.username);
 
-  console.log(decryptedProfile);
-
   useEffect(() => {
     if (!_.isEmpty(nearby)) {
       setDecryptedNearby(decryptPayload(nearby));
@@ -79,9 +77,10 @@ const MultipleSelect = ({ setPersonName, personName, nearby, profile }) => {
           input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
           renderValue={(selected) => (
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-              {selected.map((value) => (
-                <Chip key={value} label={personName} />
-              ))}
+              {selected.map((value) => {
+                console.log(value);
+                return <Chip key={value} label={value} />;
+              })}
             </Box>
           )}
           MenuProps={MenuProps}

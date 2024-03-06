@@ -7,9 +7,7 @@ import { UPDATE_PROFILE } from './constants';
 function* doUpdateProfile({ data, cbSuccess, cbFailed }) {
   setLoading(true);
   try {
-    console.log(data);
     const response = yield call(updateProfile, data);
-    console.log(response);
     cbSuccess && cbSuccess(response.message);
   } catch (error) {
     cbFailed && cbFailed();

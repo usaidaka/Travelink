@@ -12,7 +12,7 @@ import decryptPayload from '@utils/decryptionHelper';
 import { useEffect, useState } from 'react';
 
 const MainLayout = ({ children, locale, theme, intl: { formatMessage }, user }) => {
-  const [decryptedUser, setDecryptedUser] = useState(decryptPayload(user));
+  const [decryptedUser, setDecryptedUser] = useState({});
 
   useEffect(() => {
     if (user) {

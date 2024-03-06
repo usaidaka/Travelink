@@ -8,7 +8,6 @@ import { DO_REGISTER, GET_STEP_PAGE, GET_USER_DATA_INPUT } from './constants';
 function* doGetUserInputData({ data }) {
   yield put(setLoading(true));
   try {
-    console.log(data);
     yield put(setUserDataInput(data));
   } catch (error) {
     yield put(showPopup());

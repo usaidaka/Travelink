@@ -9,11 +9,9 @@ function* getConnection() {
   setLoading(true);
   try {
     const response = yield call(connection);
-    console.log(response);
+
     yield put(setConnectionData(response.result));
   } catch (error) {
-    console.log(error);
-    console.log(error.response);
     yield put(showPopup('Error', error.response?.data?.message));
   }
   setLoading(false);
@@ -26,8 +24,6 @@ function* doDeletePost({ postId, cbSuccess }) {
 
     cbSuccess && cbSuccess(response.message);
   } catch (error) {
-    console.log(error);
-    console.log(error.response);
     yield put(showPopup('Error', error.response?.data?.message));
   }
   setLoading(false);
@@ -39,8 +35,6 @@ function* doGetMyFollow() {
 
     yield put(setMyFollow(response.result));
   } catch (error) {
-    console.log(error);
-    console.log(error.response);
     yield put(showPopup('Error', error.response?.data?.message));
   }
   setLoading(false);
@@ -51,8 +45,6 @@ function* doDeleteFollower({ followId, cbSuccess }) {
     const response = yield call(deleteFollower, followId);
     cbSuccess && cbSuccess(response.message);
   } catch (error) {
-    console.log(error);
-    console.log(error.response);
     yield put(showPopup('Error', error.response?.data?.message));
   }
   setLoading(false);

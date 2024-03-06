@@ -299,12 +299,36 @@ const forgotPassword = async (dataObject) => {
 };
 
 const resetPassword = async (dataObject) => {
-  const { otp, newPassword, confirmNewPassword } = dataObject;
+  const { otp, newPassword, confirmNewPassword, token } = dataObject;
+
+  console.log(token, "<<<<<< token");
+
   const transaction = await db.sequelize.transaction();
   try {
     const credential = await db.Credential.findOne({
       where: { otp },
     });
+
+    const paranoidFalse = await db.Credential.findOne({
+      where: { otp },
+      paranoid: false,
+    });
+
+    if (paranoidFalse.deletedAt) {
+      await transaction.rollback();
+      return Promise.reject(Boom.badRequest("OTP already used"));
+    }
+
+    const newToken = token.replace(/\./g, "_");
+
+    const isTokenExist = await db.Credential.findOne({
+      where: { token: newToken },
+    });
+
+    if (_.isEmpty(isTokenExist)) {
+      await transaction.rollback();
+      return Promise.reject(Boom.badRequest("Token reset invalid"));
+    }
 
     if (!_.isEqual(newPassword, confirmNewPassword)) {
       await transaction.rollback();

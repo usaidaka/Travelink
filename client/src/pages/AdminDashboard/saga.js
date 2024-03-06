@@ -8,11 +8,9 @@ function* doGetDashboardData() {
   setLoading(true);
   try {
     const response = yield call(dashboard);
-    console.log(response.result);
+
     yield put(setDashboardData(response.result));
   } catch (error) {
-    console.log(error);
-
     yield put(showPopup('Error', error.response?.data?.message));
   }
   setLoading(false);
