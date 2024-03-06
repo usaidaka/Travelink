@@ -1,7 +1,7 @@
-const Request = require('axios');
-const express = require('express');
-const Fs = require('fs');
-const Boom = require('boom');
+const Request = require("axios");
+const express = require("express");
+const Fs = require("fs");
+const Boom = require("boom");
 
 const app = express();
 
@@ -11,7 +11,7 @@ const createTestServer = (path, plugin) => {
   app.use(express.json());
   app.use(
     express.urlencoded({
-      extended: true
+      extended: true,
     })
   );
 
@@ -19,7 +19,8 @@ const createTestServer = (path, plugin) => {
     const oldSend = res.send;
     res.send = async (data) => {
       res.send = oldSend; // set function back to avoid the 'double-send'
-      const statusCode = (data.output && data.output.statusCode) || res.statusCode;
+      const statusCode =
+        (data.output && data.output.statusCode) || res.statusCode;
       let bodyResponse = data;
 
       if (statusCode !== 200 && data.isBoom) {
@@ -59,15 +60,21 @@ const writeToFile = (file, data) =>
         return reject(err);
       }
 
-      return resolve('SUCCESS');
+      return resolve("SUCCESS");
     });
   });
 
 const errorResponse = (error) => {
-  if (error && error.output && error.output.payload && error.output.payload.statusCode) {
-    const data = error.data && typeof error.data === 'string' ? error.data : null;
+  if (
+    error &&
+    error.output &&
+    error.output.payload &&
+    error.output.payload.statusCode
+  ) {
+    const data =
+      error.data && typeof error.data === "string" ? error.data : null;
 
-    if (error.data && typeof error.data === 'object') {
+    if (error.data && typeof error.data === "object") {
       switch (error.output.payload.statusCode) {
         case 400:
           return error;
@@ -75,7 +82,7 @@ const errorResponse = (error) => {
           return Boom.badImplementation();
       }
     }
-    
+
     switch (error.output.payload.statusCode) {
       case 422:
         return Boom.badData(error.output.payload.message, data);
@@ -113,10 +120,10 @@ const commonHttpRequest = async (options) => {
     const logData = {
       timeTaken,
       status: response && response.status,
-      uri: `${options.baseURL}${options.url}`
+      uri: `${options.baseURL}${options.url}`,
     };
 
-    console.log(['commonHttpRequest', 'Response', 'INFO'], logData);
+    console.log(["commonHttpRequest", "Response", "INFO"], logData);
 
     return Promise.resolve(response.data);
   } catch (err) {
@@ -128,10 +135,10 @@ const commonHttpRequest = async (options) => {
         timeTaken,
         uri: `${options.baseURL}${options.url}`,
         status: err.response.status,
-        error: `${err.response.data}`
+        error: `${err.response.data}`,
       };
 
-      console.log(['commonHttpRequest', 'Response', 'ERROR'], logData);
+      console.log(["commonHttpRequest", "Response", "ERROR"], logData);
     }
 
     return Promise.reject(Boom.badImplementation(err));
@@ -143,5 +150,5 @@ module.exports = {
   readFromFile,
   writeToFile,
   errorResponse,
-  commonHttpRequest
+  commonHttpRequest,
 };
